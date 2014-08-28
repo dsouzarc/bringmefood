@@ -92,19 +92,13 @@ public class MainOrdersActivity extends FragmentActivity {
             theViewPager.setCurrentItem(tab.getPosition());
             switch (tab.getPosition()) {
                 case 0:
-                    theActionBar.setTitle("Asana Yogamojis!");
+                    theActionBar.setTitle("My Orders");
                     break;
                 case 1:
-                    theActionBar.setTitle("Yogamoji Animations!");
-                    break;
-                case 2:
-                    theActionBar.setTitle("Yogamoji Phrases!");
-                    break;
-                case 3:
-                    theActionBar.setTitle("Yogamoji Symbols!");
+                    theActionBar.setTitle("New Order");
                     break;
                 default:
-                    theActionBar.setTitle("Yogamojis!");
+                    theActionBar.setTitle("Bring Me Food");
                     break;
             }
         }
