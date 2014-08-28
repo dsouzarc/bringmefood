@@ -1,58 +1,130 @@
 package com.ryan.bringmefood;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.res.AssetManager;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.Window;
-import android.widget.ImageView;
-import android.widget.TextView;
-import java.io.InputStream;
 
 public class MainOrdersActivity extends FragmentActivity {
+
+    private ActionBar theActionBar;
+    private ViewPager theViewPager;
+    private Context theC;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_orders);
 
-        
+        theC = getApplicationContext();
+
+        theActionBar = getActionBar();
+        theActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+        theViewPager = (ViewPager) findViewById(R.id.theViewPager);
+        final FragmentManager theManager = getSupportFragmentManager();
+
+        final ViewPager.SimpleOnPageChangeListener thePageListener = new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                theActionBar.setSelectedNavigationItem(position);
+            }
+
+            int positionCurrent;
+            boolean dontLoadList;
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                if (state == 0) {
+                    new Handler().postDelayed(new Runnable() {
+                        public void run() {
+                            if (!dontLoadList) {
+
+                            }
+                        }
+                    }, 06);
+                }
+            }
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                positionCurrent = position;
+                if (positionOffset == 0 && positionOffsetPixels == 0) {
+                    dontLoadList = false;
+                } else {
+                    dontLoadList = true;
+                }
+            }
+        };
+
+        theViewPager.setOnPageChangeListener(thePageListener);
+
+        /*final TheFragmentPagerAdapter fragmentPagerAdapter = new TheFragmentPagerAdapter(theManager, theC, width, height);
+        theViewPager.setAdapter(fragmentPagerAdapter);
+        theActionBar.setDisplayShowTitleEnabled(true);
+        Tab theTab = theActionBar.newTab().setText(ASANA).setTabListener(tabListener);
+        theTab.setCustomView(getTab(ASANA));
+        theActionBar.addTab(theTab, 0);
+        theTab = theActionBar.newTab().setText(ANIMATIONS).setTabListener(tabListener);
+        theTab.setCustomView(getTab(ANIMATIONS));;*/
     }
 
+    //Tab listener
+    private final ActionBar.TabListener tabListener = new ActionBar.TabListener() {
+        @Override
+        public void onTabReselected(Tab arg0, FragmentTransaction arg1) {
+        }
+
+        @Override
+        public void onTabSelected(Tab tab, FragmentTransaction ft) {
+            theViewPager.setCurrentItem(tab.getPosition());
+            switch (tab.getPosition()) {
+                case 0:
+                    theActionBar.setTitle("Asana Yogamojis!");
+                    break;
+                case 1:
+                    theActionBar.setTitle("Yogamoji Animations!");
+                    break;
+                case 2:
+                    theActionBar.setTitle("Yogamoji Phrases!");
+                    break;
+                case 3:
+                    theActionBar.setTitle("Yogamoji Symbols!");
+                    break;
+                default:
+                    theActionBar.setTitle("Yogamojis!");
+                    break;
+            }
+        }
+
+        @Override
+        public void onTabUnselected(Tab tab, android.app.FragmentTransaction ft) {
+        }
+    };
+
+    public void log(final String message) {
+        Log.e("com.ryan.bringmefood", message);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+
         getMenuInflater().inflate(R.menu.main_orders, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;
