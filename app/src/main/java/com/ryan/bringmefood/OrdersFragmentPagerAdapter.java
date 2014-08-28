@@ -50,20 +50,30 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
         }
     };
 
+    public class NewOrder extends Fragment {
+        @Override
+        public View onCreateView(LayoutInflater theLI, ViewGroup container, Bundle savedInstance) {
+            final View rootInflater = theLI.inflate(R.layout.neworder_layout, container, false);
+            return rootInflater;
+        }
+    }
+
 
 
     @Override
     public Fragment getItem(int position) {
         final Bundle data = new Bundle();
+        data.putInt("current_page", position + 1);
 
         switch (position) {
             case 0:
                 MyOrders myOrders = new MyOrders();
-                data.putInt("current_page", position + 1);
                 myOrders.setArguments(data);
                 return myOrders;
             case 1:
-                break;
+                NewOrder newOrder = new NewOrder();
+                newOrder.setArguments(data);
+                return newOrder;
             default:
                 break;
         }

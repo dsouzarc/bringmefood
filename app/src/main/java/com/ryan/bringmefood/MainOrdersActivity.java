@@ -76,6 +76,9 @@ public class MainOrdersActivity extends FragmentActivity {
         //theTab.setCustomView()
         theActionBar.addTab(theTab, 0);
 
+        theTab = theActionBar.newTab().setText("New order").setTabListener(tabListener);
+        theActionBar.addTab(theTab, 1);
+
     }
 
     //Tab listener
