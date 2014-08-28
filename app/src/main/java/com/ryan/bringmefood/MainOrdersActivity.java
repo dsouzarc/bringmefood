@@ -68,14 +68,14 @@ public class MainOrdersActivity extends FragmentActivity {
 
         theViewPager.setOnPageChangeListener(thePageListener);
 
-        /*final TheFragmentPagerAdapter fragmentPagerAdapter = new TheFragmentPagerAdapter(theManager, theC, width, height);
-        theViewPager.setAdapter(fragmentPagerAdapter);
+        final OrdersFragmentPagerAdapter ofPA = new OrdersFragmentPagerAdapter(theManager);
+        theViewPager.setAdapter(ofPA);
         theActionBar.setDisplayShowTitleEnabled(true);
-        Tab theTab = theActionBar.newTab().setText(ASANA).setTabListener(tabListener);
-        theTab.setCustomView(getTab(ASANA));
+
+        Tab theTab = theActionBar.newTab().setText("My Orders").setTabListener(tabListener);
+        //theTab.setCustomView()
         theActionBar.addTab(theTab, 0);
-        theTab = theActionBar.newTab().setText(ANIMATIONS).setTabListener(tabListener);
-        theTab.setCustomView(getTab(ANIMATIONS));;*/
+
     }
 
     //Tab listener
