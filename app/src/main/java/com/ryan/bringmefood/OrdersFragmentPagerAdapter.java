@@ -10,9 +10,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.app.AlertDialog;
 import android.view.LayoutInflater;
+import java.util.Calendar;
 import android.provider.Settings.Secure;
 import android.view.View;
 import android.widget.Button;
+import java.util.GregorianCalendar;
 import android.widget.TextView;
 import android.content.DialogInterface;
 import android.widget.EditText;
@@ -41,19 +43,31 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
     }
 
     public class MyOrders extends Fragment {
+
+        private final ArrayList<Order> allOrders = new ArrayList<Order>();
+
+        private LinearLayout theLL;
+        private SQLiteOrdersDatabase theDB;
+
         @Override
         public View onCreateView(LayoutInflater theLI, ViewGroup container, Bundle savedinstance) {
             final View rootInflater = theLI.inflate(R.layout.myorders_layout, container, false);
 
-            final LinearLayout theLL = (LinearLayout) rootInflater.findViewById(R.id.theLinearLayout);
+            theDB = new SQLiteOrdersDatabase(theC);
+
+            theLL = (LinearLayout) rootInflater.findViewById(R.id.theLinearLayout);
 
             final SQLiteOrdersDatabase theDB = new SQLiteOrdersDatabase(theC);
-            final ArrayList<Order> allOrders = theDB.getAllOrders(); //removeAllDuplicates(theDB.getAllOrders());
+            allOrders.addAll(theDB.getAllOrders()); //removeAllDuplicates(theDB.getAllOrders());
 
+            addOrdersToLayout();
+            return rootInflater;
+        }
+
+        public void addOrdersToLayout() {
             for(Order theOrder : allOrders) {
                 theLL.addView(getView(theOrder));
             }
-            return rootInflater;
         }
         public TextView getView(final Order theOrder) {
             final TextView theView = new TextView(theC);
@@ -62,10 +76,51 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             theView.setTextSize(20);
             theView.setPadding(20, 20, 0, 0);
 
-            
+            theView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+
+                    AlertDialog.Builder deleteItem = new AlertDialog.Builder(getActivity());
+                    deleteItem.setTitle("Delete " + theOrder.getRestaurantName() + " order");
+                    deleteItem.setMessage("Delete your order for " + theOrder.getRestaurantName() +
+                    " on " + getDateForm(Long.parseLong(theOrder.getCalendarTimeMillis())));
+
+                    deleteItem.setPositiveButton("Delete order", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            theDB.deleteOrder(theOrder.getIdNumber());
+                            
+                            allOrders.remove(theOrder);
+
+                            theLL.removeAllViews();
+
+                            addOrdersToLayout();
+
+                        }
+                    });
+
+                    deleteItem.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    });
+
+                    return false;
+                }
+            });
+
+
             return theView;
         }
     };
+
+    private static String getDateForm(final long timeInMillis) {
+        final GregorianCalendar theCal = new GregorianCalendar();
+        theCal.setTimeInMillis(timeInMillis);
+        return theCal.get(Calendar.MONTH) + "/" + theCal.get(Calendar.DAY_OF_MONTH) +
+                "/" + theCal.get(Calendar.YEAR) + " at " +
+                theCal.get(Calendar.HOUR_OF_DAY) + ":" + theCal.get(Calendar.MINUTE);
+    }
 
     public class NewOrder extends Fragment {
 
