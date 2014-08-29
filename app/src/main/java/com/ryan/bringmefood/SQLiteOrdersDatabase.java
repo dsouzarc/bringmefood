@@ -6,10 +6,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import org.json.JSONObject;
+
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.LinkedList;
 
 public class SQLiteOrdersDatabase extends SQLiteOpenHelper {
 
@@ -53,9 +54,48 @@ public class SQLiteOrdersDatabase extends SQLiteOpenHelper {
         theDB.close();
     }
 
+    public ArrayList<Order> getAllOrders() {
+        final LinkedList<Order> allOrders = new LinkedList<Order>();
 
+        final String query = "SELECT * FROM " + TABLE_NAME;
+        final SQLiteDatabase db = this.getWritableDatabase();
+        final Cursor cursor = db.rawQuery(query, null);
 
+        if (cursor.moveToFirst()) {
+            do {
+                try {
+                    allOrders.add(Order.getOrder(new JSONObject(cursor.getString(2))));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    log("Adding order: " + cursor.getString(1) + ": " + cursor.getString(2));
+                }
+            } while (cursor.moveToNext());
+        }
 
+        db.close();
 
+        return new ArrayList<Order>(allOrders);
+    }
 
+    public void deleteOrder(final String orderID) {
+        final SQLiteDatabase theDB = this.getWritableDatabase();
+
+        try {
+            theDB.delete(TABLE_NAME, KEY_ID + " = ?", new String[]{orderID});
+        }
+        catch (Exception e) {
+            log("Failed to delete: " + orderID);
+        }
+        theDB.close();
+    }
+
+    public void deleteAllOrders() {
+        final SQLiteDatabase theDB = this.getWritableDatabase();
+        theDB.delete(TABLE_NAME, null, null);
+        theDB.close();
+    }
+
+    public void log(final String message) {
+        Log.e("com.ryan.bringmefood", message);
+    }
 }

@@ -1,10 +1,13 @@
 package com.ryan.bringmefood;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.Arrays;
 /**
  * Created by Ryan on 8/28/14.
  */
@@ -232,5 +235,9 @@ public class Order {
         result = 31 * result + theDate.hashCode();
         result = 31 * result + status.hashCode();
         return result;
+    }
+
+    public void log(final String message) {
+        Log.e("com.ryan.bringmefood", message);
     }
 }
