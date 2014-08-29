@@ -12,46 +12,33 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
             <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                style="@style/New_Order_Edit_Text"
                 android:inputType="textPersonName"
-                android:layout_marginTop="20dp"
-                android:text="Name"
-                android:ems="10"
+                android:hint="Name"
                 android:id="@+id/myName"/>
             <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                style="@style/New_Order_Edit_Text"
                 android:inputType="textPostalAddress"
-                android:layout_marginTop="40dp"
-                android:text="Address"
-                android:ems="10"
+                android:hint="Address"
                 android:id="@+id/myAddress"/>
             <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                style="@style/New_Order_Edit_Text"
                 android:inputType="phone"
-                android:layout_marginTop="40dp"
-                android:ems="10"
-                android:text="phone number"
+                android:hint="phone number"
                 android:id="@+id/myPhoneNumber"/>
             <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Restaurant name"
-                android:layout_marginTop="40dp"
+                style="@style/New_Order_Edit_Text"
+                android:hint="Restaurant name"
                 android:id="@+id/restaurantName"/>
 
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/itemsLinearLayout"
                     android:orientation="vertical">
-
                 </LinearLayout>
             </ScrollView>
             <TextView
@@ -61,12 +48,9 @@
                 android:layout_marginTop="20dp"
                 android:id="@+id/addItemTV"/>
             <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/New_Order_Edit_Text"
                 android:inputType="numberDecimal"
-                android:ems="10"
-                android:text="Approximate cost"
-                android:layout_marginTop="20dp"
+                android:hint="Approximate cost"
                 android:id="@+id/cost"/>
             <Button
                 android:layout_width="wrap_content"
