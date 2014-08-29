@@ -4,22 +4,35 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.widget.ScrollView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.content.Context;
 
 public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
     private static final int NUM_PAGES = 2;
+    final Context theC;
 
-    public OrdersFragmentPagerAdapter(final FragmentManager fragmentManager) {
+    public OrdersFragmentPagerAdapter(final FragmentManager fragmentManager, final Context theC) {
         super(fragmentManager);
+        this.theC = theC;
     }
 
     public class MyOrders extends Fragment {
         @Override
         public View onCreateView(LayoutInflater theLI, ViewGroup container, Bundle savedinstance) {
             final View rootInflater = theLI.inflate(R.layout.myorders_layout, container, false);
+
+            final ScrollView theScroll = (ScrollView) rootInflater.findViewById(R.id.scrollViewAllOrders);
+
+            final SQLiteOrdersDatabase theDB = new SQLiteOrdersDatabase(theC);
+
+
+
             return rootInflater;
         }
     };
