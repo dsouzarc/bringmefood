@@ -24,6 +24,7 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.SortedSet;
+import java.util.Iterator;
 import java.util.TreeSet;
 
 public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
@@ -155,22 +156,94 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             return rootInflater;
         }
 
-        public String getEditText(final int resID) {
-            try {
-                final EditText theText = (EditText) rootInflater.findViewById(resID);
-                return theText.getText().toString();
-            }
-            catch (Exception e) {
-                return e.toString();
-            }
-        }
-
-        public TextView getView(final String text) {
+        public TextView getItemView(final String text) {
             final TextView theView = new TextView(theC);
             theView.setText(text);
             theView.setTextColor(Color.BLACK);
             theView.setTextSize(20);
             theView.setPadding(20, 20, 0, 0);
+
+            theView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View v) {
+                    final AlertDialog.Builder editAD = new AlertDialog.Builder(getActivity());
+                    editAD.setTitle("Edit");
+                    editAD.setMessage("Edit item");
+
+                    final EditText theItem = new EditText(theC);
+                    theItem.setText(text);
+
+                    editAD.setView(theItem);
+                    editAD.show();
+
+                    editAD.setPositiveButton("Update", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            final TextView theV = (TextView) v;
+                            final String newItem = theItem.getText().toString();
+                            final String oldItem = theV.getText().toString();
+                            for(int i = 0; i < theItems.size(); i++) {
+                                if (theItems.get(i).equals(oldItem)) {
+                                    theItems.set(i, newItem);
+                                    i = Integer.MAX_VALUE;
+                                }
+                            }
+
+                            theV.setText(newItem);
+                            theView.setText(newItem);
+                        }
+                    });
+                    editAD.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    });
+                }
+            });
+
+            theView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    final TextView theV = (TextView) v;
+                    final String toBeDeleted = theV.getText().toString();
+
+                    final AlertDialog.Builder deleteAD = new AlertDialog.Builder(getActivity());
+                    deleteAD.setTitle("Delete item");
+                    deleteAD.setMessage("Delete " + toBeDeleted + "?");
+
+                    deleteAD.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            Iterator<String> theIT = theItems.iterator();
+
+                            while(theIT.hasNext() && theIT != null) {
+                                if(theIT.next().equals(toBeDeleted)) {
+                                    theIT.remove();
+                                    theIT = null;
+                                }
+                            }
+
+                            itemsLayout.removeAllViews();
+
+                            theIT = theItems.iterator();
+
+                            while(theIT.hasNext()) {
+                                itemsLayout.addView(getItemView(theIT.next()));
+                            }
+                        }
+                    });
+                    deleteAD.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+
+                    return false;
+                }
+            });
+
             return theView;
         }
 
@@ -219,7 +292,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         theItems.add(item.getText().toString());
-                        itemsLayout.addView(getView(item.getText().toString()), 0);
+                        itemsLayout.addView(getItemView(item.getText().toString()), 0);
                     }
                 });
                 addItem.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
