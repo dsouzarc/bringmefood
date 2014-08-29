@@ -37,7 +37,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
         @Override
         public View onCreateView(LayoutInflater theLI, ViewGroup container, Bundle savedinstance) {
             final View rootInflater = theLI.inflate(R.layout.myorders_layout, container, false);
-            
+
             final LinearLayout theLL = (LinearLayout) rootInflater.findViewById(R.id.theLinearLayout);
 
             final SQLiteOrdersDatabase theDB = new SQLiteOrdersDatabase(theC);
