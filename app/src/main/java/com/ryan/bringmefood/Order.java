@@ -26,6 +26,8 @@ public class Order {
 
     private String status;
 
+    //Name, phone number, my address, restaurant address, UID, myOrder[], order ID, orderCost, time in millis, status
+
     public Order(String myName, String myNumber, String myAddress, String restaurantName,
                  String uniqueDeviceIdentifier, String[] myOrder, String idNumber, String orderCost,
                  final String calendarTimeMillis, final String status) {

@@ -19,7 +19,7 @@ public class SQLiteOrdersDatabase extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "BringMeFoodDB";
     private static final String TABLE_NAME = "OrdersTable";
 
-    private static final String KEY_ID = "id";
+    private static final String KEY_ID = "ORDER_ID";
     private static final String KEY_ORDER = "orderAsJSON";
 
     private static final String[] COLUMNS = {KEY_ID, KEY_ORDER};

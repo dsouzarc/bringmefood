@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.app.AlertDialog;
 import android.view.LayoutInflater;
+import android.provider.Settings.Secure;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -67,19 +68,22 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
     public class NewOrder extends Fragment {
 
+        private final LinkedList<String> theItems = new LinkedList<String>();
+        private View rootInflater;
         @Override
         public View onCreateView(LayoutInflater theLI, ViewGroup container, Bundle savedInstance) {
             final View rootInflater = theLI.inflate(R.layout.neworder_layout, container, false);
 
+            this.rootInflater = rootInflater;
+
             final LinearLayout itemsLayout = (LinearLayout) rootInflater.findViewById(R.id.itemsLinearLayout);
-            final LinkedList<String> theItems = new LinkedList<String>();
 
             final TextView addItem = (TextView) rootInflater.findViewById(com.ryan.bringmefood.R.id.addItemTV);
 
             addItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final AlertDialog.Builder addItem = new AlertDialog.Builder(theC);
+                    final AlertDialog.Builder addItem = new AlertDialog.Builder(getActivity());
                     final EditText item = new EditText(theC);
 
                     addItem.setTitle("Add Item");
@@ -94,6 +98,8 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         }
                     });
 
+                    addItem.show();
+
                 }
             });
 
@@ -101,13 +107,38 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             submit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    
+                    final String myName = getEditText(com.ryan.bringmefood.R.id.myName);
+                    final String myAddress = getEditText(com.ryan.bringmefood.R.id.myAddress);
+                    final String myPhone = getEditText(com.ryan.bringmefood.R.id.myPhoneNumber);
+                    final String restaurantName = getEditText(com.ryan.bringmefood.R.id.restaurantName);
+                    final String myCost = getEditText(com.ryan.bringmefood.R.id.cost);
+                    final String Order_ID = String.valueOf(String.valueOf(System.currentTimeMillis()).hashCode());
+                    final String time = String.valueOf(System.currentTimeMillis());
+                    final String[] order = theItems.toArray(new String[theItems.size()]);
+                    final String UID = Secure.getString(theC.getContentResolver(), Secure.ANDROID_ID);
 
+                    //Name, phone number, my address, restaurant address, UID, myOrder[], order ID, orderCost, time in millis, status
+
+                    final Order theOrder = new Order(myName, myPhone, myAddress, restaurantName,
+                            UID, order, Order_ID, myCost, time, "0");
+                    SQLiteOrdersDatabase theDB = new SQLiteOrdersDatabase(theC);
+                    theDB.addOrder(theOrder);
+                    theDB.close();
                 }
             });
 
 
             return rootInflater;
+        }
+
+        public String getEditText(final int resID) {
+            try {
+                final EditText theText = (EditText) rootInflater.findViewById(resID);
+                return theText.getText().toString();
+            }
+            catch (Exception e) {
+                return e.toString();
+            }
         }
 
         public TextView getView(final String text) {
