@@ -4,13 +4,14 @@ import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.content.SharedPreferences;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -54,7 +55,6 @@ public class MainOrdersActivity extends FragmentActivity {
                     new Handler().postDelayed(new Runnable() {
                         public void run() {
                             if (!dontLoadList) {
-
                             }
                         }
                     }, 06);
@@ -93,6 +93,11 @@ public class MainOrdersActivity extends FragmentActivity {
     private void setPreference(final String key, final String value) {
         theEd.putString(key, value);
         theEd.apply();
+    }
+
+    private String getPhoneNumber() {
+        TelephonyManager tMgr = (TelephonyManager)getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
+        return tMgr.getLine1Number();
     }
 
 

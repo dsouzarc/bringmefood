@@ -3,12 +3,14 @@ package com.ryan.bringmefood;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +19,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import android.content.SharedPreferences;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -213,6 +214,11 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
             }
         };
+    }
+
+    private String getPhoneNumber(final Context theC) {
+        TelephonyManager tMgr = (TelephonyManager)theC.getSystemService(Context.TELEPHONY_SERVICE);
+        return tMgr.getLine1Number();
     }
 
     public ArrayList<Order> removeAllDuplicates(final List<Order> theOrders) {
