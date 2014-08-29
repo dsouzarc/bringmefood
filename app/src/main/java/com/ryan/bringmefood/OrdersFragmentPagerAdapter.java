@@ -3,12 +3,18 @@ package com.ryan.bringmefood;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import java.util.LinkedList;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.widget.ScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+import android.content.DialogInterface;
+import android.widget.EditText;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -60,10 +66,57 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
     };
 
     public class NewOrder extends Fragment {
+
         @Override
         public View onCreateView(LayoutInflater theLI, ViewGroup container, Bundle savedInstance) {
             final View rootInflater = theLI.inflate(R.layout.neworder_layout, container, false);
+
+            final LinearLayout itemsLayout = (LinearLayout) rootInflater.findViewById(R.id.itemsLinearLayout);
+            final LinkedList<String> theItems = new LinkedList<String>();
+
+            final TextView addItem = (TextView) rootInflater.findViewById(com.ryan.bringmefood.R.id.addItemTV);
+
+            addItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final AlertDialog.Builder addItem = new AlertDialog.Builder(theC);
+                    final EditText item = new EditText(theC);
+
+                    addItem.setTitle("Add Item");
+                    addItem.setMessage("Add new item to your order");
+                    addItem.setView(item);
+
+                    addItem.setPositiveButton("Add item", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            theItems.add(item.getText().toString());
+                            itemsLayout.addView(getView(item.getText().toString()), 0);
+                        }
+                    });
+
+                }
+            });
+
+            final Button submit = (Button) rootInflater.findViewById(R.id.submitButton);
+            submit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    
+
+                }
+            });
+
+
             return rootInflater;
+        }
+
+        public TextView getView(final String text) {
+            final TextView theView = new TextView(theC);
+            theView.setText(text);
+            theView.setTextColor(Color.BLACK);
+            theView.setTextSize(20);
+            theView.setPadding(20, 20, 0, 0);
+            return theView;
         }
     }
 

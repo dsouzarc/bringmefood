@@ -41,12 +41,39 @@
                 android:text="Restaurant name"
                 android:layout_marginTop="40dp"
                 android:id="@+id/restaurantName"/>
-            </LinearLayout>
 
-        <ScrollView
-            android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></ScrollView>
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/itemsLinearLayout"
+                    android:orientation="vertical">
 
+                </LinearLayout>
+            </ScrollView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add item"
+                android:layout_marginTop="20dp"
+                android:id="@+id/addItemTV"/>
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:ems="10"
+                android:text="Approximate cost"
+                android:layout_marginTop="20dp"
+                android:id="@+id/cost"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Submit"
+                android:layout_marginTop="20dp"
+                android:id="@+id/submitButton"/>
+        </LinearLayout>
     </ScrollView>
 </RelativeLayout>
