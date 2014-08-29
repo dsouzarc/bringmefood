@@ -64,6 +64,10 @@ public class Order {
         return theObject;
     }
 
+    public String getStatus() {
+        return getStatusAsString(getStatus(Integer.parseInt(status)));
+    }
+
     public static Order getOrder(final JSONObject theJSON) {
 
         try {

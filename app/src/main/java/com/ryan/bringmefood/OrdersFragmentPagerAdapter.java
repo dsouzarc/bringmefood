@@ -37,26 +37,27 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
         @Override
         public View onCreateView(LayoutInflater theLI, ViewGroup container, Bundle savedinstance) {
             final View rootInflater = theLI.inflate(R.layout.myorders_layout, container, false);
-
-            final ScrollView theScroll = (ScrollView) rootInflater.findViewById(R.id.scrollViewAllOrders);
+            
+            final LinearLayout theLL = (LinearLayout) rootInflater.findViewById(R.id.theLinearLayout);
 
             final SQLiteOrdersDatabase theDB = new SQLiteOrdersDatabase(theC);
             final ArrayList<Order> allOrders = removeAllDuplicates(theDB.getAllOrders());
 
-            for(Order theOrder : )
-
+            for(Order theOrder : allOrders) {
+                theLL.addView(getView(theOrder.getRestaurantName() + theOrder.getStatus()));
+            }
             return rootInflater;
         }
-    };
+        public TextView getView(final String text) {
+            final TextView theView = new TextView(theC);
+            theView.setText(text);
+            theView.setTextColor(Color.BLACK);
+            theView.setTextSize(20);
+            theView.setPadding(20, 20, 0, 0);
+            return theView;
+        }
 
-    public TextView getView(final String text) {
-        final TextView theView = new TextView(theC);
-        theView.setText(text);
-        theView.setTextColor(Color.BLACK);
-        theView.setTextSize(20);
-        theView.setPadding(20, 20, 0, 0);
-        return theView;
-    }
+    };
 
     public class NewOrder extends Fragment {
         @Override
