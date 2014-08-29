@@ -115,17 +115,17 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
         private View rootInflater;
         private LinearLayout itemsLayout;
         private TextView addItem;
-        private EditText myName, myPhone, myAddress, restaurantName, orderCost;
+        private EditText myNameET, myPhoneET, myAddressET, restaurantNameET, orderCostET;
         private Button submit;
 
         private void initializeVariables() {
             itemsLayout = (LinearLayout) rootInflater.findViewById(R.id.itemsLinearLayout);
             addItem = (TextView) rootInflater.findViewById(R.id.addItemTV);
-            myName = (EditText) rootInflater.findViewById(R.id.myName);
-            myPhone = (EditText) rootInflater.findViewById(R.id.myPhoneNumber);
-            myAddress = (EditText) rootInflater.findViewById(R.id.myAddress);
-            restaurantName = (EditText) rootInflater.findViewById(R.id.restaurantName);
-            orderCost = (EditText) rootInflater.findViewById(R.id.cost);
+            myNameET = (EditText) rootInflater.findViewById(R.id.myName);
+            myPhoneET = (EditText) rootInflater.findViewById(R.id.myPhoneNumber);
+            myAddressET = (EditText) rootInflater.findViewById(R.id.myAddress);
+            restaurantNameET = (EditText) rootInflater.findViewById(R.id.restaurantName);
+            orderCostET = (EditText) rootInflater.findViewById(R.id.cost);
             submit = (Button) rootInflater.findViewById(R.id.submitButton);
         }
 
@@ -136,7 +136,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             initializeVariables();
 
             addItem.setOnClickListener(AddItemListener);
-            submit.setOnClickListener(SubmitOrder);
+            submit.setOnClickListener(SubmitOrderListener);
             return rootInflater;
         }
 
@@ -159,18 +159,18 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             return theView;
         }
 
-        private final View.OnClickListener submitListener = new View.OnClickListener() {
+        private final View.OnClickListener SubmitOrderListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(theItems.size() == 0) {
                     theItems.add("ITEM");
                 }
 
-                final String myName = getEditText(R.id.myName);
-                final String myAddress = getEditText(R.id.myAddress);
-                final String myPhone = getEditText(R.id.myPhoneNumber);
-                final String restaurantName = getEditText(R.id.restaurantName);
-                final String myCost = getEditText(R.id.cost);
+                final String myName = myNameET.getText().toString();
+                final String myAddress = myAddressET.getText().toString();
+                final String myPhone = myPhoneET.getText().toString();
+                final String restaurantName = restaurantNameET.getText().toString();
+                final String myCost = orderCostET.getText().toString();
                 final String Order_ID = String.valueOf(String.valueOf(System.currentTimeMillis()).hashCode());
                 final String time = String.valueOf(System.currentTimeMillis());
                 final String[] order = theItems.toArray(new String[theItems.size()]);
