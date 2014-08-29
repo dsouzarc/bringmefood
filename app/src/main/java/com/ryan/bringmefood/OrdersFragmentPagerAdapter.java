@@ -9,6 +9,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.view.LayoutInflater;
 import android.view.View;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import android.graphics.Color;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import android.view.ViewGroup;
 import android.content.Context;
 
@@ -30,12 +41,22 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             final ScrollView theScroll = (ScrollView) rootInflater.findViewById(R.id.scrollViewAllOrders);
 
             final SQLiteOrdersDatabase theDB = new SQLiteOrdersDatabase(theC);
+            final ArrayList<Order> allOrders = removeAllDuplicates(theDB.getAllOrders());
 
-
+            for(Order theOrder : )
 
             return rootInflater;
         }
     };
+
+    public TextView getView(final String text) {
+        final TextView theView = new TextView(theC);
+        theView.setText(text);
+        theView.setTextColor(Color.BLACK);
+        theView.setTextSize(20);
+        theView.setPadding(20, 20, 0, 0);
+        return theView;
+    }
 
     public class NewOrder extends Fragment {
         @Override
@@ -43,6 +64,16 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             final View rootInflater = theLI.inflate(R.layout.neworder_layout, container, false);
             return rootInflater;
         }
+    }
+
+    public ArrayList<Order> removeAllDuplicates(final List<Order> theOrders) {
+        final SortedSet<Order> theSet = new TreeSet<Order>(new Comparator<Order>() {
+            @Override
+            public int compare(Order lhs, Order rhs) {
+                return lhs.hashCode() - rhs.hashCode();
+            }
+        });
+        return new ArrayList<Order>(theSet);
     }
 
 

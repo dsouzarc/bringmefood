@@ -68,7 +68,7 @@ public class MainOrdersActivity extends FragmentActivity {
 
         theViewPager.setOnPageChangeListener(thePageListener);
 
-        final OrdersFragmentPagerAdapter ofPA = new OrdersFragmentPagerAdapter(theManager);
+        final OrdersFragmentPagerAdapter ofPA = new OrdersFragmentPagerAdapter(theManager, getApplicationContext());
         theViewPager.setAdapter(ofPA);
         theActionBar.setDisplayShowTitleEnabled(true);
 
