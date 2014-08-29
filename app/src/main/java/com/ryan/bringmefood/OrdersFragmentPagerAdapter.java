@@ -116,6 +116,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
         private LinearLayout itemsLayout;
         private TextView addItem;
         private EditText myName, myPhone, myAddress, restaurantName, orderCost;
+        private Button submit;
 
         private void initializeVariables() {
             itemsLayout = (LinearLayout) rootInflater.findViewById(R.id.itemsLinearLayout);
@@ -125,6 +126,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             myAddress = (EditText) rootInflater.findViewById(R.id.myAddress);
             restaurantName = (EditText) rootInflater.findViewById(R.id.restaurantName);
             orderCost = (EditText) rootInflater.findViewById(R.id.cost);
+            submit = (Button) rootInflater.findViewById(R.id.submitButton);
         }
 
         @Override
@@ -134,36 +136,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             initializeVariables();
 
             addItem.setOnClickListener(AddItemListener);
-
-            final Button submit = (Button) rootInflater.findViewById(R.id.submitButton);
-            submit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(theItems.size() == 0) {
-                        theItems.add("ITEM");
-                    }
-
-                    final String myName = getEditText(R.id.myName);
-                    final String myAddress = getEditText(R.id.myAddress);
-                    final String myPhone = getEditText(R.id.myPhoneNumber);
-                    final String restaurantName = getEditText(R.id.restaurantName);
-                    final String myCost = getEditText(R.id.cost);
-                    final String Order_ID = String.valueOf(String.valueOf(System.currentTimeMillis()).hashCode());
-                    final String time = String.valueOf(System.currentTimeMillis());
-                    final String[] order = theItems.toArray(new String[theItems.size()]);
-                    final String UID = Secure.getString(theC.getContentResolver(), Secure.ANDROID_ID);
-
-                    //Name, phone number, my address, restaurant address, UID, myOrder[], order ID, orderCost, time in millis, status
-
-                    final Order theOrder = new Order(myName, myPhone, myAddress, restaurantName,
-                            UID, order, Order_ID, myCost, time, "0");
-                    SQLiteOrdersDatabase theDB = new SQLiteOrdersDatabase(theC);
-                    theDB.addOrder(theOrder);
-                    theDB.close();
-                }
-            });
-
-
+            submit.setOnClickListener(SubmitOrder);
             return rootInflater;
         }
 
@@ -185,6 +158,33 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             theView.setPadding(20, 20, 0, 0);
             return theView;
         }
+
+        private final View.OnClickListener submitListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(theItems.size() == 0) {
+                    theItems.add("ITEM");
+                }
+
+                final String myName = getEditText(R.id.myName);
+                final String myAddress = getEditText(R.id.myAddress);
+                final String myPhone = getEditText(R.id.myPhoneNumber);
+                final String restaurantName = getEditText(R.id.restaurantName);
+                final String myCost = getEditText(R.id.cost);
+                final String Order_ID = String.valueOf(String.valueOf(System.currentTimeMillis()).hashCode());
+                final String time = String.valueOf(System.currentTimeMillis());
+                final String[] order = theItems.toArray(new String[theItems.size()]);
+                final String UID = Secure.getString(theC.getContentResolver(), Secure.ANDROID_ID);
+
+                //Name, phone number, my address, restaurant address, UID, myOrder[], order ID, orderCost, time in millis, status
+
+                final Order theOrder = new Order(myName, myPhone, myAddress, restaurantName,
+                        UID, order, Order_ID, myCost, time, "0");
+                SQLiteOrdersDatabase theDB = new SQLiteOrdersDatabase(theC);
+                theDB.addOrder(theOrder);
+                theDB.close();
+            }
+        };
 
         private final View.OnClickListener AddItemListener = new View.OnClickListener() {
             @Override
