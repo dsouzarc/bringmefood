@@ -122,12 +122,13 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
         private void initializeVariables() {
             itemsLayout = (LinearLayout) rootInflater.findViewById(R.id.itemsLinearLayout);
             addItem = (TextView) rootInflater.findViewById(R.id.addItemTV);
+            submit = (Button) rootInflater.findViewById(R.id.submitButton);
+
             myNameET = (EditText) rootInflater.findViewById(R.id.myName);
             myPhoneET = (EditText) rootInflater.findViewById(R.id.myPhoneNumber);
             myAddressET = (EditText) rootInflater.findViewById(R.id.myAddress);
             restaurantNameET = (EditText) rootInflater.findViewById(R.id.restaurantName);
             orderCostET = (EditText) rootInflater.findViewById(R.id.cost);
-            submit = (Button) rootInflater.findViewById(R.id.submitButton);
 
             String data = getPreferences("myName");
             if(data.length() > 2) {
@@ -139,7 +140,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
             data = getPreferences("myAddress");
             if(data.length() > 2) {
-                myPhoneET.setText(data);
+                myAddressET.setText(data);
             }
         }
 
