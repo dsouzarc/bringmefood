@@ -71,7 +71,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
         }
         public TextView getView(final Order theOrder) {
             final TextView theView = new TextView(theC);
-            theView.setText(theOrder.getRestaurantName() + theOrder.getStatus());
+            theView.setText(theOrder.getDateForm() + " " + theOrder.getRestaurantName() + theOrder.getStatus());
             theView.setTextColor(Color.BLACK);
             theView.setTextSize(20);
             theView.setPadding(20, 20, 0, 0);
@@ -83,7 +83,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                     AlertDialog.Builder deleteItem = new AlertDialog.Builder(getActivity());
                     deleteItem.setTitle("Delete " + theOrder.getRestaurantName() + " order");
                     deleteItem.setMessage("Delete your order for " + theOrder.getRestaurantName() +
-                    " on " + getDateForm(Long.parseLong(theOrder.getCalendarTimeMillis())));
+                    " on " + theOrder.getDateForm());
 
                     deleteItem.setPositiveButton("Delete order", new DialogInterface.OnClickListener() {
                         @Override
@@ -107,7 +107,6 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
                     deleteItem.show();
 
-
                     return false;
                 }
             });
@@ -116,14 +115,6 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             return theView;
         }
     };
-
-    private static String getDateForm(final long timeInMillis) {
-        final GregorianCalendar theCal = new GregorianCalendar();
-        theCal.setTimeInMillis(timeInMillis);
-        return theCal.get(Calendar.MONTH) + "/" + theCal.get(Calendar.DAY_OF_MONTH) +
-                "/" + theCal.get(Calendar.YEAR) + " at " +
-                theCal.get(Calendar.HOUR_OF_DAY) + ":" + theCal.get(Calendar.MINUTE);
-    }
 
     public class NewOrder extends Fragment {
 

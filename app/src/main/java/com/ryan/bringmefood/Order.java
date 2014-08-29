@@ -101,6 +101,20 @@ public class Order {
         return this.calendarTimeMillis;
     }
 
+    public String getDateForm() {
+        return theDate.get(Calendar.MONTH) + "/" + theDate.get(Calendar.DAY_OF_MONTH) +
+                "/" + theDate.get(Calendar.YEAR) + " at " +
+                theDate.get(Calendar.HOUR_OF_DAY) + ":" + theDate.get(Calendar.MINUTE);
+    }
+
+    public static String getDateForm(final long timeInMillis) {
+        final GregorianCalendar theCal = new GregorianCalendar();
+        theCal.setTimeInMillis(timeInMillis);
+        return theCal.get(Calendar.MONTH) + "/" + theCal.get(Calendar.DAY_OF_MONTH) +
+                "/" + theCal.get(Calendar.YEAR) + " at " +
+                theCal.get(Calendar.HOUR_OF_DAY) + ":" + theCal.get(Calendar.MINUTE);
+    }
+
     public Calendar getCalendar() {
         return this.theDate;
     }
