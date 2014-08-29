@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Arrays;
 /**
  * Created by Ryan on 8/28/14.
  */
@@ -181,5 +182,55 @@ public class Order {
 
     public String getIdNumber() {
         return idNumber;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (!(o instanceof com.ryan.bringmefood.Order))
+            return false;
+
+        Order order = (Order) o;
+
+        if (!calendarTimeMillis.equals(order.calendarTimeMillis))
+            return false;
+        if (!idNumber.equals(order.idNumber))
+            return false;
+        if (!myAddress.equals(order.myAddress))
+            return false;
+        if (!myName.equals(order.myName))
+            return false;
+        if (!myNumber.equals(order.myNumber))
+            return false;
+        if (!Arrays.equals(myOrder, order.myOrder))
+            return false;
+        if (!orderCost.equals(order.orderCost))
+            return false;
+        if (!restaurantName.equals(order.restaurantName))
+            return false;
+        if (!status.equals(order.status))
+            return false;
+        if (!theDate.equals(order.theDate))
+            return false;
+        if (!uniqueDeviceIdentifier.equals(order.uniqueDeviceIdentifier))
+            return false;
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = myName.hashCode();
+        result = 31 * result + myNumber.hashCode();
+        result = 31 * result + myAddress.hashCode();
+        result = 31 * result + restaurantName.hashCode();
+        result = 31 * result + uniqueDeviceIdentifier.hashCode();
+        result = 31 * result + Arrays.hashCode(myOrder);
+        result = 31 * result + orderCost.hashCode();
+        result = 31 * result + idNumber.hashCode();
+        result = 31 * result + calendarTimeMillis.hashCode();
+        result = 31 * result + theDate.hashCode();
+        result = 31 * result + status.hashCode();
+        return result;
     }
 }
