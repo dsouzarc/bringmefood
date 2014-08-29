@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import android.content.SharedPreferences;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -27,11 +28,16 @@ import java.util.TreeSet;
 public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
     private static final int NUM_PAGES = 2;
-    final Context theC;
+    private final Context theC;
+    private final SharedPreferences thePrefs;
+    private final SharedPreferences.Editor theEd;
 
     public OrdersFragmentPagerAdapter(final FragmentManager fragmentManager, final Context theC) {
         super(fragmentManager);
         this.theC = theC;
+        this.thePrefs = theC.getSharedPreferences("com.ryan.bringmefood", Context.MODE_PRIVATE);
+        this.theEd = thePrefs.edit();
+
     }
 
     public class MyOrders extends Fragment {
@@ -105,37 +111,29 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
     public class NewOrder extends Fragment {
 
         private final LinkedList<String> theItems = new LinkedList<String>();
+
         private View rootInflater;
+        private LinearLayout itemsLayout;
+        private TextView addItem;
+        private EditText myName, myPhone, myAddress, restaurantName, orderCost;
+
+        private void initializeVariables() {
+            itemsLayout = (LinearLayout) rootInflater.findViewById(R.id.itemsLinearLayout);
+            addItem = (TextView) rootInflater.findViewById(R.id.addItemTV);
+            myName = (EditText) rootInflater.findViewById(R.id.myName);
+            myPhone = (EditText) rootInflater.findViewById(R.id.myPhoneNumber);
+            myAddress = (EditText) rootInflater.findViewById(R.id.myAddress);
+            restaurantName = (EditText) rootInflater.findViewById(R.id.restaurantName);
+            orderCost = (EditText) rootInflater.findViewById(R.id.cost);
+        }
+
         @Override
         public View onCreateView(LayoutInflater theLI, ViewGroup container, Bundle savedInstance) {
-            final View rootInflater = theLI.inflate(R.layout.neworder_layout, container, false);
+            this.rootInflater = theLI.inflate(R.layout.neworder_layout, container, false);
 
-            this.rootInflater = rootInflater;
-            final LinearLayout itemsLayout = (LinearLayout) rootInflater.findViewById(R.id.itemsLinearLayout);
-            final TextView addItem = (TextView) rootInflater.findViewById(com.ryan.bringmefood.R.id.addItemTV);
+            initializeVariables();
 
-            addItem.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    final AlertDialog.Builder addItem = new AlertDialog.Builder(getActivity());
-                    final EditText item = new EditText(theC);
-
-                    addItem.setTitle("Add Item");
-                    addItem.setMessage("Add new item to your order");
-                    addItem.setView(item);
-
-                    addItem.setPositiveButton("Add item", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            theItems.add(item.getText().toString());
-                            itemsLayout.addView(getView(item.getText().toString()), 0);
-                        }
-                    });
-
-                    addItem.show();
-
-                }
-            });
+            addItem.setOnClickListener(AddItemListener);
 
             final Button submit = (Button) rootInflater.findViewById(R.id.submitButton);
             submit.setOnClickListener(new View.OnClickListener() {
@@ -145,11 +143,11 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         theItems.add("ITEM");
                     }
 
-                    final String myName = getEditText(com.ryan.bringmefood.R.id.myName);
-                    final String myAddress = getEditText(com.ryan.bringmefood.R.id.myAddress);
-                    final String myPhone = getEditText(com.ryan.bringmefood.R.id.myPhoneNumber);
-                    final String restaurantName = getEditText(com.ryan.bringmefood.R.id.restaurantName);
-                    final String myCost = getEditText(com.ryan.bringmefood.R.id.cost);
+                    final String myName = getEditText(R.id.myName);
+                    final String myAddress = getEditText(R.id.myAddress);
+                    final String myPhone = getEditText(R.id.myPhoneNumber);
+                    final String restaurantName = getEditText(R.id.restaurantName);
+                    final String myCost = getEditText(R.id.cost);
                     final String Order_ID = String.valueOf(String.valueOf(System.currentTimeMillis()).hashCode());
                     final String time = String.valueOf(System.currentTimeMillis());
                     final String[] order = theItems.toArray(new String[theItems.size()]);
@@ -187,6 +185,34 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             theView.setPadding(20, 20, 0, 0);
             return theView;
         }
+
+        private final View.OnClickListener AddItemListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final AlertDialog.Builder addItem = new AlertDialog.Builder(getActivity());
+                final EditText item = new EditText(theC);
+
+                addItem.setTitle("Add Item");
+                addItem.setMessage("Add new item to your order");
+                addItem.setView(item);
+
+                addItem.setPositiveButton("Add item", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        theItems.add(item.getText().toString());
+                        itemsLayout.addView(getView(item.getText().toString()), 0);
+                    }
+                });
+                addItem.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                addItem.show();
+
+            }
+        };
     }
 
     public ArrayList<Order> removeAllDuplicates(final List<Order> theOrders) {
@@ -199,7 +225,14 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
         return new ArrayList<Order>(theSet);
     }
 
+    private String getPreferences(final String key) {
+        return thePrefs.getString(key, "");
+    }
 
+    private void setPreference(final String key, final String value) {
+        theEd.putString(key, value);
+        theEd.apply();
+    }
 
     @Override
     public Fragment getItem(int position) {

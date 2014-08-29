@@ -10,14 +10,18 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.content.SharedPreferences;
 import android.view.Menu;
 import android.view.MenuItem;
+
 
 public class MainOrdersActivity extends FragmentActivity {
 
     private ActionBar theActionBar;
     private ViewPager theViewPager;
     private Context theC;
+    private SharedPreferences thePrefs;
+    private SharedPreferences.Editor theEd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +29,8 @@ public class MainOrdersActivity extends FragmentActivity {
         setContentView(R.layout.activity_main_orders);
 
         theC = getApplicationContext();
+        thePrefs = this.getSharedPreferences("com.ryan.bringmefood", Context.MODE_PRIVATE);
+        theEd = thePrefs.edit();
 
         theActionBar = getActionBar();
         theActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -78,8 +84,18 @@ public class MainOrdersActivity extends FragmentActivity {
 
         theTab = theActionBar.newTab().setText("New order").setTabListener(tabListener);
         theActionBar.addTab(theTab, 1);
-
     }
+
+    private String getPreferences(final String key) {
+        return thePrefs.getString(key, "");
+    }
+
+    private void setPreference(final String key, final String value) {
+        theEd.putString(key, value);
+        theEd.apply();
+    }
+
+
 
     //Tab listener
     private final ActionBar.TabListener tabListener = new ActionBar.TabListener() {
@@ -104,9 +120,10 @@ public class MainOrdersActivity extends FragmentActivity {
         }
 
         @Override
-        public void onTabUnselected(Tab tab, android.app.FragmentTransaction ft) {
+        public void onTabUnselected(Tab tab, FragmentTransaction ft) {
         }
     };
+
 
     public void log(final String message) {
         Log.e("com.ryan.bringmefood", message);
