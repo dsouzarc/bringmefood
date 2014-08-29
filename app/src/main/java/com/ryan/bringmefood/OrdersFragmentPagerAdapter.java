@@ -128,6 +128,19 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             restaurantNameET = (EditText) rootInflater.findViewById(R.id.restaurantName);
             orderCostET = (EditText) rootInflater.findViewById(R.id.cost);
             submit = (Button) rootInflater.findViewById(R.id.submitButton);
+
+            String data = getPreferences("myName");
+            if(data.length() > 2) {
+                myNameET.setText(data);
+            }
+
+            data = getPreferences("myPhone");
+            myPhoneET.setText((data.length() > 2) ? data : getPhoneNumber(theC));
+
+            data = getPreferences("myAddress");
+            if(data.length() > 2) {
+                myPhoneET.setText(data);
+            }
         }
 
         @Override
@@ -176,6 +189,10 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                 final String time = String.valueOf(System.currentTimeMillis());
                 final String[] order = theItems.toArray(new String[theItems.size()]);
                 final String UID = Secure.getString(theC.getContentResolver(), Secure.ANDROID_ID);
+
+                setPreference("myName", myName);
+                setPreference("myPhone", myPhone);
+                setPreference("myAddress", myAddress);
 
                 //Name, phone number, my address, restaurant address, UID, myOrder[], order ID, orderCost, time in millis, status
 
