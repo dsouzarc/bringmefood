@@ -89,7 +89,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             theDB.deleteOrder(theOrder.getIdNumber());
-                            
+
                             allOrders.remove(theOrder);
 
                             theLL.removeAllViews();
@@ -104,6 +104,8 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         public void onClick(DialogInterface dialog, int which) {
                         }
                     });
+
+                    deleteItem.show();
 
                     return false;
                 }
