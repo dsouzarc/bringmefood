@@ -1,36 +1,28 @@
 package com.ryan.bringmefood;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.provider.Settings.Secure;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import java.util.LinkedList;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.widget.ScrollView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.app.AlertDialog;
-import android.view.LayoutInflater;
-import java.util.Calendar;
-import android.provider.Settings.Secure;
-import android.view.View;
-import android.widget.Button;
-import java.util.GregorianCalendar;
-import android.widget.TextView;
-import android.content.DialogInterface;
-import android.widget.EditText;
-import java.text.DecimalFormat;
+
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import android.graphics.Color;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import android.view.ViewGroup;
-import android.content.Context;
 
 public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
