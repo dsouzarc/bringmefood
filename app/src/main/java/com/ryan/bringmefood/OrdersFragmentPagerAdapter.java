@@ -12,7 +12,6 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
     private static final int NUM_PAGES = 2;
 
-
     public OrdersFragmentPagerAdapter(final FragmentManager fragmentManager) {
         super(fragmentManager);
     }
