@@ -49,7 +49,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
             theLL = (LinearLayout) rootInflater.findViewById(R.id.theLinearLayout);
 
-            final SQLiteOrdersDatabase theDB = new SQLiteOrdersDatabase(theC);
+            theDB = new SQLiteOrdersDatabase(theC);
             allOrders.addAll(theDB.getAllOrders()); //removeAllDuplicates(theDB.getAllOrders());
 
             addOrdersToLayout();
@@ -81,11 +81,8 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             theDB.deleteOrder(theOrder.getIdNumber());
-
                             allOrders.remove(theOrder);
-
                             theLL.removeAllViews();
-
                             addOrdersToLayout();
 
                         }
@@ -98,12 +95,9 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                     });
 
                     deleteItem.show();
-
                     return false;
                 }
             });
-
-
             return theView;
         }
     };
@@ -117,9 +111,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             final View rootInflater = theLI.inflate(R.layout.neworder_layout, container, false);
 
             this.rootInflater = rootInflater;
-
             final LinearLayout itemsLayout = (LinearLayout) rootInflater.findViewById(R.id.itemsLinearLayout);
-
             final TextView addItem = (TextView) rootInflater.findViewById(com.ryan.bringmefood.R.id.addItemTV);
 
             addItem.setOnClickListener(new View.OnClickListener() {
