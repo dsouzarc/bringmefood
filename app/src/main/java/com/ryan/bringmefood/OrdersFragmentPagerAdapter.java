@@ -107,6 +107,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
                     deleteItem.show();
 
+
                     return false;
                 }
             });

@@ -80,6 +80,23 @@ public class SQLiteOrdersDatabase extends SQLiteOpenHelper {
         return new ArrayList<Order>(allOrders);
     }
 
+    public void addOrder(final Order[] theOrders) {
+        final SQLiteDatabase theDB = this.getWritableDatabase();
+        theDB.beginTransaction();
+
+        ContentValues theValues;
+        for(Order theOrder : theOrders) {
+            theValues = new ContentValues();
+            theValues.put(KEY_ID, theOrder.getIdNumber());
+            theValues.put(KEY_ORDER, theOrder.toJSONObject().toString());
+            theDB.insert(TABLE_NAME, null, theValues);
+        }
+
+        theDB.setTransactionSuccessful();
+        theDB.endTransaction();
+        theDB.close();
+    }
+
     public void deleteOrder(final String orderID) {
         final SQLiteDatabase theDB = this.getWritableDatabase();
 
