@@ -48,22 +48,23 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             final LinearLayout theLL = (LinearLayout) rootInflater.findViewById(R.id.theLinearLayout);
 
             final SQLiteOrdersDatabase theDB = new SQLiteOrdersDatabase(theC);
-            final ArrayList<Order> allOrders = removeAllDuplicates(theDB.getAllOrders());
+            final ArrayList<Order> allOrders = theDB.getAllOrders(); //removeAllDuplicates(theDB.getAllOrders());
 
             for(Order theOrder : allOrders) {
-                theLL.addView(getView(theOrder.getRestaurantName() + theOrder.getStatus()));
+                theLL.addView(getView(theOrder));
             }
             return rootInflater;
         }
-        public TextView getView(final String text) {
+        public TextView getView(final Order theOrder) {
             final TextView theView = new TextView(theC);
-            theView.setText(text);
+            theView.setText(theOrder.getRestaurantName() + theOrder.getStatus());
             theView.setTextColor(Color.BLACK);
             theView.setTextSize(20);
             theView.setPadding(20, 20, 0, 0);
+
+            
             return theView;
         }
-
     };
 
     public class NewOrder extends Fragment {
@@ -107,6 +108,10 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             submit.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if(theItems.size() == 0) {
+                        theItems.add("ITEM");
+                    }
+
                     final String myName = getEditText(com.ryan.bringmefood.R.id.myName);
                     final String myAddress = getEditText(com.ryan.bringmefood.R.id.myAddress);
                     final String myPhone = getEditText(com.ryan.bringmefood.R.id.myPhoneNumber);
