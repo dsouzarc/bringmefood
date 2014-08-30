@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--https://www.google.com/design/spec/style/color.html#color-ui-color-palette -->
+<resources>
+    <color name="primary500">#5677fc</color>
+    <color name="primary700">#455ede</color>
+    <color name="primary900">#2a36b1</color>
+    <color name="primary100">#d0d9ff</color> <!--fallback -->
+
+    <color name="fallback100">#ff7997</color>
+    <color name="fallback200">#ff5177</color>
+    <color name="fallback400">#ff2d6f</color>
+</resources>
