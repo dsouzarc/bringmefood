@@ -9,6 +9,7 @@ import android.app.ProgressDialog;
 import android.widget.Toast;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.provider.Settings.Secure;
 import android.support.v4.app.Fragment;
@@ -348,13 +349,17 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                 if(status) {
                     theDialog.setMessage("Order submitted");
                     theDialog.setTitle("Order submitted");
-                    theDialog.dismiss();
                     makeToast("Order successfully submitted");
+
+                    final Intent viewOrder = new Intent(getActivity(), VieworderActivity.class);
+                    viewOrder.putExtra("order", theOrder.toJSONObject().toString());
+                    viewOrder.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(viewOrder);
                 }
                 else {
                     makeToast("Sorry, something went wrong. Please submit again");
-                    theDialog.dismiss();
                 }
+                theDialog.dismiss();
             }
         }
 
