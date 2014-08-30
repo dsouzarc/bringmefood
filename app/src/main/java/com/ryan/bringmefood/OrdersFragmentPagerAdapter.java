@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.view.WindowManager;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.support.v4.app.Fragment;
@@ -226,21 +227,16 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
-                            Iterator<String> theIT = theItems.iterator();
-
-                            while(theIT.hasNext() && theIT != null) {
-                                if(theIT.next().equals(toBeDeleted)) {
-                                    theIT.remove();
-                                    theIT = null;
+                            for(String item : theItems) {
+                                if (toBeDeleted.equals(item)) {
+                                    theItems.remove(item);
+                                    break;
                                 }
                             }
 
                             itemsLayout.removeAllViews();
-
-                            theIT = theItems.iterator();
-
-                            while(theIT.hasNext()) {
-                                itemsLayout.addView(getItemView(theIT.next()));
+                            for(String item : theItems) {
+                                itemsLayout.addView(getItemView(item));
                             }
                         }
                     });
@@ -250,13 +246,10 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
                         }
                     });
-
                     deleteAD.show();
-
                     return false;
                 }
             });
-
             return theView;
         }
 
@@ -352,6 +345,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                     viewOrder.putExtra("order", theOrder.toJSONObject().toString());
                     viewOrder.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(viewOrder);
+                    getActivity().finish();
                 }
                 else {
                     makeToast("Sorry, something went wrong. Please submit again");
@@ -394,8 +388,10 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
                     }
                 });
-                addItem.show();
 
+                final AlertDialog theDialog = addItem.create();
+                theDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+                theDialog.show();
             }
         };
 
