@@ -1,10 +1,10 @@
 package com.ryan.bringmefood;
 
+import android.net.Uri;
 import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import android.net.Uri;
 
 import java.util.Arrays;
 import java.util.Calendar;

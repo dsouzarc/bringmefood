@@ -1,7 +1,7 @@
 package com.ryan.bringmefood;
-import android.util.Log;
-import android.content.Context;
+
 import android.app.Activity;
+import android.util.Log;
 import android.widget.Toast;
 /**
  * Created by Ryan on 8/30/14.
