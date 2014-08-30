@@ -12,6 +12,6 @@ public class Constant {
     }
 
     public static void makeToast(final Context theC, final String message) {
-        Toast.makeText(theC, message, Toast.LENGTH_LONG);
+        Toast.makeText(theC, message, Toast.LENGTH_LONG).show();
     }
 }

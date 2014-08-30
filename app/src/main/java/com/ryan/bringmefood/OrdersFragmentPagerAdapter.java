@@ -368,7 +368,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
         };
 
         private void makeToast(final String message) {
-            Toast.makeText(theC, message, Toast.LENGTH_LONG);
+            Toast.makeText(theC, message, Toast.LENGTH_LONG).show();
         }
     }
 
