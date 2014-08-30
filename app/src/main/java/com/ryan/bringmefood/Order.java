@@ -19,12 +19,12 @@ public class Order {
     private final String restaurantName;
     private final String uniqueDeviceIdentifier;
     private final String[] myOrder;
-    private String orderCost;
     private final String idNumber;
     private final String calendarTimeMillis;
     private final Calendar theDate;
 
     private String status;
+    private String orderCost;
 
     //Name, phone number, my address, restaurant address, UID, myOrder[], order ID, orderCost, time in millis, status
 

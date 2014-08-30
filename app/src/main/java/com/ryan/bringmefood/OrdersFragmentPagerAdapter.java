@@ -8,6 +8,13 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.support.v4.app.Fragment;
+import org.apache.http.*;
+import org.apache.http.client.*;
+import org.apache.http.util.*;
+import org.apache.http.client.methods.*;
+import org.apache.http.impl.client.*;
+import android.util.Log;
+import org.apache.http.impl.*;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.telephony.TelephonyManager;
@@ -16,15 +23,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.net.Uri;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.SortedSet;
-import java.util.Iterator;
 import java.util.TreeSet;
 
 public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
@@ -39,7 +47,6 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
         this.theC = theC;
         this.thePrefs = theC.getSharedPreferences("com.ryan.bringmefood", Context.MODE_PRIVATE);
         this.theEd = thePrefs.edit();
-
     }
 
     public class MyOrders extends Fragment {
@@ -174,7 +181,6 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                     theItem.setText(text);
 
                     editAD.setView(theItem);
-                    editAD.show();
 
                     editAD.setPositiveButton("Update", new DialogInterface.OnClickListener() {
                         @Override
@@ -198,6 +204,8 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         public void onClick(DialogInterface dialog, int which) {
                         }
                     });
+
+                    editAD.show();
                 }
             });
 
@@ -268,15 +276,61 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                 setPreference("myPhone", myPhone);
                 setPreference("myAddress", myAddress);
 
+                String neworder = "";
+                for(int i = 0; i < order.length; i++) {
+                    neworder += order[i] + "||";
+                }
+                neworder = neworder.substring(0, neworder.length() - 2);
+
+
                 //Name, phone number, my address, restaurant address, UID, myOrder[], order ID, orderCost, time in millis, status
 
                 final Order theOrder = new Order(myName, myPhone, myAddress, restaurantName,
                         UID, order, Order_ID, myCost, time, "0");
+
+                String ORDER = String.format("http://barsoftapps.com/scripts/PrincetonFoodDelivery.py?id=%s&udid=%s&PhoneNumber=%s&" +
+                "Name=%s&Restaurant=%s&OrderDetails=%s&Address=%s&user=%s&newOrder=%s&EstimatedCost=%s",
+                Uri.encode(Order_ID), Uri.encode(UID), Uri.encode(myPhone), Uri.encode(myName),
+                        Uri.encode(restaurantName), Uri.encode(neworder), Uri.encode(myAddress),
+                        Uri.encode("1"), Uri.encode("1"), Uri.encode(myCost));
+
+                new Thread(new PostOrder(ORDER)).start();
+
+
+
                 SQLiteOrdersDatabase theDB = new SQLiteOrdersDatabase(theC);
                 theDB.addOrder(theOrder);
                 theDB.close();
             }
         };
+
+        private class PostOrder implements Runnable {
+            private String order;
+
+            public PostOrder(String order) {
+                this.order = order;
+            }
+
+            @Override
+            public void run() {
+                HttpClient httpclient = new DefaultHttpClient();
+                HttpPost httppost = new HttpPost(order);
+                log("ORDER: " + order);
+
+                try {
+                    HttpResponse response = httpclient.execute(httppost);
+                    String response1 = EntityUtils.toString(response.getEntity());
+                    log(response1);
+                }
+                catch (Exception e) {
+                    log(e.toString());
+                }
+            }
+        }
+
+        private void log(final String message) {
+            Log.e("com.ryan.bringmefood", message);
+        }
 
         private final View.OnClickListener AddItemListener = new View.OnClickListener() {
             @Override
