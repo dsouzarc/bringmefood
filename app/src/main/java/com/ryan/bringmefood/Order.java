@@ -81,7 +81,14 @@ public class Order {
                 Uri.encode("1"), Uri.encode("1"), Uri.encode(orderCost));
     }
 
-
+    private static Order getOrder(final String orderAsJSON) {
+        try {
+            return getOrder(new JSONObject(orderAsJSON));
+        }
+        catch (Exception e) {
+            return null;
+        }
+    }
 
     public String getStatus() {
         return getStatusAsString(getStatus(Integer.parseInt(status)));
