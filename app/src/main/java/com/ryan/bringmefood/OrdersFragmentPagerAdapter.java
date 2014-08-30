@@ -98,7 +98,6 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
         public void addOrdersToLayout() {
             for(Order theOrder : allOrders) {
                 theLL.addView(getView(theOrder));
-                log("Working");
             }
         }
 
