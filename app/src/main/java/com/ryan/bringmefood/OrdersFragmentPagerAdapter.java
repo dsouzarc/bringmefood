@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
-import android.view.WindowManager;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.support.v4.app.Fragment;
@@ -19,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -33,7 +33,6 @@ import org.apache.http.util.EntityUtils;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.SortedSet;
@@ -64,12 +63,9 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
         public View onCreateView(LayoutInflater theLI, ViewGroup container, Bundle savedinstance) {
             final View rootInflater = theLI.inflate(R.layout.myorders_layout, container, false);
 
-            theDB = new SQLiteOrdersDatabase(theC);
-
             theLL = (LinearLayout) rootInflater.findViewById(R.id.theLinearLayout);
-
             theDB = new SQLiteOrdersDatabase(theC);
-            allOrders.addAll(theDB.getAllOrders()); //removeAllDuplicates(theDB.getAllOrders());
+            allOrders.addAll(theDB.getAllOrders());
 
             addOrdersToLayout();
             return rootInflater;
@@ -80,6 +76,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                 theLL.addView(getView(theOrder));
             }
         }
+
         public TextView getView(final Order theOrder) {
             final TextView theView = new TextView(theC);
             theView.setText(theOrder.getDateForm() + " " + theOrder.getRestaurantName() + theOrder.getStatus());
