@@ -89,7 +89,6 @@ public class MainOrdersActivity extends FragmentActivity {
 
         Tab theTab = theActionBar.newTab().setText("My Orders").setTabListener(tabListener);
         theActionBar.addTab(theTab, 0);
-
         theTab = theActionBar.newTab().setText("New order").setTabListener(tabListener);
         theActionBar.addTab(theTab, 1);
 

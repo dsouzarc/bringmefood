@@ -3,18 +3,24 @@
     <style name="AppTheme" parent="android:Theme.Holo.Light">
         <item name="android:actionBarStyle">@style/MyActionBar</item>
         <item name="android:actionBarTabStyle">@style/MyTabStyle</item>
+        <item name="android:actionBarTabTextStyle">@style/MyTabTextColorStyle</item>
     </style>
 
     <!-- ActionBar at top of screen -->
-    <style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
+    <style name="MyActionBar" parent="@android:style/Widget.DeviceDefault.ActionBar">
         <item name="android:background">@color/primary900</item>
         <item name="android:displayOptions">showTitle</item>
+        <item name="android:actionBarTabTextStyle">@style/MyTabTextColorStyle</item>
     </style>
 
     <!-- Tab icons (My orders, New order) -->
-    <style name="MyTabStyle" parent="android:Widget.ActionBar.TabView">
+    <style name="MyTabStyle" parent="android:Widget.DeviceDefault.ActionBar.TabView">
         <item name="android:background">@color/primary700</item>
-        <item name="android:textColor">@color/primary50</item>
+        <item name="android:actionMenuTextColor">@color/primary100</item>
+    </style>
+
+    <style name="MyTabTextColorStyle" parent="android:Widget.DeviceDefault.ActionBar.TabText" >
+        <item name="android:textColor">@android:color/white</item>
     </style>
 
     <style name="New_Order_Edit_Text" parent="android:Widget.Holo.EditText">
