@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.app.ProgressDialog;
 import android.widget.Toast;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -292,11 +293,31 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         final Order theOrder = new Order(myName, myPhone, myAddress, restaurantName,
                                 UID, order, Order_ID, myCost, time, "0");
 
-                        new Thread(new PostOrder(theOrder.getOrderHttpPost())).start();
+                        final ProgressDialog submitOrderProgress = ProgressDialog.show(theC,
+                                "Please wait", "Submitting Order to " + restaurantName, true);
+                        submitOrderProgress.setCancelable(true);
 
-                        SQLiteOrdersDatabase theDB = new SQLiteOrdersDatabase(theC);
-                        theDB.addOrder(theOrder);
-                        theDB.close();
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    final HttpClient httpclient = new DefaultHttpClient();
+                                    final HttpPost httppost = new HttpPost(theOrder.getOrderHttpPost());
+                                    final HttpResponse response = httpclient.execute(httppost);
+                                    final String response1 = EntityUtils.toString(response.getEntity());
+
+                                    if(response1.equals(""))
+
+                                    final SQLiteOrdersDatabase theDB = new SQLiteOrdersDatabase(theC);
+                                    theDB.addOrder(theOrder);
+                                    theDB.close();
+                                } catch (Exception e) {
+
+                                }
+                                ringProgressDialog.dismiss();
+                            }
+                        }).start();
+
                     }
                 });
 
