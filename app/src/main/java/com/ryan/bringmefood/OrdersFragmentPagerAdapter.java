@@ -2,15 +2,18 @@ package com.ryan.bringmefood;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.os.Message;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.app.ProgressDialog;
 import android.widget.Toast;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.AsyncTask;
 import android.provider.Settings.Secure;
 import android.support.v4.app.Fragment;
 import org.apache.http.*;
+import android.os.Handler;
 import org.apache.http.client.*;
 import org.apache.http.util.*;
 import org.apache.http.client.methods.*;
@@ -293,32 +296,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         final Order theOrder = new Order(myName, myPhone, myAddress, restaurantName,
                                 UID, order, Order_ID, myCost, time, "0");
 
-                        final ProgressDialog submitOrderProgress = ProgressDialog.show(getActivity(),
-                                "Please wait", "Submitting Order to " + restaurantName, true);
-                        submitOrderProgress.setCancelable(true);
-
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    final HttpClient httpclient = new DefaultHttpClient();
-                                    final HttpPost httppost = new HttpPost(theOrder.getOrderHttpPost());
-                                    final HttpResponse response = httpclient.execute(httppost);
-                                    final String response1 = EntityUtils.toString(response.getEntity());
-
-                                    if(response1.equals("ACK")) {
-                                        makeToast("Order submitted");
-                                        final SQLiteOrdersDatabase theDB = new SQLiteOrdersDatabase(theC);
-                                        theDB.addOrder(theOrder);
-                                        theDB.close();
-                                    }
-
-                                } catch (Exception e) {
-                                    makeToast("Something went wrong. Please try resubmitting your order");
-                                }
-                                submitOrderProgress.dismiss();
-                            }
-                        }).start();
+                        new SubmitOrderTask(theOrder).execute();
                     }
                 });
 
@@ -331,6 +309,58 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                 confirmSubmit.show();
             }
         };
+
+        private class SubmitOrderTask extends AsyncTask<Void, Void, Boolean> {
+            private final Order theOrder;
+            private final ProgressDialog theDialog;
+
+            public SubmitOrderTask(final Order theOrder) {
+                this.theOrder = theOrder;
+                theDialog = ProgressDialog.show(getActivity(), "Please wait", "Submitting order to " +
+                theOrder.getRestaurantName(), true);
+                theDialog.setCancelable(false);
+            }
+
+            @Override
+            public Boolean doInBackground(Void... params) {
+                try {
+                    final HttpClient httpclient = new DefaultHttpClient();
+                    final HttpPost httppost = new HttpPost(theOrder.getOrderHttpPost());
+                    final HttpResponse response = httpclient.execute(httppost);
+                    final String response1 = EntityUtils.toString(response.getEntity());
+
+                    if (response1.contains("ACK")) {
+                        final SQLiteOrdersDatabase theDB = new SQLiteOrdersDatabase(theC);
+                        theDB.addOrder(theOrder);
+                        theDB.close();
+                        log("Successfully ordered " + response1);
+                        return true;
+                    }
+                }
+                catch(Exception e) {
+                    e.printStackTrace();
+                }
+                return false;
+            }
+
+            @Override
+            public void onPostExecute(final Boolean status) {
+                if(status) {
+                    theDialog.setMessage("Order submitted");
+                    theDialog.setTitle("Order submitted");
+                    theDialog.dismiss();
+                    makeToast("Order successfully submitted");
+                }
+                else {
+                    makeToast("Sorry, something went wrong. Please submit again");
+                    theDialog.dismiss();
+                }
+            }
+        }
+
+        private void log(final String message) {
+            Log.e("com.ryan.bringmefood", message);
+        }
 
         private final View.OnClickListener AddItemListener = new View.OnClickListener() {
             @Override
@@ -368,7 +398,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
         };
 
         private void makeToast(final String message) {
-            Toast.makeText(theC, message, Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
         }
     }
 

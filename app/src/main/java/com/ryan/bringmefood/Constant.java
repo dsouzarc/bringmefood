@@ -1,6 +1,7 @@
 package com.ryan.bringmefood;
 import android.util.Log;
 import android.content.Context;
+import android.app.Activity;
 import android.widget.Toast;
 /**
  * Created by Ryan on 8/30/14.
@@ -11,7 +12,7 @@ public class Constant {
         Log.e("com.ryan.bringmefood", message);
     }
 
-    public static void makeToast(final Context theC, final String message) {
-        Toast.makeText(theC, message, Toast.LENGTH_LONG).show();
+    public static void makeToast(final Activity theActivity, final String message) {
+        Toast.makeText(theActivity, message, Toast.LENGTH_LONG).show();
     }
 }
