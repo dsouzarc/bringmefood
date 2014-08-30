@@ -282,8 +282,6 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
                 new Thread(new PostOrder(theOrder.getOrderHttpPost())).start();
 
-
-
                 SQLiteOrdersDatabase theDB = new SQLiteOrdersDatabase(theC);
                 theDB.addOrder(theOrder);
                 theDB.close();
