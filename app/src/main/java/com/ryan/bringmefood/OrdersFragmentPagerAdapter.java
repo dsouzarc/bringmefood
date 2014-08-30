@@ -5,8 +5,11 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.util.DisplayMetrics;
 import android.content.SharedPreferences;
+import android.util.TypedValue;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
@@ -44,20 +47,41 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
     private final Context theC;
     private final SharedPreferences thePrefs;
     private final SharedPreferences.Editor theEd;
+    private final DisplayMetrics theMetrics;
+    private final int DP_72, DP_16, DP_8;
+    private final int SP_16, SP_14;
 
     public OrdersFragmentPagerAdapter(final FragmentManager fragmentManager, final Context theC) {
         super(fragmentManager);
         this.theC = theC;
         this.thePrefs = theC.getSharedPreferences("com.ryan.bringmefood", Context.MODE_PRIVATE);
         this.theEd = thePrefs.edit();
+
+        this.theMetrics = theC.getResources().getDisplayMetrics();
+        this.DP_72 = getDP(72);
+        this.DP_16 = getDP(16);
+        this.DP_8 = getDP(8);
+        this.SP_16 = getSP(16);
+        this.SP_14 = getSP(14);
+    }
+
+    private int getSP(final int theNum) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, theNum, theMetrics);
+    }
+    private int getDP(final int theNum) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, theNum, theMetrics);
     }
 
     public class MyOrders extends Fragment {
 
         private final ArrayList<Order> allOrders = new ArrayList<Order>();
+        private final LinearLayout.LayoutParams theLayoutParams =
+                new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT);
 
         private LinearLayout theLL;
         private SQLiteOrdersDatabase theDB;
+
 
         @Override
         public View onCreateView(LayoutInflater theLI, ViewGroup container, Bundle savedinstance) {
@@ -77,45 +101,68 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             }
         }
 
-        public TextView getView(final Order theOrder) {
-            final TextView theView = new TextView(theC);
-            theView.setText(theOrder.getDateForm() + " " + theOrder.getRestaurantName() + theOrder.getStatus());
-            theView.setTextColor(Color.BLACK);
-            theView.setTextSize(20);
-            theView.setPadding(20, 20, 0, 0);
+        public LinearLayout getView(final Order theOrder) {
 
-            theView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
+            final LinearLayout encompassingLV = new LinearLayout(theC);
+            encompassingLV.setLayoutParams(theLayoutParams);
+            encompassingLV.setOrientation(LinearLayout.VERTICAL);
+            encompassingLV.setMinimumHeight(DP_72);
+            encompassingLV.setPadding(DP_16, 0, DP_8, DP_8);
 
-                    AlertDialog.Builder deleteItem = new AlertDialog.Builder(getActivity());
-                    deleteItem.setTitle("Delete " + theOrder.getRestaurantName() + " order");
-                    deleteItem.setMessage("Delete your order for " + theOrder.getRestaurantName() +
-                    " on " + theOrder.getDateForm());
+            final TextView restaurantTV = new TextView(theC);
+            final TextView statusTV = new TextView(theC);
 
-                    deleteItem.setPositiveButton("Delete order", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            theDB.deleteOrder(theOrder.getIdNumber());
-                            allOrders.remove(theOrder);
-                            theLL.removeAllViews();
-                            addOrdersToLayout();
+            restaurantTV.setTextSize(16, TypedValue.COMPLEX_UNIT_SP);
+            statusTV.setTextSize(14, TypedValue.COMPLEX_UNIT_SP);
 
-                        }
-                    });
+            final MyOrderLongClickListener theLong = new MyOrderLongClickListener(theOrder);
 
-                    deleteItem.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    });
+            restaurantTV.setOnLongClickListener(theLong);
+            statusTV.setOnLongClickListener(theLong);
 
-                    deleteItem.show();
-                    return false;
-                }
-            });
-            return theView;
+            encompassingLV.addView(restaurantTV);
+            encompassingLV.addView(statusTV);
+
+            return encompassingLV;
         }
+
+        private class MyOrderLongClickListener implements View.OnLongClickListener {
+            private final Order theOrder;
+
+            public MyOrderLongClickListener(final Order theOrder) {
+                this.theOrder = theOrder;
+            }
+
+            @Override
+            public boolean onLongClick(View v) {
+                AlertDialog.Builder deleteItem = new AlertDialog.Builder(getActivity());
+                deleteItem.setTitle("Delete " + theOrder.getRestaurantName() + " order");
+                deleteItem.setMessage("Delete your order for " + theOrder.getRestaurantName() +
+                        " on " + theOrder.getDateForm());
+
+                deleteItem.setPositiveButton("Delete order", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        theDB.deleteOrder(theOrder.getIdNumber());
+                        allOrders.remove(theOrder);
+                        theLL.removeAllViews();
+                        addOrdersToLayout();
+
+                    }
+                });
+
+                deleteItem.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+
+                deleteItem.show();
+                return false;
+            }
+
+        }
+
     };
 
     public class NewOrder extends Fragment {
