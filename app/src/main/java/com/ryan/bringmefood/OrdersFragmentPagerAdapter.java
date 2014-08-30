@@ -275,26 +275,12 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                 setPreference("myName", myName);
                 setPreference("myPhone", myPhone);
                 setPreference("myAddress", myAddress);
-
-                String neworder = "";
-                for(int i = 0; i < order.length; i++) {
-                    neworder += order[i] + "||";
-                }
-                neworder = neworder.substring(0, neworder.length() - 2);
-
-
                 //Name, phone number, my address, restaurant address, UID, myOrder[], order ID, orderCost, time in millis, status
 
                 final Order theOrder = new Order(myName, myPhone, myAddress, restaurantName,
                         UID, order, Order_ID, myCost, time, "0");
 
-                String ORDER = String.format("http://barsoftapps.com/scripts/PrincetonFoodDelivery.py?id=%s&udid=%s&PhoneNumber=%s&" +
-                "Name=%s&Restaurant=%s&OrderDetails=%s&Address=%s&user=%s&newOrder=%s&EstimatedCost=%s",
-                Uri.encode(Order_ID), Uri.encode(UID), Uri.encode(myPhone), Uri.encode(myName),
-                        Uri.encode(restaurantName), Uri.encode(neworder), Uri.encode(myAddress),
-                        Uri.encode("1"), Uri.encode("1"), Uri.encode(myCost));
-
-                new Thread(new PostOrder(ORDER)).start();
+                new Thread(new PostOrder(theOrder.getOrderHttpPost())).start();
 
 
 

@@ -4,6 +4,7 @@ import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import android.net.Uri;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -65,6 +66,22 @@ public class Order {
         }
         return theObject;
     }
+
+    public String getOrderHttpPost() {
+        final StringBuilder newOrder = new StringBuilder("");
+        for(String order : myOrder) {
+            newOrder.append(order + "||");
+        }
+        final String orderString = newOrder.substring(0, newOrder.length());
+
+        return String.format("http://barsoftapps.com/scripts/PrincetonFoodDelivery.py?id=%s&udid=%s&PhoneNumber=%s&" +
+                        "Name=%s&Restaurant=%s&OrderDetails=%s&Address=%s&user=%s&newOrder=%s&EstimatedCost=%s",
+                Uri.encode(idNumber), Uri.encode(uniqueDeviceIdentifier), Uri.encode(myNumber), Uri.encode(myName),
+                Uri.encode(restaurantName), Uri.encode(orderString), Uri.encode(myAddress),
+                Uri.encode("1"), Uri.encode("1"), Uri.encode(orderCost));
+    }
+
+
 
     public String getStatus() {
         return getStatusAsString(getStatus(Integer.parseInt(status)));
