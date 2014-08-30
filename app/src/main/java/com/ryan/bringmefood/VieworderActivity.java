@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import com.ryan.bringmefood.R;
+import org.json.JSONObject;
 
 public class VieworderActivity extends Activity {
 
@@ -13,7 +14,9 @@ public class VieworderActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vieworder);
 
-        
+        final Order theOrder = Order.getOrder(getIntent().getExtras().getString("order"));
+
+
 
     }
 

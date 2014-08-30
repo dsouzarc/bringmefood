@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.widget.Toast;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
@@ -248,6 +249,8 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         }
                     });
 
+                    deleteAD.show();
+
                     return false;
                 }
             });
@@ -259,32 +262,51 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             @Override
             public void onClick(View v) {
                 if(theItems.size() == 0) {
-                    theItems.add("ITEM");
+                    makeToast("Must have at least 1 item");
+                    return;
                 }
 
-                final String myName = myNameET.getText().toString();
-                final String myAddress = myAddressET.getText().toString();
-                final String myPhone = myPhoneET.getText().toString();
-                final String restaurantName = restaurantNameET.getText().toString();
-                final String myCost = orderCostET.getText().toString();
-                final String Order_ID = String.valueOf(String.valueOf(System.currentTimeMillis()).hashCode());
-                final String time = String.valueOf(System.currentTimeMillis());
-                final String[] order = theItems.toArray(new String[theItems.size()]);
-                final String UID = Secure.getString(theC.getContentResolver(), Secure.ANDROID_ID);
+                final AlertDialog.Builder confirmSubmit = new AlertDialog.Builder(getActivity());
 
-                setPreference("myName", myName);
-                setPreference("myPhone", myPhone);
-                setPreference("myAddress", myAddress);
-                //Name, phone number, my address, restaurant address, UID, myOrder[], order ID, orderCost, time in millis, status
+                confirmSubmit.setTitle("Confirm Order");
+                confirmSubmit.setMessage("Are you sure you want to submit this order for $" +
+                                            orderCostET.getText().toString() + "?");
+                confirmSubmit.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        final String myName = myNameET.getText().toString();
+                        final String myAddress = myAddressET.getText().toString();
+                        final String myPhone = myPhoneET.getText().toString();
+                        final String restaurantName = restaurantNameET.getText().toString();
+                        final String myCost = orderCostET.getText().toString();
+                        final String Order_ID = String.valueOf(String.valueOf(System.currentTimeMillis()).hashCode());
+                        final String time = String.valueOf(System.currentTimeMillis());
+                        final String[] order = theItems.toArray(new String[theItems.size()]);
+                        final String UID = Secure.getString(theC.getContentResolver(), Secure.ANDROID_ID);
 
-                final Order theOrder = new Order(myName, myPhone, myAddress, restaurantName,
-                        UID, order, Order_ID, myCost, time, "0");
+                        setPreference("myName", myName);
+                        setPreference("myPhone", myPhone);
+                        setPreference("myAddress", myAddress);
+                        //Name, phone number, my address, restaurant address, UID, myOrder[], order ID, orderCost, time in millis, status
 
-                new Thread(new PostOrder(theOrder.getOrderHttpPost())).start();
+                        final Order theOrder = new Order(myName, myPhone, myAddress, restaurantName,
+                                UID, order, Order_ID, myCost, time, "0");
 
-                SQLiteOrdersDatabase theDB = new SQLiteOrdersDatabase(theC);
-                theDB.addOrder(theOrder);
-                theDB.close();
+                        new Thread(new PostOrder(theOrder.getOrderHttpPost())).start();
+
+                        SQLiteOrdersDatabase theDB = new SQLiteOrdersDatabase(theC);
+                        theDB.addOrder(theOrder);
+                        theDB.close();
+                    }
+                });
+
+                confirmSubmit.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+
+                confirmSubmit.show();
             }
         };
 
@@ -343,6 +365,10 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
             }
         };
+
+        private void makeToast(final String message) {
+            Toast.makeText(theC, message, Toast.LENGTH_LONG);
+        }
     }
 
     private String getPhoneNumber(final Context theC) {
