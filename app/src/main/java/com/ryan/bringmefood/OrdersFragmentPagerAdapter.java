@@ -98,24 +98,31 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
         public void addOrdersToLayout() {
             for(Order theOrder : allOrders) {
                 theLL.addView(getView(theOrder));
+                log("Working");
             }
         }
 
-        public LinearLayout getView(final Order theOrder) {
+        public View getView(final Order theOrder) {
 
             final LinearLayout encompassingLV = new LinearLayout(theC);
+            final TextView restaurantTV = new TextView(theC);
+            final TextView statusTV = new TextView(theC);
+            final MyOrderLongClickListener theLong = new MyOrderLongClickListener(theOrder);
+
             encompassingLV.setLayoutParams(theLayoutParams);
             encompassingLV.setOrientation(LinearLayout.VERTICAL);
             encompassingLV.setMinimumHeight(DP_72);
-            encompassingLV.setPadding(DP_16, 0, DP_8, DP_8);
+            encompassingLV.setPadding(DP_16, DP_8, 0, DP_8);
 
-            final TextView restaurantTV = new TextView(theC);
-            final TextView statusTV = new TextView(theC);
+            restaurantTV.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
+            statusTV.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
 
-            restaurantTV.setTextSize(16, TypedValue.COMPLEX_UNIT_SP);
-            statusTV.setTextSize(14, TypedValue.COMPLEX_UNIT_SP);
+            restaurantTV.setText(theOrder.getRestaurantName() + "WHAT ");
+            statusTV.setText(theOrder.getStatus());
 
-            final MyOrderLongClickListener theLong = new MyOrderLongClickListener(theOrder);
+            restaurantTV.setTextColor(Color.BLACK);
+            //restaurantTV.setTextColor(getResources().getColor(R.color.primary300));
+            //statusTV.setTextColor(getResources().getColor(R.color.primary500));
 
             restaurantTV.setOnLongClickListener(theLong);
             statusTV.setOnLongClickListener(theLong);
@@ -471,6 +478,10 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
     private void setPreference(final String key, final String value) {
         theEd.putString(key, value);
         theEd.apply();
+    }
+
+    private void log(final String message) {
+        Log.e("com.ryan.bringmefood", message);
     }
 
     @Override

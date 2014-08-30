@@ -5,6 +5,7 @@
     <color name="primary800">#3b50ce</color>
     <color name="primary700">#455ede</color>
     <color name="primary500">#5677fc</color>
+    <color name="primary300">#91a7ff</color>
     <color name="primary100">#d0d9ff</color> <!--fallback -->
     <color name="primary50">#e7e9fd</color>
 
