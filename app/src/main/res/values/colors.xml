@@ -4,6 +4,7 @@
     <color name="primary500">#5677fc</color>
     <color name="primary700">#455ede</color>
     <color name="primary900">#2a36b1</color>
+    <color name="primary50">#e7e9fd</color>
     <color name="primary100">#d0d9ff</color> <!--fallback -->
 
     <color name="fallback100">#ff7997</color>

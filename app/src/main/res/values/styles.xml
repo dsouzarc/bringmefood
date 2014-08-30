@@ -1,12 +1,20 @@
 <resources>
 
-    <!-- Base application theme. -->
     <style name="AppTheme" parent="android:Theme.Holo.Light">
         <item name="android:actionBarStyle">@style/MyActionBar</item>
+        <item name="android:actionBarTabStyle">@style/MyTabStyle</item>
     </style>
 
+    <!-- ActionBar at top of screen -->
     <style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:background">@color/primary900</item>
+        <item name="android:displayOptions">showTitle</item>
+    </style>
+
+    <!-- Tab icons (My orders, New order) -->
+    <style name="MyTabStyle" parent="android:Widget.ActionBar.TabView">
         <item name="android:background">@color/primary700</item>
+        <item name="android:textColor">@color/primary50</item>
     </style>
 
     <style name="New_Order_Edit_Text" parent="android:Widget.Holo.EditText">
@@ -15,5 +23,4 @@
         <item name="android:layout_marginTop">20dp</item>
         <item name="android:ems">10</item>
     </style>
-
 </resources>

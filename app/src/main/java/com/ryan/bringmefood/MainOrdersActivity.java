@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,6 +15,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.View;
+
+import android.widget.TextView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
@@ -84,12 +88,11 @@ public class MainOrdersActivity extends FragmentActivity {
         theActionBar.setDisplayShowTitleEnabled(true);
 
         Tab theTab = theActionBar.newTab().setText("My Orders").setTabListener(tabListener);
-        //theTab.setCustomView()
         theActionBar.addTab(theTab, 0);
-        theActionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.primary700)));
 
         theTab = theActionBar.newTab().setText("New order").setTabListener(tabListener);
         theActionBar.addTab(theTab, 1);
+
     }
 
     private String getPreferences(final String key) {
