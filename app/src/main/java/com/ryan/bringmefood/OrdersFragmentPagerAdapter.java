@@ -193,9 +193,14 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                             final String newItem = theItem.getText().toString();
                             final String oldItem = theV.getText().toString();
                             for(int i = 0; i < theItems.size(); i++) {
-                                if (theItems.get(i).equals(oldItem)) {
-                                    theItems.set(i, newItem);
-                                    i = Integer.MAX_VALUE;
+                                try {
+                                    if (theItems.get(i).equals(oldItem)) {
+                                        theItems.set(i, newItem);
+                                        i = Integer.MAX_VALUE;
+                                        break;
+                                    }
+                                }
+                                catch (Exception e) {
                                 }
                             }
 
