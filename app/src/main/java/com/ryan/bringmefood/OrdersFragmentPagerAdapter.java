@@ -142,7 +142,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
             @Override
             public boolean onLongClick(View v) {
-                AlertDialog.Builder deleteItem = new AlertDialog.Builder(getActivity());
+                AlertDialog.Builder deleteItem = new AlertDialog.Builder(getActivity(), R.style.DialogSlideAnim);
                 deleteItem.setTitle("Delete " + theOrder.getRestaurantName() + " order");
                 deleteItem.setMessage("Delete your order for " + theOrder.getRestaurantName() +
                         " on " + theOrder.getDateForm());
