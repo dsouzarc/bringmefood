@@ -293,7 +293,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         final Order theOrder = new Order(myName, myPhone, myAddress, restaurantName,
                                 UID, order, Order_ID, myCost, time, "0");
 
-                        final ProgressDialog submitOrderProgress = ProgressDialog.show(theC,
+                        final ProgressDialog submitOrderProgress = ProgressDialog.show(getActivity(),
                                 "Please wait", "Submitting Order to " + restaurantName, true);
                         submitOrderProgress.setCancelable(true);
 
@@ -306,18 +306,19 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                                     final HttpResponse response = httpclient.execute(httppost);
                                     final String response1 = EntityUtils.toString(response.getEntity());
 
-                                    if(response1.equals(""))
+                                    if(response1.equals("ACK")) {
+                                        makeToast("Order submitted");
+                                        final SQLiteOrdersDatabase theDB = new SQLiteOrdersDatabase(theC);
+                                        theDB.addOrder(theOrder);
+                                        theDB.close();
+                                    }
 
-                                    final SQLiteOrdersDatabase theDB = new SQLiteOrdersDatabase(theC);
-                                    theDB.addOrder(theOrder);
-                                    theDB.close();
                                 } catch (Exception e) {
-
+                                    makeToast("Something went wrong. Please try resubmitting your order");
                                 }
-                                ringProgressDialog.dismiss();
+                                submitOrderProgress.dismiss();
                             }
                         }).start();
-
                     }
                 });
 
@@ -330,34 +331,6 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                 confirmSubmit.show();
             }
         };
-
-        private class PostOrder implements Runnable {
-            private String order;
-
-            public PostOrder(String order) {
-                this.order = order;
-            }
-
-            @Override
-            public void run() {
-                HttpClient httpclient = new DefaultHttpClient();
-                HttpPost httppost = new HttpPost(order);
-                log("ORDER: " + order);
-
-                try {
-                    HttpResponse response = httpclient.execute(httppost);
-                    String response1 = EntityUtils.toString(response.getEntity());
-                    log(response1);
-                }
-                catch (Exception e) {
-                    log(e.toString());
-                }
-            }
-        }
-
-        private void log(final String message) {
-            Log.e("com.ryan.bringmefood", message);
-        }
 
         private final View.OnClickListener AddItemListener = new View.OnClickListener() {
             @Override
@@ -372,8 +345,15 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                 addItem.setPositiveButton("Add item", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        theItems.add(item.getText().toString());
-                        itemsLayout.addView(getItemView(item.getText().toString()), 0);
+                        final String itemText = item.getText().toString();
+
+                        if(itemText.replace(" ", "").length() < 2) {
+                            makeToast("Please enter a valid item");
+                        }
+                        else {
+                            theItems.add(item.getText().toString());
+                            itemsLayout.addView(getItemView(item.getText().toString()), 0);
+                        }
                     }
                 });
                 addItem.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
