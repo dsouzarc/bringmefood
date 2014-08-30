@@ -7,13 +7,16 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.graphics.Color;
 import android.support.v4.app.FragmentActivity;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 
 
 public class MainOrdersActivity extends FragmentActivity {
@@ -34,6 +37,8 @@ public class MainOrdersActivity extends FragmentActivity {
         theEd = thePrefs.edit();
 
         theActionBar = getActionBar();
+        getActionBar().setIcon(
+                new ColorDrawable(getResources().getColor(android.R.color.transparent)));
         theActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         theViewPager = (ViewPager) findViewById(R.id.theViewPager);
@@ -81,6 +86,7 @@ public class MainOrdersActivity extends FragmentActivity {
         Tab theTab = theActionBar.newTab().setText("My Orders").setTabListener(tabListener);
         //theTab.setCustomView()
         theActionBar.addTab(theTab, 0);
+        theActionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.primary700)));
 
         theTab = theActionBar.newTab().setText("New order").setTabListener(tabListener);
         theActionBar.addTab(theTab, 1);
@@ -136,7 +142,6 @@ public class MainOrdersActivity extends FragmentActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         getMenuInflater().inflate(R.menu.main_orders, menu);
         return true;
     }
