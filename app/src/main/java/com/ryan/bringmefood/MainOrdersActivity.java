@@ -4,23 +4,17 @@ import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.graphics.Color;
 import android.support.v4.app.FragmentActivity;
-import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.view.View;
-
-import android.widget.TextView;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
 
 
 public class MainOrdersActivity extends FragmentActivity {
