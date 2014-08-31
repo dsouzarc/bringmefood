@@ -141,7 +141,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
             @Override
             public boolean onLongClick(View v) {
-                AlertDialog.Builder deleteItem = new AlertDialog.Builder(getActivity(), R.style.DialogSlideAnim);
+                AlertDialog.Builder deleteItem = new AlertDialog.Builder(getActivity());
                 deleteItem.setTitle("Delete " + theOrder.getRestaurantName() + " order");
                 deleteItem.setMessage("Delete your order for " + theOrder.getRestaurantName() +
                         " on " + theOrder.getDateForm());
@@ -163,7 +163,9 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                     }
                 });
 
-                deleteItem.show();
+                final AlertDialog theDialog = deleteItem.create();
+                theDialog.getWindow().getAttributes().windowAnimations = com.ryan.bringmefood.R.style.DialogSlideAnim;
+                theDialog.show();
                 return false;
             }
 
