@@ -319,6 +319,8 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                     editAD.setMessage("Edit item");
 
                     final EditText theItem = new EditText(theC);
+                    theItem.setBackgroundColor(Color.WHITE);
+                    theItem.setTextColor(Color.BLACK);
                     theItem.setText(text);
 
                     editAD.setView(theItem);
@@ -505,6 +507,8 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             public void onClick(View v) {
                 final AlertDialog.Builder addItem = new AlertDialog.Builder(getActivity());
                 final EditText item = new EditText(theC);
+                item.setBackgroundColor(Color.WHITE);
+                item.setTextColor(Color.BLACK);
 
                 addItem.setTitle("Add Item");
                 addItem.setMessage("Add new item to your order");
