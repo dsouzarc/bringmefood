@@ -29,7 +29,10 @@ public class VieworderActivity extends Activity {
         initializeVariables();
 
         restaurantName.setText(theOrder.getRestaurantName());
-
+        orderStatus.setText(theOrder.getStatus());
+        //driverDetails;
+        myName.setText(theOrder.getMyName());
+        myPhone.setText(theOrder.getMyNumber());
 
     }
 
