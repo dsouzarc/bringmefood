@@ -153,7 +153,6 @@ public class MainOrdersActivity extends FragmentActivity {
         if(id == R.id.refreshItem) {
             try {
                 ofPA.myOrdersFragment.addOrdersToLayout();
-                log("ADDED");
             }
             catch (Exception e) {
                 e.printStackTrace();

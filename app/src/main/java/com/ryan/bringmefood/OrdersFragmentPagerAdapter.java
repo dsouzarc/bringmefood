@@ -2,28 +2,25 @@ package com.ryan.bringmefood;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.view.MenuItem;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
-import java.util.Iterator;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
-import java.util.concurrent.LinkedBlockingQueue;
 import android.support.v4.app.Fragment;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.support.v4.app.FragmentManager;
-import java.util.concurrent.BlockingQueue;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -41,6 +38,7 @@ import org.apache.http.util.EntityUtils;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.SortedSet;
@@ -85,15 +83,15 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
     public class MyOrders extends Fragment {
 
-        private final ArrayList<Order> allOrders = new ArrayList<Order>();
+        private final HttpClient httpclient = new DefaultHttpClient();
         private final LinearLayout.LayoutParams theLayoutParams =
                 new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT);
 
+        private final ArrayList<Order> allOrders = new ArrayList<Order>();
+
         private LinearLayout theLL;
         private SQLiteOrdersDatabase theDB;
-
-        private final BlockingQueue<Order> theUpdateQueue = new LinkedBlockingQueue<Order>();
         private Iterator<Order> theIterator;
         private UpdateOrderDB updateOrderDBRunnable;
 
@@ -128,21 +126,15 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
             private boolean toContinue = true;
 
-            public boolean isWorking() {
-                return toContinue;
-            }
-
             public void stop() {
                 toContinue = false;
             }
 
             @Override
             public void run() {
-
                 int counter = 0;
                 final Iterator<Order> theIterator = allOrders.iterator();
 
-                final HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httpPost;
                 HttpResponse httpResponse;
 
