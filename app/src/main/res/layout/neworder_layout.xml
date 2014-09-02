@@ -45,7 +45,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Add item"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginLeft="8dp"
                 android:id="@+id/addItemTV"/>
             <EditText
                 style="@style/New_Order_Edit_Text"
@@ -53,10 +54,11 @@
                 android:hint="Approximate cost"
                 android:id="@+id/cost"/>
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Submit"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="24dp"
+                android:background="@color/primary400"
                 android:id="@+id/submitButton"/>
         </LinearLayout>
     </ScrollView>
