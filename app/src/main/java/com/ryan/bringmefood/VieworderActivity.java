@@ -7,7 +7,10 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import android.content.Context;
 public class VieworderActivity extends Activity {
+
+    private final Context theC = this;
 
     private TextView restaurantName;
     private TextView orderStatus;
@@ -30,11 +33,24 @@ public class VieworderActivity extends Activity {
 
         restaurantName.setText(theOrder.getRestaurantName());
         orderStatus.setText(theOrder.getStatus());
-        //driverDetails;
         myName.setText(theOrder.getMyName());
         myPhone.setText(theOrder.getMyNumber());
         myAddress.setText(theOrder.getMyAddress());
         myCost.setText(theOrder.getOrderCost());
+
+        final String[] items = theOrder.getMyOrder();
+        for(String item : items) {
+            itemsLinearLayout.addView(getItemTV(item));
+        }
+    }
+
+    private TextView getItemTV(final String item) {
+        final TextView theView = new TextView(theC);
+        theView.setText(item);
+        theView.setTextColor(getResources().getColor(R.color.primary700));
+        theView.setTextAppearance(theC, R.style.Order_Items_TextView);
+
+        return theView;
     }
 
     private void initializeVariables() {
