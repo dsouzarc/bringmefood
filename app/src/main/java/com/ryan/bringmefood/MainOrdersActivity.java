@@ -16,7 +16,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-
 public class MainOrdersActivity extends FragmentActivity {
 
     private ActionBar theActionBar;
@@ -158,6 +157,11 @@ public class MainOrdersActivity extends FragmentActivity {
             catch (Exception e) {
                 e.printStackTrace();
             }
+            return true;
+        }
+
+        if(id == R.id.addOrderItem) {
+            theViewPager.setCurrentItem(1, true);
             return true;
         }
 
