@@ -143,11 +143,10 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         final String theResponse = EntityUtils.toString(httpResponse.getEntity());
 
                         final String deliveryTime = theResponse.substring(0, theResponse.indexOf("|"));
-                        log("DELIVERY:  " + deliveryTime);
-                        final String status = theResponse.substring(theResponse.indexOf("||"));
-                        log("STATUS: " + status);
+                        final String status = theResponse.substring(theResponse.indexOf("||") + 2);
 
-                        theOrder.setOrderStatus(theResponse.replace("\"", ""));
+                        theOrder.setEstimatedDeliveryTime(deliveryTime);
+                        theOrder.setOrderStatus(status);
                     } catch (Exception e) {
                         log(e.toString());
                     }
@@ -210,7 +209,22 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             if (isBeingUpdated) {
                 statusTV.setText("Updating...");
             } else {
-                statusTV.setText(theOrder.getStatus());
+                final String rawStatus = theOrder.getRawStatus();
+                if(rawStatus.contains("0")) {
+                    statusTV.setText("Unclaimed");
+                }
+                else if(rawStatus.contains("1")) {
+                    statusTV.setText("Claimed: " + theOrder.getDeliveryTime() + " minutes");
+                }
+                else if(rawStatus.contains("2")) {
+                    statusTV.setText("En route to address: " + theOrder.getDeliveryTime() + " minutes");
+                }
+                else if(rawStatus.contains("3")) {
+                    statusTV.setText("Delivered");
+                }
+                else {
+                    statusTV.setText("Unclaimed: " + theOrder.getDeliveryTime() + " minutes");
+                }
             }
 
             restaurantTV.setTextColor(Color.BLACK);

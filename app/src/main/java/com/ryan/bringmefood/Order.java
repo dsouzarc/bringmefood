@@ -150,10 +150,7 @@ public class Order {
         return null;
     }
 
-    public enum STATUS {
-        UNCLAIMED, CLAIMED, IN_PROCESS_OF_ORDERING, FOOD_ORDERED,
-        FOOD_PICKED_UP, ON_WAY_TO_HOUSE, DELIVERED;
-    }
+    public String getRawStatus() { return this.status; }
 
     public String getCalendarTimeMillis() {
         return this.calendarTimeMillis;
