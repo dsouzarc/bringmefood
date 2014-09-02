@@ -307,7 +307,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
         public TextView getItemView(final String text) {
             final TextView theView = new TextView(theC);
             theView.setText(text);
-            theView.setTextColor(Color.BLACK);
+            theView.setTextColor(getResources().getColor(R.color.primary700));
             theView.setTextSize(20);
             theView.setPadding(20, 20, 0, 0);
 
