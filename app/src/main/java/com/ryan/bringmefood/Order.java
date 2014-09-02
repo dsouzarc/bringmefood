@@ -26,6 +26,7 @@ public class Order {
 
     private String status;
     private String orderCost;
+    private String estimatedDeliveryTime = "";
 
     //Name, phone number, my address, restaurant address, UID, myOrder[], order ID, orderCost, time in millis, status
 
@@ -60,6 +61,7 @@ public class Order {
             theObject.put("orderCost", orderCost);
             theObject.put("time", calendarTimeMillis);
             theObject.put("status", status);
+            theObject.put("deliveryTime", estimatedDeliveryTime);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -132,11 +134,15 @@ public class Order {
                 theItems[i] = theOrder.get(i).toString();
             }
 
-            return new Order(theJSON.getString("myName"), theJSON.getString("myNumber"),
+            final String estimatedDeliver = theJSON.getString("deliveryTime");
+
+            final Order toReturn = new Order(theJSON.getString("myName"), theJSON.getString("myNumber"),
                     theJSON.getString("myAddress"), theJSON.getString("restaurantName"),
                     theJSON.getString("uniqueDeviceIdentifier"), theItems,
                     theJSON.getString("id"), theJSON.getString("orderCost"),
                     theJSON.getString("time"), theJSON.getString("status"));
+            toReturn.setEstimatedDeliveryTime(estimatedDeliver);
+            return toReturn;
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -166,6 +172,9 @@ public class Order {
                 "/" + theCal.get(Calendar.YEAR) + " at " +
                 theCal.get(Calendar.HOUR_OF_DAY) + ":" + theCal.get(Calendar.MINUTE);
     }
+
+    public String getDeliveryTime() { return this.estimatedDeliveryTime; }
+    public void setEstimatedDeliveryTime(final String time) { this.estimatedDeliveryTime = time; }
 
     public Calendar getCalendar() {
         return this.theDate;

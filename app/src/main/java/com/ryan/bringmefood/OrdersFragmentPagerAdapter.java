@@ -141,7 +141,12 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         httpPost = new HttpPost(theOrder.getUpdateOrderHttpPost());
                         httpResponse = httpclient.execute(httpPost);
                         final String theResponse = EntityUtils.toString(httpResponse.getEntity());
-                        log("RESULT: " + theResponse);
+
+                        final String deliveryTime = theResponse.substring(0, theResponse.indexOf("|"));
+                        log("DELIVERY:  " + deliveryTime);
+                        final String status = theResponse.substring(theResponse.indexOf("||"));
+                        log("STATUS: " + status);
+
                         theOrder.setOrderStatus(theResponse.replace("\"", ""));
                     } catch (Exception e) {
                         log(e.toString());
