@@ -188,7 +188,9 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             final LinearLayout encompassingLV = new LinearLayout(theC);
             final TextView restaurantTV = new TextView(theC);
             final TextView statusTV = new TextView(theC);
+
             final MyOrderLongClickListener theLong = new MyOrderLongClickListener(theOrder);
+            final MyOrderShortClickListener theShort = new MyOrderShortClickListener(theOrder);
 
             encompassingLV.setLayoutParams(theLayoutParams);
             encompassingLV.setOrientation(LinearLayout.VERTICAL);
@@ -213,10 +215,28 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             restaurantTV.setOnLongClickListener(theLong);
             statusTV.setOnLongClickListener(theLong);
 
+            restaurantTV.setOnClickListener(theShort);
+            statusTV.setOnClickListener(theShort);
+
             encompassingLV.addView(restaurantTV);
             encompassingLV.addView(statusTV);
 
             return encompassingLV;
+        }
+
+        private class MyOrderShortClickListener implements View.OnClickListener {
+            private final Order theOrder;
+
+            public MyOrderShortClickListener(final Order theOrder) {
+                this.theOrder = theOrder;
+            }
+
+            @Override
+            public void onClick(View v) {
+                final Intent toViewOrder = new Intent(getActivity(), VieworderActivity.class);
+                toViewOrder.putExtra("order", theOrder.toJSONObject().toString());
+                startActivity(toViewOrder);
+            }
         }
 
         private class MyOrderLongClickListener implements View.OnLongClickListener {
