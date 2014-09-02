@@ -86,6 +86,11 @@ public class Order {
                 Uri.encode("1"), Uri.encode("1"), Uri.encode(orderCost));
     }
 
+    public String getOrderDriverDeliveryHttpPost() {
+        return String.format("http://barsoftapps.com/scripts/PrincetonFoodDelivery.py?id=%s&udid=%s&getOrder=%s",
+                Uri.encode(idNumber), Uri.encode(uniqueDeviceIdentifier), Uri.encode("1"));
+    }
+
     public static Order getOrder(final String orderAsJSON) {
         try {
             return getOrder(new JSONObject(orderAsJSON));

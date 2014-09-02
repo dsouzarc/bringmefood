@@ -136,16 +136,17 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                 HttpResponse httpResponse;
 
                 while (theIterator.hasNext() && toContinue) {
+                    final Order theOrder = theIterator.next();
                     try {
-                        final Order theOrder = theIterator.next();
-                        httpPost = new HttpPost(theOrder.getUpdateOrderHttpPost());
+                        httpPost = new HttpPost(theOrder.getOrderDriverDeliveryHttpPost()); //theOrder.getUpdateOrderHttpPost());
                         httpResponse = httpclient.execute(httpPost);
                         final String theResponse = EntityUtils.toString(httpResponse.getEntity());
+                        log("RESULT: " + theResponse);
                         theOrder.setOrderStatus(theResponse.replace("\"", ""));
-                        new UpdateViewAndDatabaseTask(counter, theOrder).execute();
                     } catch (Exception e) {
                         log(e.toString());
                     }
+                    new UpdateViewAndDatabaseTask(counter, theOrder).execute();
                     counter++;
                 }
             }
