@@ -44,15 +44,16 @@ public class MainOrdersActivity extends FragmentActivity {
         final FragmentManager theManager = getSupportFragmentManager();
 
         final ViewPager.SimpleOnPageChangeListener thePageListener = new ViewPager.SimpleOnPageChangeListener() {
+
+            int positionCurrent;
+            boolean dontLoadList;
+
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 theActionBar.setSelectedNavigationItem(position);
                 supportInvalidateOptionsMenu();
             }
-
-            int positionCurrent;
-            boolean dontLoadList;
 
             @Override
             public void onPageScrollStateChanged(int state) {
