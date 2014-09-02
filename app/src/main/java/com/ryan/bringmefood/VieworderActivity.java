@@ -15,7 +15,6 @@ public class VieworderActivity extends Activity {
         final Order theOrder = Order.getOrder(getIntent().getExtras().getString("order"));
 
 
-
     }
 
 
