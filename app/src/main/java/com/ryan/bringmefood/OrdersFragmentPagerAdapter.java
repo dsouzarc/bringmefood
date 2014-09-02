@@ -10,8 +10,10 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
+import java.util.concurrent.LinkedBlockingQueue;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import java.util.concurrent.BlockingQueue;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
@@ -81,6 +83,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
         private LinearLayout theLL;
         private SQLiteOrdersDatabase theDB;
 
+        private final BlockingQueue<Order> orderQueue = new LinkedBlockingQueue<Order>();
 
         @Override
         public View onCreateView(LayoutInflater theLI, ViewGroup container, Bundle savedinstance) {
@@ -96,9 +99,38 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
         public void addOrdersToLayout() {
             for(Order theOrder : allOrders) {
+                orderQueue.add(theOrder);
                 theLL.addView(getView(theOrder));
             }
         }
+
+        private class UpdateOrderDB implements Runnable {
+            @Override
+            public void run() {
+
+                final HttpClient httpclient = new DefaultHttpClient();
+
+                HttpPost httpPost;
+                HttpResponse httpResponse;
+
+                while(true) {
+                    try {
+                        final Order theOrder = orderQueue.take();
+                        httpPost = new HttpPost(theOrder.getOrderHttpPost());
+                        httpResponse = httpclient.execute(httpPost);
+                        final String response1 = EntityUtils.toString(httpResponse.getEntity());
+
+
+
+                    }
+                    catch (Exception e) {
+                        e.printStackTrace();
+                        log(e.toString());
+                    }
+                }
+            }
+        }
+
 
         public View getView(final Order theOrder) {
 

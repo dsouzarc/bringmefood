@@ -67,6 +67,8 @@ public class Order {
         return theObject;
     }
 
+    
+
     public String getOrderHttpPost() {
         final StringBuilder newOrder = new StringBuilder("");
         for(String order : myOrder) {
