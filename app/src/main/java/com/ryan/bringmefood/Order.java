@@ -96,7 +96,12 @@ public class Order {
     }
 
     public String getStatus() {
-        return getStatusAsString(getStatus(Integer.parseInt(status)));
+        try {
+            return getStatusAsString(getStatus(Integer.parseInt(status.replace("\"", ""))));
+        }
+        catch (Exception e) {
+            return status;
+        }
     }
 
     public static Order getOrder(final JSONObject theJSON) {

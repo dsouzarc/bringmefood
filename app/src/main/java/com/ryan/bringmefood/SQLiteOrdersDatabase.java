@@ -80,6 +80,11 @@ public class SQLiteOrdersDatabase extends SQLiteOpenHelper {
         return new ArrayList<Order>(allOrders);
     }
 
+    public void updateOrder(final Order theOrder) {
+        deleteOrder(theOrder.getIdNumber());
+        addOrder(theOrder);
+    }
+
     public void addOrder(final Order[] theOrders) {
         final SQLiteDatabase theDB = this.getWritableDatabase();
         theDB.beginTransaction();

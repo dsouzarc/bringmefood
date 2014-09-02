@@ -8,10 +8,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import java.util.Iterator;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
 import java.util.concurrent.LinkedBlockingQueue;
 import android.support.v4.app.Fragment;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.support.v4.app.FragmentManager;
 import java.util.concurrent.BlockingQueue;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -83,7 +86,9 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
         private LinearLayout theLL;
         private SQLiteOrdersDatabase theDB;
 
-        private final BlockingQueue<Order> orderQueue = new LinkedBlockingQueue<Order>();
+        private final BlockingQueue<Order> theUpdateQueue = new LinkedBlockingQueue<Order>();
+        private Iterator<Order> theIterator;
+        private final UpdateOrderDB updateOrderRunnable = new UpdateOrderDB();
 
         @Override
         public View onCreateView(LayoutInflater theLI, ViewGroup container, Bundle savedinstance) {
@@ -93,62 +98,85 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             theDB = new SQLiteOrdersDatabase(theC);
             allOrders.addAll(theDB.getAllOrders());
 
-            new Thread(new UpdateOrderDB()).start();
-
             addOrdersToLayout();
             return rootInflater;
         }
 
         public void addOrdersToLayout() {
-            for(Order theOrder : allOrders) {
-                orderQueue.add(theOrder);
-                theLL.addView(getView(theOrder));
+
+            new Thread(new UpdateOrderDB()).start();
+            theIterator = allOrders.iterator();
+
+            while(theIterator.hasNext()) {
+                theLL.addView(getView(theIterator.next(), false));
             }
+
         }
 
         private class UpdateOrderDB implements Runnable {
+
             @Override
             public void run() {
 
-                final HttpClient httpclient = new DefaultHttpClient();
+                int counter = 0;
+                final Iterator<Order> theIterator = allOrders.iterator();
 
+                final HttpClient httpclient = new DefaultHttpClient();
                 HttpPost httpPost;
                 HttpResponse httpResponse;
 
-                int counter = 0;
-                while(true) {
+                while(theIterator.hasNext()) {
                     try {
-                        final Order theOrder = orderQueue.take();
+                        final Order theOrder = theIterator.next();
                         httpPost = new HttpPost(theOrder.getUpdateOrderHttpPost());
                         httpResponse = httpclient.execute(httpPost);
-                        final String response1 = EntityUtils.toString(httpResponse.getEntity());
-                        theOrder.setOrderStatus(response1);
-                        counter++;
+                        final String theResponse = EntityUtils.toString(httpResponse.getEntity());
+                        theOrder.setOrderStatus(theResponse);
+                        new UpdateViewAndDatabaseTask(counter, theOrder).execute();
                     }
                     catch (Exception e) {
-                        e.printStackTrace();
                         log(e.toString());
                     }
+                    counter++;
                 }
             }
         }
 
-        /*private class UpdateViewAndDatabaseTask extends AsyncTask<Void, Void, Void>{
+        private class UpdateViewAndDatabaseTask extends AsyncTask<Void, Void, View>{
             private final int counter;
             private final Order theOrder;
 
             public UpdateViewAndDatabaseTask(final int counter, final Order theOrder) {
+                this.counter = counter;
+                this.theOrder = theOrder;
             }
-
 
             @Override
-            public Void doInBackground(Void... params) {
-                return null;
+            public View doInBackground(Void... params) {
+                return getView(theOrder, false);
             }
-        }*/
+
+            @Override
+            public void onPostExecute(final View theView) {
+                try {
+                    theLL.removeViewAt(counter);
+                }
+                catch (Exception e) {
+                    log(e.toString());
+                }
+
+                try {
+                    theLL.addView(theView, counter);
+                }
+                catch (Exception e) {
+                    log(e.toString());
+                }
+                theDB.updateOrder(theOrder);
+            }
+        }
 
 
-        public View getView(final Order theOrder) {
+        public View getView(final Order theOrder, final boolean isBeingUpdated) {
 
             final LinearLayout encompassingLV = new LinearLayout(theC);
             final TextView restaurantTV = new TextView(theC);
@@ -164,7 +192,13 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             statusTV.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
 
             restaurantTV.setText(theOrder.getRestaurantName() + "WHAT ");
-            statusTV.setText(theOrder.getStatus());
+
+            if(isBeingUpdated) {
+                statusTV.setText("Updating...");
+            }
+            else {
+                statusTV.setText(theOrder.getStatus());
+            }
 
             restaurantTV.setTextColor(Color.BLACK);
             //restaurantTV.setTextColor(getResources().getColor(R.color.primary300));
@@ -197,7 +231,8 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         theDB.deleteOrder(theOrder.getIdNumber());
-                        allOrders.remove(theOrder);
+                        allOrders.clear();
+                        allOrders.addAll(theDB.getAllOrders());
                         theLL.removeAllViews();
                         addOrdersToLayout();
 
@@ -215,9 +250,13 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                 theDialog.show();
                 return false;
             }
-
         }
-
+        @Override
+        public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+            super.onCreateOptionsMenu(menu, inflater);
+            menu.clear();
+            inflater.inflate(com.ryan.bringmefood.R.menu.main_orders, menu);
+        }
     };
 
     public class NewOrder extends Fragment {
