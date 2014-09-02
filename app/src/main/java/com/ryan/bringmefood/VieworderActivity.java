@@ -4,17 +4,44 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 public class VieworderActivity extends Activity {
+
+    private TextView restaurantName;
+    private TextView orderStatus;
+    private TextView driverDetails;
+    private TextView myName;
+    private TextView myPhone;
+    private TextView myAddress;
+    private TextView myCost;
+
+    private LinearLayout itemsLinearLayout;
+
+    private Order theOrder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vieworder);
 
-        final Order theOrder = Order.getOrder(getIntent().getExtras().getString("order"));
+        initializeVariables();
 
 
+
+    }
+
+    private void initializeVariables() {
+        this.theOrder = Order.getOrder(getIntent().getExtras().getString("order"));
+        this.itemsLinearLayout = (LinearLayout) findViewById(R.id.itemsLinearLayout);
+        this.restaurantName = (TextView) findViewById(R.id.restaurantNameTV);
+        this.orderStatus = (TextView) findViewById(R.id.orderStatusTV);
+        this.driverDetails = (TextView) findViewById(R.id.driverDetailsTV);
+        this.myName = (TextView) findViewById(R.id.myNameTV);
+        this.myPhone = (TextView) findViewById(R.id.myPhoneTV);
+        this.myAddress = (TextView) findViewById(R.id.myAddressTV);
+        this.myCost = (TextView) findViewById(R.id.orderCostTV);
     }
 
 
@@ -31,9 +58,6 @@ public class VieworderActivity extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 }

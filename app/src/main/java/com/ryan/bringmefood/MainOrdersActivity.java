@@ -146,10 +146,6 @@ public class MainOrdersActivity extends FragmentActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
         if(id == R.id.refreshItem) {
             try {
                 ofPA.myOrdersFragment.addOrdersToLayout();
