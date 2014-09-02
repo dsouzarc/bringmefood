@@ -175,7 +175,6 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             }
         }
 
-
         public View getView(final Order theOrder, final boolean isBeingUpdated) {
 
             final LinearLayout encompassingLV = new LinearLayout(theC);

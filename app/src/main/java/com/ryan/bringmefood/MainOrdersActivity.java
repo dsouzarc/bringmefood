@@ -47,6 +47,7 @@ public class MainOrdersActivity extends FragmentActivity {
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 theActionBar.setSelectedNavigationItem(position);
+                supportInvalidateOptionsMenu();
             }
 
             int positionCurrent;
@@ -62,6 +63,7 @@ public class MainOrdersActivity extends FragmentActivity {
                         }
                     }, 06);
                 }
+                supportInvalidateOptionsMenu();
             }
 
             @Override
