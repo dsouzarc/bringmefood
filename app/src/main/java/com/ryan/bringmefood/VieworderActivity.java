@@ -28,6 +28,7 @@ public class VieworderActivity extends Activity {
 
         initializeVariables();
 
+        restaurantName.setText(theOrder.getRestaurantName());
 
 
     }

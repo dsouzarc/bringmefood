@@ -52,7 +52,6 @@ public class SQLiteOrdersDatabase extends SQLiteOpenHelper {
 
         theDB.insert(TABLE_NAME, null, values);
         theDB.close();
-        log("Order added");
     }
 
     public ArrayList<Order> getAllOrders() {
