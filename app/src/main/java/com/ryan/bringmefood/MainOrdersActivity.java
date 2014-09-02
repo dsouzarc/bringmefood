@@ -24,6 +24,7 @@ public class MainOrdersActivity extends FragmentActivity {
     private Context theC;
     private SharedPreferences thePrefs;
     private SharedPreferences.Editor theEd;
+    private OrdersFragmentPagerAdapter ofPA;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +80,7 @@ public class MainOrdersActivity extends FragmentActivity {
 
         theViewPager.setOnPageChangeListener(thePageListener);
 
-        final OrdersFragmentPagerAdapter ofPA = new OrdersFragmentPagerAdapter(theManager, getApplicationContext());
+        ofPA = new OrdersFragmentPagerAdapter(theManager, getApplicationContext());
         theViewPager.setAdapter(ofPA);
         theActionBar.setDisplayShowTitleEnabled(true);
 
@@ -103,8 +104,6 @@ public class MainOrdersActivity extends FragmentActivity {
         TelephonyManager tMgr = (TelephonyManager)getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
         return tMgr.getLine1Number();
     }
-
-
 
     //Tab listener
     private final ActionBar.TabListener tabListener = new ActionBar.TabListener() {
@@ -146,11 +145,22 @@ public class MainOrdersActivity extends FragmentActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         int id = item.getItemId();
         if (id == R.id.action_settings) {
             return true;
         }
+
+        if(id == R.id.refreshItem) {
+            try {
+                ofPA.myOrdersFragment.addOrdersToLayout();
+                log("ADDED");
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 }

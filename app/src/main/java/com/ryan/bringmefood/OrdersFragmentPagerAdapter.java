@@ -2,6 +2,7 @@ package com.ryan.bringmefood;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.view.MenuItem;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -55,6 +56,9 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
     private final int DP_72, DP_16, DP_8;
     private final int SP_16, SP_14;
 
+    public final MyOrders myOrdersFragment;
+    public final NewOrder newOrderFragment;
+
     public OrdersFragmentPagerAdapter(final FragmentManager fragmentManager, final Context theC) {
         super(fragmentManager);
         this.theC = theC;
@@ -67,6 +71,9 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
         this.DP_8 = getDP(8);
         this.SP_16 = getSP(16);
         this.SP_14 = getSP(14);
+
+        this.myOrdersFragment = new MyOrders();
+        this.newOrderFragment = new NewOrder();
     }
 
     private int getSP(final int theNum) {
@@ -88,7 +95,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
         private final BlockingQueue<Order> theUpdateQueue = new LinkedBlockingQueue<Order>();
         private Iterator<Order> theIterator;
-        private final UpdateOrderDB updateOrderRunnable = new UpdateOrderDB();
+        private UpdateOrderDB updateOrderDBRunnable;
 
         @Override
         public View onCreateView(LayoutInflater theLI, ViewGroup container, Bundle savedinstance) {
@@ -104,16 +111,30 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
         public void addOrdersToLayout() {
 
-            new Thread(new UpdateOrderDB()).start();
-            theIterator = allOrders.iterator();
-
-            while(theIterator.hasNext()) {
-                theLL.addView(getView(theIterator.next(), false));
+            if(updateOrderDBRunnable != null) {
+                updateOrderDBRunnable.stop();
             }
 
+            theIterator = allOrders.iterator();
+            theLL.removeAllViews();
+            while(theIterator.hasNext()) {
+                theLL.addView(getView(theIterator.next(), true));
+            }
+            updateOrderDBRunnable = new UpdateOrderDB();
+            new Thread(updateOrderDBRunnable).start();
         }
 
         private class UpdateOrderDB implements Runnable {
+
+            private boolean toContinue = true;
+
+            public boolean isWorking() {
+                return toContinue;
+            }
+
+            public void stop() {
+                toContinue = false;
+            }
 
             @Override
             public void run() {
@@ -125,7 +146,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                 HttpPost httpPost;
                 HttpResponse httpResponse;
 
-                while(theIterator.hasNext()) {
+                while(theIterator.hasNext() && toContinue) {
                     try {
                         final Order theOrder = theIterator.next();
                         httpPost = new HttpPost(theOrder.getUpdateOrderHttpPost());
@@ -250,11 +271,43 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                 return false;
             }
         }
+
         @Override
         public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-            super.onCreateOptionsMenu(menu, inflater);
             menu.clear();
-            inflater.inflate(com.ryan.bringmefood.R.menu.main_orders, menu);
+            log("DOWN");
+            MenuItem refreshItem = menu.findItem(R.id.refreshItem);
+            refreshItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    addOrdersToLayout();
+                    log("CLICKED");
+                    return false;
+                }
+            });
+
+            inflater.inflate(R.menu.main_orders, menu);
+            super.onCreateOptionsMenu(menu, inflater);
+        }
+
+        @Override
+        public boolean onContextItemSelected(MenuItem theItem) {
+            log("YES");
+            getActivity().finish();
+
+            return false;
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            log("NOOOO");
+
+            if(item.getItemId() == com.ryan.bringmefood.R.id.refreshItem) {
+                getActivity().finish();
+            }
+            getActivity().finish();
+
+            return false;
         }
     };
 
@@ -577,13 +630,17 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
         switch (position) {
             case 0:
-                MyOrders myOrders = new MyOrders();
-                myOrders.setArguments(data);
-                return myOrders;
+                /*MyOrders myOrders = new MyOrders();
+                myOrder.setArguments(data);
+                return myOrders; */
+                myOrdersFragment.setArguments(data);
+                return myOrdersFragment;
             case 1:
-                NewOrder newOrder = new NewOrder();
+                /*NewOrder newOrder = new NewOrder();
                 newOrder.setArguments(data);
-                return newOrder;
+                return newOrder;*/
+                newOrderFragment.setArguments(data);
+                return newOrderFragment;
             default:
                 break;
         }
