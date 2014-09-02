@@ -67,7 +67,7 @@ public class Order {
         return theObject;
     }
 
-    public String updateOrderHttpPost() {
+    public String getUpdateOrderHttpPost() {
         return String.format("http://barsoftapps.com/scripts/PrincetonFoodDelivery.py?id=%s&udid=%s&checkOrder=%s&user=%s",
                 Uri.encode(idNumber), Uri.encode(uniqueDeviceIdentifier), Uri.encode("1"), Uri.encode("1"));
     }
@@ -231,6 +231,8 @@ public class Order {
     public void setOrderCost(String orderCost) {
         this.orderCost = orderCost;
     }
+
+    public void setOrderStatus(final String newStatus) { this.status = newStatus; }
 
     public String getIdNumber() {
         return idNumber;

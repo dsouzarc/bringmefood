@@ -93,6 +93,8 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             theDB = new SQLiteOrdersDatabase(theC);
             allOrders.addAll(theDB.getAllOrders());
 
+            new Thread(new UpdateOrderDB()).start();
+
             addOrdersToLayout();
             return rootInflater;
         }
@@ -116,7 +118,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                 while(true) {
                     try {
                         final Order theOrder = orderQueue.take();
-                        httpPost = new HttpPost(theOrder.getOrderHttpPost());
+                        httpPost = new HttpPost(theOrder.getUpdateOrderHttpPost());
                         httpResponse = httpclient.execute(httpPost);
                         final String response1 = EntityUtils.toString(httpResponse.getEntity());
 
