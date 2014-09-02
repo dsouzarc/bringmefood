@@ -67,7 +67,10 @@ public class Order {
         return theObject;
     }
 
-    
+    public String updateOrderHttpPost() {
+        return String.format("http://barsoftapps.com/scripts/PrincetonFoodDelivery.py?id=%s&udid=%s&checkOrder=%s&user=%s",
+                Uri.encode(idNumber), Uri.encode(uniqueDeviceIdentifier), Uri.encode("1"), Uri.encode("1"));
+    }
 
     public String getOrderHttpPost() {
         final StringBuilder newOrder = new StringBuilder("");

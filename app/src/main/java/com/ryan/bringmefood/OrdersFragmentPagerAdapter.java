@@ -121,7 +121,6 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         final String response1 = EntityUtils.toString(httpResponse.getEntity());
 
 
-
                     }
                     catch (Exception e) {
                         e.printStackTrace();
