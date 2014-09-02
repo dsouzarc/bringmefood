@@ -33,7 +33,8 @@ public class VieworderActivity extends Activity {
         //driverDetails;
         myName.setText(theOrder.getMyName());
         myPhone.setText(theOrder.getMyNumber());
-
+        myAddress.setText(theOrder.getMyAddress());
+        myCost.setText(theOrder.getOrderCost());
     }
 
     private void initializeVariables() {
