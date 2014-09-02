@@ -91,6 +91,12 @@ public class Order {
                 Uri.encode(idNumber), Uri.encode(uniqueDeviceIdentifier), Uri.encode("1"));
     }
 
+
+    public String getCheckOrderHttpPost() {
+        return String.format("http://barsoftapps.com/scripts/PrincetonFoodDelivery.py?id=%s&udid=%s&checkOrder=%s",
+                Uri.encode(idNumber), Uri.encode(uniqueDeviceIdentifier), Uri.encode("1"));
+    }
+
     public static Order getOrder(final String orderAsJSON) {
         try {
             return getOrder(new JSONObject(orderAsJSON));
