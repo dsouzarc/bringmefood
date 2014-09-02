@@ -96,12 +96,19 @@ public class Order {
     }
 
     public String getStatus() {
-        try {
-            return getStatusAsString(getStatus(Integer.parseInt(status.replace("\"", ""))));
+        if(status.contains("0")) {
+            return "Unclaimed";
         }
-        catch (Exception e) {
-            return status;
+        if(status.contains("1")) {
+            return "Claimed";
         }
+        if(status.contains("2")) {
+            return "En route";
+        }
+        if(status.contains("3")) {
+            return "Delivered";
+        }
+        return status;
     }
 
     public static Order getOrder(final JSONObject theJSON) {
@@ -152,58 +159,6 @@ public class Order {
     public Calendar getCalendar() {
         return this.theDate;
     }
-
-    public static String getStatusAsString(final STATUS theStatus) {
-        switch (theStatus) {
-            case UNCLAIMED:
-                return "Waiting to be claimed";
-            case CLAIMED:
-                return "Claimed by driver";
-            case IN_PROCESS_OF_ORDERING:
-                return "In process of being ordered";
-            case FOOD_ORDERED:
-                return "Food ordered";
-            case FOOD_PICKED_UP:
-                return "Food picked up";
-            case ON_WAY_TO_HOUSE:
-                return "On way to house";
-            case DELIVERED:
-                return "Delivered";
-            default:
-                return "";
-        }
-    }
-
-    public static int getStatusNumber(final String statusInString) {
-        if(statusInString.contains("Waiting to be claimed")) {
-            return 0;
-        }
-        if(statusInString.contains("Claimed by driver")) {
-            return 1;
-        }
-        if(statusInString.contains("In process of being ordered")) {
-            return 2;
-        }
-        if(statusInString.contains("Food ordered")) {
-            return 3;
-        }
-        if(statusInString.contains("Food picked up")) {
-            return 4;
-        }
-        if(statusInString.contains("On way to house")) {
-            return 5;
-        }
-        if(statusInString.contains("Delivered")) {
-            return 6;
-        }
-        return 0;
-    }
-
-
-    public static STATUS getStatus(final int statusNumber) {
-        return STATUS.values()[statusNumber];
-    }
-
 
     public String getMyName() {
         return myName;
