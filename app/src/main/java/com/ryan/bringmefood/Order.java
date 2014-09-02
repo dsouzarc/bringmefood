@@ -239,6 +239,15 @@ public class Order {
     }
 
     @Override
+    public boolean equals(Object other) {
+        if(this == other)
+            return true;
+        if(!(other instanceof Order))
+            return false;
+        return ((Order)other).getIdNumber().equals(this.getIdNumber());
+    }
+
+    /*@Override
     public boolean equals(Object o) {
         if (this == o)
             return true;
@@ -270,7 +279,7 @@ public class Order {
         if (!uniqueDeviceIdentifier.equals(order.uniqueDeviceIdentifier))
             return false;
         return true;
-    }
+    }*/
 
     @Override
     public int hashCode() {

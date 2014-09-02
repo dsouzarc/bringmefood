@@ -115,14 +115,15 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                 HttpPost httpPost;
                 HttpResponse httpResponse;
 
+                int counter = 0;
                 while(true) {
                     try {
                         final Order theOrder = orderQueue.take();
                         httpPost = new HttpPost(theOrder.getUpdateOrderHttpPost());
                         httpResponse = httpclient.execute(httpPost);
                         final String response1 = EntityUtils.toString(httpResponse.getEntity());
-
-
+                        theOrder.setOrderStatus(response1);
+                        counter++;
                     }
                     catch (Exception e) {
                         e.printStackTrace();
@@ -131,6 +132,20 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                 }
             }
         }
+
+        /*private class UpdateViewAndDatabaseTask extends AsyncTask<Void, Void, Void>{
+            private final int counter;
+            private final Order theOrder;
+
+            public UpdateViewAndDatabaseTask(final int counter, final Order theOrder) {
+            }
+
+
+            @Override
+            public Void doInBackground(Void... params) {
+                return null;
+            }
+        }*/
 
 
         public View getView(final Order theOrder) {
