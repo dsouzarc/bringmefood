@@ -14,13 +14,13 @@ public class VieworderActivity extends Activity {
 
     private TextView restaurantName;
     private TextView orderStatus;
-    private TextView driverDetails;
     private TextView myName;
     private TextView myPhone;
     private TextView myAddress;
     private TextView myCost;
 
     private LinearLayout itemsLinearLayout;
+    private LinearLayout orderStatusLinearLayout;
 
     private Order theOrder;
 
@@ -31,12 +31,19 @@ public class VieworderActivity extends Activity {
 
         initializeVariables();
 
-        restaurantName.setText(theOrder.getRestaurantName());
-        orderStatus.setText(theOrder.getStatus());
-        myName.setText(theOrder.getMyName());
-        myPhone.setText(theOrder.getMyNumber());
-        myAddress.setText(theOrder.getMyAddress());
-        myCost.setText(theOrder.getOrderCost());
+        restaurantName.setText("Restaurant: " + theOrder.getRestaurantName());
+        orderStatus.setText("Status: " + theOrder.getStatus());
+        myName.setText("My name: " + theOrder.getMyName());
+        myPhone.setText("My phone: " + theOrder.getMyNumber());
+        myAddress.setText("Delivery address: " + theOrder.getMyAddress());
+        myCost.setText("Estimated Cost: $" + theOrder.getOrderCost());
+
+        final String rawStatus = theOrder.getRawStatus();
+        if(rawStatus.contains("1") || rawStatus.contains("2")) {
+            orderStatusLinearLayout.addView(getTextView("ETA From Claim: " +
+                    theOrder.getDeliveryTime() + " minutes"));
+            orderStatusLinearLayout.addView(getTextView("Driver details"));
+        }
 
         final String[] items = theOrder.getMyOrder();
         for(String item : items) {
@@ -44,27 +51,33 @@ public class VieworderActivity extends Activity {
         }
     }
 
+    private TextView getTextView(final String text) {
+        final TextView theView = new TextView(theC);
+        theView.setText(text);
+        theView.setTextAppearance(theC, R.style.Order_Items_TextView);
+        return theView;
+    }
+
     private TextView getItemTV(final String item) {
         final TextView theView = new TextView(theC);
         theView.setText(item);
-        theView.setTextColor(getResources().getColor(R.color.primary700));
         theView.setTextAppearance(theC, R.style.Order_Items_TextView);
-
+        theView.setPadding(16, 24, 0, 0);
+        theView.setTextColor(getResources().getColor(R.color.primary500));
         return theView;
     }
 
     private void initializeVariables() {
         this.theOrder = Order.getOrder(getIntent().getExtras().getString("order"));
         this.itemsLinearLayout = (LinearLayout) findViewById(R.id.itemsLinearLayout);
+        this.orderStatusLinearLayout = (LinearLayout) findViewById(R.id.orderDetailsLL);
         this.restaurantName = (TextView) findViewById(R.id.restaurantNameTV);
         this.orderStatus = (TextView) findViewById(R.id.orderStatusTV);
-        this.driverDetails = (TextView) findViewById(R.id.driverDetailsTV);
         this.myName = (TextView) findViewById(R.id.myNameTV);
         this.myPhone = (TextView) findViewById(R.id.myPhoneTV);
         this.myAddress = (TextView) findViewById(R.id.myAddressTV);
         this.myCost = (TextView) findViewById(R.id.orderCostTV);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

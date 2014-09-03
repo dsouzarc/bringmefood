@@ -26,10 +26,12 @@
                 android:text="Order Status: "
                 android:id="@+id/orderStatusTV"/>
 
-            <TextView
-                style="@style/Order_Items_TextView"
-                android:text="Driver Details: "
-                android:id="@+id/driverDetailsTV"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/orderDetailsLL">
+            </LinearLayout>
 
             <TextView
                 style="@style/Order_Items_TextView"
@@ -50,7 +52,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:background="@color/primary100"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="24dp"
                 android:id="@+id/itemsLinearLayout">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Items"
+                    android:layout_marginTop="8dp"
+                    android:textSize="22sp"
+                    android:textColor="@color/primary800"/>
              </LinearLayout>
 
             <TextView
