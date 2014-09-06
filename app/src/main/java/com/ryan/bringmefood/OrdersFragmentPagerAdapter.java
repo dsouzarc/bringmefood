@@ -34,6 +34,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
 import java.util.ArrayList;
+import android.view.ViewGroup.LayoutParams;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -44,6 +45,9 @@ import java.util.TreeSet;
 public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
     private static final int NUM_PAGES = 2;
+
+    private static LinearLayout.LayoutParams matchWrap = new
+            LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 
     private final Context theC;
     private final SharedPreferences thePrefs;
@@ -142,18 +146,11 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         final String theResponse = EntityUtils.toString(httpResponse.getEntity());
                         log("ORDER RESPONSE: " + theResponse);
 
-                        final String[] responseArray = theResponse.split("||");
+                        final String status = theResponse.substring(0, theResponse.indexOf("|"));
+                        final String deliveryTime = theResponse.substring(theResponse.indexOf("||") + 2);
+                        theOrder.setEstimatedDeliveryTime(deliveryTime);
+                        theOrder.setOrderStatus(status);
 
-                        if(responseArray == null) {
-                            makeToast("Sorry, something went wrong");
-                        }
-                        else {
-                            final String status = responseArray[0];
-                            final String deliveryTime = responseArray[1];
-                            log("Status: " + status + ". Delivery: " + deliveryTime);
-                            theOrder.setEstimatedDeliveryTime(deliveryTime);
-                            theOrder.setOrderStatus(status);
-                        }
                     } catch (Exception e) {
                         log(e.toString());
                     }
@@ -210,6 +207,8 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
             restaurantTV.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
             statusTV.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+
+            restaurantTV.setLayoutParams(matchWrap);
 
             restaurantTV.setText(theOrder.getRestaurantName() + "WHAT ");
 
