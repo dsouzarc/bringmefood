@@ -74,12 +74,17 @@ public class Order {
                 Uri.encode(idNumber), Uri.encode(uniqueDeviceIdentifier), Uri.encode("1"), Uri.encode("1"));
     }
 
+    public String getOrderDeleteHttpPost() {
+        return String.format("http://barsoftapps.com/scripts/PrincetonFoodDelivery.py?id=%s&udid=%s&deleteOrder=%s",
+                Uri.encode(idNumber), Uri.encode(uniqueDeviceIdentifier), Uri.encode("1"));
+    }
+
     public String getOrderHttpPost() {
         final StringBuilder newOrder = new StringBuilder("");
         for(String order : myOrder) {
             newOrder.append(order + "||");
         }
-        final String orderString = newOrder.substring(0, newOrder.length());
+        final String orderString = newOrder.substring(0, newOrder.length() - 2);
 
         return String.format("http://barsoftapps.com/scripts/PrincetonFoodDelivery.py?id=%s&udid=%s&PhoneNumber=%s&" +
                         "Name=%s&Restaurant=%s&OrderDetails=%s&Address=%s&user=%s&newOrder=%s&EstimatedCost=%s",

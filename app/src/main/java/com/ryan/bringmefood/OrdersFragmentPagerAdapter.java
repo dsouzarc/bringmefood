@@ -44,6 +44,7 @@ import java.util.TreeSet;
 public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
     private static final int NUM_PAGES = 2;
+
     private final Context theC;
     private final SharedPreferences thePrefs;
     private final SharedPreferences.Editor theEd;
@@ -139,7 +140,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         httpPost = new HttpPost(theOrder.getUpdateOrderHttpPost());
                         httpResponse = httpclient.execute(httpPost);
                         final String theResponse = EntityUtils.toString(httpResponse.getEntity());
-
+                        log("ORDER RESPONSE: " + theResponse);
                         final String deliveryTime = theResponse.substring(0, theResponse.indexOf("|"));
                         final String status = theResponse.substring(theResponse.indexOf("||") + 2);
 
@@ -273,11 +274,18 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                 deleteItem.setPositiveButton("Delete order", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        theDB.deleteOrder(theOrder.getIdNumber());
-                        allOrders.clear();
-                        allOrders.addAll(theDB.getAllOrders());
-                        theLL.removeAllViews();
-                        addOrdersToLayout();
+
+                        if(theOrder.getStatus().contains("Unclaimed") || theOrder.getStatus().contains("Delivered")) {
+                            new Thread(new SendToServer(theOrder.getOrderDeleteHttpPost())).start();
+                            theDB.deleteOrder(theOrder.getIdNumber());
+                            allOrders.clear();
+                            allOrders.addAll(theDB.getAllOrders());
+                            theLL.removeAllViews();
+                            addOrdersToLayout();
+                        }
+                        else {
+                            makeToast("Sorry, you can't delete a live order");
+                        }
 
                     }
                 });
@@ -294,7 +302,11 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                 return false;
             }
         }
-    };
+
+        private void makeToast(final String message) {
+            Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+        }
+    }
 
     public class NewOrder extends Fragment {
 
@@ -581,6 +593,27 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
         private void makeToast(final String message) {
             Toast.makeText(getActivity(), message, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private class SendToServer implements Runnable {
+        private final String sendMessage;
+
+        public SendToServer(final String message) {
+            this.sendMessage = message;
+        }
+
+        @Override
+        public void run() {
+            try {
+                final HttpClient httpclient = new DefaultHttpClient();
+                final HttpPost httppost = new HttpPost(sendMessage);
+                final HttpResponse response = httpclient.execute(httppost);
+                final String response1 = EntityUtils.toString(response.getEntity());
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
