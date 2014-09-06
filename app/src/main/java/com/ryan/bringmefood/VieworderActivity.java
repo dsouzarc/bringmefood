@@ -115,15 +115,24 @@ public class VieworderActivity extends Activity {
             final HttpPost post = new HttpPost(theOrder.getUpdateOrderHttpPost());
 
             try {
-                final HttpResponse theResponse = theClient.execute(post);
+                final HttpResponse response = theClient.execute(post);
+                final String theResponse = EntityUtils.toString(response.getEntity());
+
+                final String status = theResponse.substring(0, theResponse.indexOf("|"));
+                final String deliveryTime = theResponse.substring(theResponse.indexOf("||") + 2);
+                theOrder.setEstimatedDeliveryTime(deliveryTime);
+                theOrder.setOrderStatus(status);
             }
             catch (Exception e) {
                 e.printStackTrace();
                 makeToast("Sorry, something went wrong");
             }
-
-
             return null;
+        }
+
+        @Override
+        public void onPostExecute(Void param) {
+            addEtaDetails();
         }
     }
 
