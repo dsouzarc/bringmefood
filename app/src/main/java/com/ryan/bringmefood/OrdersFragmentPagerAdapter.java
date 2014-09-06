@@ -343,20 +343,23 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             orderCostET.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
                 }
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    final String string = s.toString();
-                    if(!string.contains("$")) {
-                        orderCostET.setText("$" + string);
+                    final String theString = s.toString();
+                    try {
+                        if (theString.charAt(0) != '$') {
+                            orderCostET.setText("$" + theString.replace("$", ""));
+                        }
+                        orderCostET.setSelection(orderCostET.getText().length());
+                    }
+                    catch (Exception e) {
                     }
                 }
 
                 @Override
                 public void afterTextChanged(android.text.Editable s) {
-
                 }
             });
 
