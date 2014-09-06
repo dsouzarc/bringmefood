@@ -6,6 +6,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.content.Context;
@@ -20,6 +25,9 @@ public class VieworderActivity extends Activity {
     private TextView myPhone;
     private TextView myAddress;
     private TextView myCost;
+
+    private TextView driverDetails;
+    private TextView eta;
 
     private LinearLayout itemsLinearLayout;
     private LinearLayout orderStatusLinearLayout;
@@ -40,16 +48,26 @@ public class VieworderActivity extends Activity {
         myAddress.setText("Delivery address: " + theOrder.getMyAddress());
         myCost.setText("Estimated Cost: $" + theOrder.getOrderCost());
 
-        final String rawStatus = theOrder.getRawStatus();
-        if(rawStatus.contains("1") || rawStatus.contains("2")) {
-            orderStatusLinearLayout.addView(getTextView("ETA From Claim: " +
-                    theOrder.getDeliveryTime() + " minutes"));
-            orderStatusLinearLayout.addView(getTextView("Driver details"));
-        }
+        addEtaDetails();
 
         final String[] items = theOrder.getMyOrder();
         for(String item : items) {
             itemsLinearLayout.addView(getItemTV(item));
+        }
+    }
+
+    private void addEtaDetails() {
+        final String rawStatus = theOrder.getRawStatus();
+        if(rawStatus.contains("1") || rawStatus.contains("2")) {
+            if(eta != null || driverDetails != null) {
+                orderStatusLinearLayout.removeView(eta);
+                orderStatusLinearLayout.removeView(driverDetails);
+            }
+            
+            eta = getTextView("ETA From Claim: " + theOrder.getDeliveryTime() + " minutes");
+            driverDetails = getTextView("Driver details");
+            orderStatusLinearLayout.addView(eta, 2);
+            orderStatusLinearLayout.addView(driverDetails, 3);
         }
     }
 
@@ -81,6 +99,21 @@ public class VieworderActivity extends Activity {
         this.myCost = (TextView) findViewById(R.id.orderCostTV);
     }
 
+    private class UpdateOrderDetails extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        public Void doInBackground(Void... params) {
+            orderStatus.setText("Updating...");
+
+            final HttpClient theClient = new DefaultHttpClient();
+            final HttpPost post = new HttpPost(theOrder.getUpdateOrderHttpPost());
+
+
+
+            return null;
+        }
+    }
+
     @Override
     public void onBackPressed() {
         startActivity(new Intent(VieworderActivity.this, MainOrdersActivity.class));
@@ -101,7 +134,7 @@ public class VieworderActivity extends Activity {
 
         switch (id) {
             case R.id.refreshItem :
-
+                new UpdateOrderDetails().execute();
                 break;
             default:
                 break;
