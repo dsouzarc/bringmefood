@@ -43,6 +43,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.text.DecimalFormat;
 
 public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
@@ -50,6 +51,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
     private static LinearLayout.LayoutParams matchWrap = new
             LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+    private static final DecimalFormat decimalFormat = new DecimalFormat("#,###,##0.00");
 
     private final Context theC;
     private final SharedPreferences thePrefs;
@@ -491,9 +493,12 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
                 final AlertDialog.Builder confirmSubmit = new AlertDialog.Builder(getActivity());
 
+                final String myCost = "$" + decimalFormat.format(
+                        Double.parseDouble(orderCostET.getText().toString().replace("$", "")));
+
                 confirmSubmit.setTitle("Confirm Order");
                 confirmSubmit.setMessage("Are you sure you want to submit this order for " +
-                                            orderCostET.getText().toString() + "?");
+                                            myCost + "?");
                 confirmSubmit.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -501,7 +506,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         final String myAddress = myAddressET.getText().toString();
                         final String myPhone = myPhoneET.getText().toString();
                         final String restaurantName = restaurantNameET.getText().toString();
-                        final String myCost = orderCostET.getText().toString();
+
                         final String Order_ID = String.valueOf(String.valueOf(System.currentTimeMillis()).hashCode());
                         final String time = String.valueOf(System.currentTimeMillis());
                         final String[] order = theItems.toArray(new String[theItems.size()]);

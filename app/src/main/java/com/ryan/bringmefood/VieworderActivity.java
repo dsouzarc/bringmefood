@@ -49,7 +49,7 @@ public class VieworderActivity extends Activity {
         myName.setText("My name: " + theOrder.getMyName());
         myPhone.setText("My phone: " + theOrder.getMyNumber());
         myAddress.setText("Delivery address: " + theOrder.getMyAddress());
-        myCost.setText("Estimated Cost: $" + theOrder.getOrderCost());
+        myCost.setText("Estimated Cost: " + theOrder.getOrderCost());
 
         addEtaDetails();
 
