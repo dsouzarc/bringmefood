@@ -1,22 +1,22 @@
 package com.ryan.bringmefood;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
-import android.util.Log;
-import android.content.Context;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
-import android.widget.Toast;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.content.Context;
 
 public class VieworderActivity extends Activity {
 
