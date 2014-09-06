@@ -3,6 +3,7 @@ package com.ryan.bringmefood;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.text.TextWatcher;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -338,6 +339,26 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             myAddressET = (EditText) rootInflater.findViewById(R.id.myAddress);
             restaurantNameET = (EditText) rootInflater.findViewById(R.id.restaurantName);
             orderCostET = (EditText) rootInflater.findViewById(R.id.cost);
+
+            orderCostET.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    final String string = s.toString();
+                    if(!string.contains("$")) {
+                        orderCostET.setText("$" + string);
+                    }
+                }
+
+                @Override
+                public void afterTextChanged(android.text.Editable s) {
+
+                }
+            });
 
             String data = getPreferences("myName");
             if(data.length() > 2) {
