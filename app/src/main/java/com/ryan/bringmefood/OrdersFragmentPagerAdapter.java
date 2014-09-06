@@ -209,6 +209,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             statusTV.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
 
             restaurantTV.setLayoutParams(matchWrap);
+            statusTV.setLayoutParams(matchWrap);
 
             restaurantTV.setText(theOrder.getRestaurantName() + "WHAT ");
 
