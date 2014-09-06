@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
+import android.util.Log;
 import android.content.Context;
 import android.widget.TextView;
 import org.apache.http.HttpResponse;
@@ -68,8 +69,15 @@ public class VieworderActivity extends Activity {
 
             eta = getTextView("ETA From Claim: " + theOrder.getDeliveryTime() + " minutes");
             driverDetails = getTextView("Driver details");
-            orderStatusLinearLayout.addView(eta, 2);
-            orderStatusLinearLayout.addView(driverDetails, 3);
+
+            try {
+                orderStatusLinearLayout.addView(eta, 1);
+                orderStatusLinearLayout.addView(driverDetails, 2);
+            }
+            catch (Exception e) {
+                orderStatusLinearLayout.addView(eta);
+                orderStatusLinearLayout.addView(driverDetails);
+            }
         }
     }
 
@@ -109,15 +117,13 @@ public class VieworderActivity extends Activity {
 
         @Override
         public Void doInBackground(Void... params) {
-            orderStatus.setText("Updating...");
-
             final HttpClient theClient = new DefaultHttpClient();
             final HttpPost post = new HttpPost(theOrder.getUpdateOrderHttpPost());
 
             try {
                 final HttpResponse response = theClient.execute(post);
                 final String theResponse = EntityUtils.toString(response.getEntity());
-
+                log("Order Detail Response: " + response);
                 final String status = theResponse.substring(0, theResponse.indexOf("|"));
                 final String deliveryTime = theResponse.substring(theResponse.indexOf("||") + 2);
                 theOrder.setEstimatedDeliveryTime(deliveryTime);
@@ -149,6 +155,10 @@ public class VieworderActivity extends Activity {
         return true;
     }
 
+    private void log(final String message) {
+        Log.e("com.ryan.bringmefood", message);
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -156,6 +166,7 @@ public class VieworderActivity extends Activity {
 
         switch (id) {
             case R.id.refreshItem :
+                orderStatus.setText("Updating...");
                 new UpdateOrderDetails().execute();
                 break;
             default:
