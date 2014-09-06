@@ -175,8 +175,12 @@ public class Order {
                 theCal.get(Calendar.HOUR_OF_DAY) + ":" + theCal.get(Calendar.MINUTE);
     }
 
-    public String getDeliveryTime() { return this.estimatedDeliveryTime; }
-    public void setEstimatedDeliveryTime(final String time) { this.estimatedDeliveryTime = time; }
+    public String getDeliveryTime() {
+        return this.estimatedDeliveryTime.replace("\n", "");
+    }
+    public void setEstimatedDeliveryTime(final String time) {
+        this.estimatedDeliveryTime = time;
+    }
 
     public Calendar getCalendar() {
         return this.theDate;
