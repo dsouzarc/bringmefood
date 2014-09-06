@@ -7,6 +7,7 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.content.Context;
 
 public class VieworderActivity extends Activity {
@@ -93,10 +94,19 @@ public class VieworderActivity extends Activity {
         return true;
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         final int id = item.getItemId();
+
+        switch (id) {
+            case R.id.refreshItem :
+
+                break;
+            default:
+                break;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 }
