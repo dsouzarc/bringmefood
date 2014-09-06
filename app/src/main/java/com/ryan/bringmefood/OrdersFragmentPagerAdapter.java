@@ -89,7 +89,6 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
         private LinearLayout theLL;
         private SQLiteOrdersDatabase theDB;
-        private Iterator<Order> theIterator;
         private UpdateOrderDB updateOrderDBRunnable;
 
         @Override
@@ -110,10 +109,9 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                 updateOrderDBRunnable.stop();
             }
 
-            theIterator = allOrders.iterator();
             theLL.removeAllViews();
-            while (theIterator.hasNext()) {
-                theLL.addView(getView(theIterator.next(), true));
+            for(Order order : allOrders) {
+                theLL.addView(getView(order, true));
             }
             updateOrderDBRunnable = new UpdateOrderDB();
             new Thread(updateOrderDBRunnable).start();
