@@ -492,7 +492,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                 final AlertDialog.Builder confirmSubmit = new AlertDialog.Builder(getActivity());
 
                 confirmSubmit.setTitle("Confirm Order");
-                confirmSubmit.setMessage("Are you sure you want to submit this order for $" +
+                confirmSubmit.setMessage("Are you sure you want to submit this order for " +
                                             orderCostET.getText().toString() + "?");
                 confirmSubmit.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
                     @Override
