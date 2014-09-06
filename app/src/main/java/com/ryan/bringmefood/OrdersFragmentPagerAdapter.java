@@ -41,6 +41,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import android.telephony.PhoneNumberFormattingTextWatcher;
 
 public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
@@ -333,6 +334,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
             myNameET = (EditText) rootInflater.findViewById(R.id.myName);
             myPhoneET = (EditText) rootInflater.findViewById(R.id.myPhoneNumber);
+            myPhoneET.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
             myAddressET = (EditText) rootInflater.findViewById(R.id.myAddress);
             restaurantNameET = (EditText) rootInflater.findViewById(R.id.restaurantName);
             orderCostET = (EditText) rootInflater.findViewById(R.id.cost);
