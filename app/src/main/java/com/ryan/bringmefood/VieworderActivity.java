@@ -5,10 +5,12 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
+import android.content.Context;
 import android.widget.TextView;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
+import android.widget.Toast;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import android.content.Intent;
@@ -63,7 +65,7 @@ public class VieworderActivity extends Activity {
                 orderStatusLinearLayout.removeView(eta);
                 orderStatusLinearLayout.removeView(driverDetails);
             }
-            
+
             eta = getTextView("ETA From Claim: " + theOrder.getDeliveryTime() + " minutes");
             driverDetails = getTextView("Driver details");
             orderStatusLinearLayout.addView(eta, 2);
@@ -99,6 +101,10 @@ public class VieworderActivity extends Activity {
         this.myCost = (TextView) findViewById(R.id.orderCostTV);
     }
 
+    private void makeToast(final String message) {
+        Toast.makeText(theC, message, Toast.LENGTH_LONG);
+    }
+
     private class UpdateOrderDetails extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -108,6 +114,13 @@ public class VieworderActivity extends Activity {
             final HttpClient theClient = new DefaultHttpClient();
             final HttpPost post = new HttpPost(theOrder.getUpdateOrderHttpPost());
 
+            try {
+                final HttpResponse theResponse = theClient.execute(post);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+                makeToast("Sorry, something went wrong");
+            }
 
 
             return null;
