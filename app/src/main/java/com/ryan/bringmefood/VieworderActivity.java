@@ -62,7 +62,7 @@ public class VieworderActivity extends Activity {
     private void addEtaDetails() {
         final String rawStatus = theOrder.getRawStatus();
         if(rawStatus.contains("1") || rawStatus.contains("2")) {
-            if(eta != null || driverDetails != null) {
+            if(eta != null && driverDetails != null) {
                 orderStatusLinearLayout.removeView(eta);
                 orderStatusLinearLayout.removeView(driverDetails);
             }
@@ -123,7 +123,7 @@ public class VieworderActivity extends Activity {
             try {
                 final HttpResponse response = theClient.execute(post);
                 final String theResponse = EntityUtils.toString(response.getEntity());
-                log("Order Detail Response: " + response);
+                log("Order Detail Response: " + theResponse);
                 final String status = theResponse.substring(0, theResponse.indexOf("|"));
                 final String deliveryTime = theResponse.substring(theResponse.indexOf("||") + 2);
                 theOrder.setEstimatedDeliveryTime(deliveryTime);
@@ -138,6 +138,7 @@ public class VieworderActivity extends Activity {
 
         @Override
         public void onPostExecute(Void param) {
+            orderStatus.setText("Status: " + theOrder.getStatus());
             addEtaDetails();
         }
     }
