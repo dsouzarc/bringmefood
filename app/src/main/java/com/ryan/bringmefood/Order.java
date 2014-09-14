@@ -178,8 +178,14 @@ public class Order {
     public String getDeliveryTime() {
         return this.estimatedDeliveryTime.replace("\n", "");
     }
+
     public void setEstimatedDeliveryTime(final String time) {
-        this.estimatedDeliveryTime = time;
+        try {
+            this.estimatedDeliveryTime = String.valueOf(Double.parseDouble(time));
+        }
+        catch (Exception e) {
+            this.estimatedDeliveryTime = "N/A";
+        }
     }
 
     public Calendar getCalendar() {
