@@ -67,7 +67,10 @@ public class VieworderActivity extends Activity {
                 orderStatusLinearLayout.removeView(driverDetails);
             }
 
-            eta = getTextView("ETA From Claim: " + theOrder.getDeliveryTime() + " minutes");
+            final String deliveryTime = theOrder.getDeliveryTime().contains("N/A") ?
+                    "N/A" : theOrder.getDeliveryTime() + " minutes";
+
+            eta = getTextView("ETA From Claim: " + deliveryTime);
             driverDetails = getTextView("Driver details");
 
             try {
