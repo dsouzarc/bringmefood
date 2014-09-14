@@ -38,6 +38,11 @@ public class MainOrdersActivity extends FragmentActivity {
                 "JY1hNJ9EgxcZxFUp1VlLhqV4ZYd7Azf1H4tQTBQX");
         PushService.setDefaultPushCallback(this, MainOrdersActivity.class);
 
+        if(isFirstUse()) {
+            PushService.subscribe(getApplicationContext(), "Drivers", MainOrdersActivity.class);
+            ParseInstallation.getCurrentInstallation().saveInBackground();
+        }
+
         theC = getApplicationContext();
         thePrefs = this.getSharedPreferences("com.ryan.bringmefood", Context.MODE_PRIVATE);
         theEd = thePrefs.edit();
@@ -101,6 +106,12 @@ public class MainOrdersActivity extends FragmentActivity {
 
     private String getPreferences(final String key) {
         return thePrefs.getString(key, "");
+    }
+
+    private boolean isFirstUse() {
+        boolean isFirst = thePrefs.getBoolean("isFirst", true);
+        theEd.putBoolean("isFirst", false);
+        return isFirst;
     }
 
     private void setPreference(final String key, final String value) {
