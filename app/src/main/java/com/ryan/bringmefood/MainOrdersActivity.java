@@ -15,6 +15,10 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import com.parse.Parse;
+import com.parse.ParseAnalytics;
+import com.parse.ParseInstallation;
+import com.parse.PushService;
 
 public class MainOrdersActivity extends FragmentActivity {
 
@@ -29,6 +33,10 @@ public class MainOrdersActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_orders);
+
+        Parse.initialize(this, "AdzOc2Rwa3OHorbxpc8mv698qtl8e7dg2XSjscqO",
+                "JY1hNJ9EgxcZxFUp1VlLhqV4ZYd7Azf1H4tQTBQX");
+        PushService.setDefaultPushCallback(this, MainOrdersActivity.class);
 
         theC = getApplicationContext();
         thePrefs = this.getSharedPreferences("com.ryan.bringmefood", Context.MODE_PRIVATE);
