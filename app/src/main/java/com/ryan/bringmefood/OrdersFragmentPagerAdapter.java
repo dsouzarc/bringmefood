@@ -44,6 +44,7 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.text.DecimalFormat;
+import com.parse.ParsePush;
 
 public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
@@ -558,6 +559,11 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         theDB.addOrder(theOrder);
                         theDB.close();
                         log("Successfully ordered " + response1);
+
+                        final ParsePush thePush = new ParsePush();
+                        thePush.setChannel("Drivers");
+                        thePush.setMessage("New Order For " + theOrder.getRestaurantName());
+                        thePush.sendInBackground();
                         return true;
                     }
                 }
