@@ -36,6 +36,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -43,8 +44,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.text.DecimalFormat;
-import com.parse.ParsePush;
 
 public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
@@ -560,10 +559,10 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         theDB.close();
                         log("Successfully ordered " + response1);
 
-                        final ParsePush thePush = new ParsePush();
+                        /*final ParsePush thePush = new ParsePush();
                         thePush.setChannel("Drivers");
                         thePush.setMessage("New Order For " + theOrder.getRestaurantName());
-                        thePush.sendInBackground();
+                        thePush.sendInBackground();*/
                         return true;
                     }
                 }
