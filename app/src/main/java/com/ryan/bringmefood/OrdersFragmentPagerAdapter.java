@@ -215,7 +215,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             restaurantTV.setLayoutParams(matchWrap);
             statusTV.setLayoutParams(matchWrap);
 
-            restaurantTV.setText(theOrder.getRestaurantName() + "WHAT ");
+            restaurantTV.setText(theOrder.getRestaurantName());
 
             if (isBeingUpdated) {
                 statusTV.setText("Updating...");
