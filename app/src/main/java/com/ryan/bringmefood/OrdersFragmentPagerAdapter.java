@@ -351,7 +351,8 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             orderCostET = (EditText) rootInflater.findViewById(R.id.cost);
 
             ArrayAdapter<String> adapter = new ArrayAdapter<String>
-                    (getActivity().getApplicationContext(), android.R.layout.simple_list_item_1, Arrays.asList(allRestaurants));
+                    (getActivity().getApplicationContext(), R.layout.restaurant_items_textview,
+                            Arrays.asList(allRestaurants));
 
             restaurantNameET.setAdapter(adapter);
 
