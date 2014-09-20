@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.widget.AutoCompleteTextView;
+import android.widget.ArrayAdapter;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -328,7 +330,8 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
         private View rootInflater;
         private LinearLayout itemsLayout;
         private TextView addItem;
-        private EditText myNameET, myPhoneET, myAddressET, restaurantNameET, orderCostET;
+        private EditText myNameET, myPhoneET, myAddressET, orderCostET;
+        private AutoCompleteTextView restaurantNameET;
         private Button submit;
 
         private void initializeVariables() {
@@ -340,7 +343,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             myPhoneET = (EditText) rootInflater.findViewById(R.id.myPhoneNumber);
             myPhoneET.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
             myAddressET = (EditText) rootInflater.findViewById(R.id.myAddress);
-            restaurantNameET = (EditText) rootInflater.findViewById(R.id.restaurantName);
+            restaurantNameET = (AutoCompleteTextView) rootInflater.findViewById(R.id.restaurantName);
             orderCostET = (EditText) rootInflater.findViewById(R.id.cost);
 
             orderCostET.addTextChangedListener(new TextWatcher() {
