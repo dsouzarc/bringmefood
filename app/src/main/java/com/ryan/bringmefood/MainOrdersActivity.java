@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Menu;
@@ -46,6 +47,12 @@ public class MainOrdersActivity extends FragmentActivity {
         theC = getApplicationContext();
         thePrefs = this.getSharedPreferences("com.ryan.bringmefood", Context.MODE_PRIVATE);
         theEd = thePrefs.edit();
+
+        if(isFirstUse()) {
+            ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+            installation.put("UDID", getUDID());
+            installation.saveInBackground();
+        }
 
         theActionBar = getActionBar();
         getActionBar().setIcon(
@@ -102,6 +109,11 @@ public class MainOrdersActivity extends FragmentActivity {
         theTab = theActionBar.newTab().setText("New order").setTabListener(tabListener);
         theActionBar.addTab(theTab, 1);
 
+    }
+
+    private String getUDID() {
+        return Secure.getString(getApplication().getApplicationContext().getContentResolver(),
+                Secure.ANDROID_ID);
     }
 
     private String getPreferences(final String key) {

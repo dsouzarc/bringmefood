@@ -287,7 +287,8 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                        if(theOrder.getStatus().contains("Unclaimed") || theOrder.getStatus().contains("Delivered")) {
+                        if(theOrder.getStatus().contains("Unclaimed") || theOrder.getStatus().contains("Delivered") ||
+                                theOrder.getRawStatus().equals("0")) {
                             new Thread(new SendToServer(theOrder.getOrderDeleteHttpPost())).start();
                             theDB.deleteOrder(theOrder.getIdNumber());
                             allOrders.clear();
