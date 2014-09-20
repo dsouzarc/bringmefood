@@ -325,6 +325,10 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
     public class NewOrder extends Fragment {
 
+        private final String[] allRestaurants = {"Cheeburger Cheeburger",
+                            "Georges", "Slice", "Soup Co", "Taste of Mexico",
+                            "Teresasa"};
+
         private final LinkedList<String> theItems = new LinkedList<String>();
 
         private View rootInflater;
@@ -338,13 +342,16 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             itemsLayout = (LinearLayout) rootInflater.findViewById(R.id.itemsLinearLayout);
             addItem = (TextView) rootInflater.findViewById(R.id.addItemTV);
             submit = (Button) rootInflater.findViewById(R.id.submitButton);
-
             myNameET = (EditText) rootInflater.findViewById(R.id.myName);
             myPhoneET = (EditText) rootInflater.findViewById(R.id.myPhoneNumber);
             myPhoneET.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
             myAddressET = (EditText) rootInflater.findViewById(R.id.myAddress);
             restaurantNameET = (AutoCompleteTextView) rootInflater.findViewById(R.id.restaurantName);
             orderCostET = (EditText) rootInflater.findViewById(R.id.cost);
+
+            final ArrayAdapter theAutoAdapter = new ArrayAdapter(theC, android.R.layout.simple_list_item_1,
+                    allRestaurants);
+            restaurantNameET.setAdapter(theAutoAdapter);
 
             orderCostET.addTextChangedListener(new TextWatcher() {
                 @Override
