@@ -355,6 +355,23 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                             Arrays.asList(allRestaurants));
 
             restaurantNameET.setAdapter(adapter);
+            restaurantNameET.setThreshold(0);
+            restaurantNameET.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    restaurantNameET.showDropDown();
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(android.text.Editable s) {
+
+                }
+            });
 
             orderCostET.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -369,8 +386,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                             orderCostET.setText("$" + theString.replace("$", ""));
                         }
                         orderCostET.setSelection(orderCostET.getText().length());
-                    }
-                    catch (Exception e) {
+                    } catch (Exception e) {
                     }
                 }
 
