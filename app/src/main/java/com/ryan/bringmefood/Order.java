@@ -44,7 +44,22 @@ public class Order {
         this.calendarTimeMillis = calendarTimeMillis;
         this.theDate = new GregorianCalendar();
         this.theDate.setTimeInMillis(Long.parseLong(calendarTimeMillis));
-        this.status = status;
+
+        try {
+            final int statusNum = Integer.parseInt(status);
+            if (statusNum > 3) {
+                this.status = "3";
+            }
+            else if(statusNum < 0) {
+                this.status = "0";
+            }
+            else {
+                this.status = status;
+            }
+        }
+        catch (Exception e) {
+            this.status = status;
+        }
     }
 
     public JSONObject toJSONObject() {
