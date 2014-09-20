@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.widget.AutoCompleteTextView;
 import android.widget.ArrayAdapter;
+import android.view.View.OnFocusChangeListener;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import java.util.Arrays;
@@ -356,23 +357,12 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
             restaurantNameET.setAdapter(adapter);
             restaurantNameET.setThreshold(0);
-            restaurantNameET.addTextChangedListener(new TextWatcher() {
+            restaurantNameET.setOnFocusChangeListener(new OnFocusChangeListener() {
                 @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                public void onFocusChange(View v, boolean hasFocus) {
                     restaurantNameET.showDropDown();
                 }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                }
-
-                @Override
-                public void afterTextChanged(android.text.Editable s) {
-
-                }
             });
-
             orderCostET.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
