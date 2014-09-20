@@ -26,7 +26,7 @@
                 android:inputType="phone"
                 android:hint="phone number"
                 android:id="@+id/myPhoneNumber"/>
-            <EditText
+            <AutoCompleteTextView
                 style="@style/New_Order_Edit_Text"
                 android:hint="Restaurant name"
                 android:id="@+id/restaurantName"/>
