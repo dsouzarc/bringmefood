@@ -10,6 +10,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.ArrayAdapter;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import java.util.Arrays;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.support.v4.app.Fragment;
@@ -349,9 +350,10 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             restaurantNameET = (AutoCompleteTextView) rootInflater.findViewById(R.id.restaurantName);
             orderCostET = (EditText) rootInflater.findViewById(R.id.cost);
 
-            final ArrayAdapter theAutoAdapter = new ArrayAdapter(theC, android.R.layout.simple_list_item_1,
-                    allRestaurants);
-            restaurantNameET.setAdapter(theAutoAdapter);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>
+                    (getActivity().getApplicationContext(), android.R.layout.simple_list_item_1, Arrays.asList(allRestaurants));
+
+            restaurantNameET.setAdapter(adapter);
 
             orderCostET.addTextChangedListener(new TextWatcher() {
                 @Override
