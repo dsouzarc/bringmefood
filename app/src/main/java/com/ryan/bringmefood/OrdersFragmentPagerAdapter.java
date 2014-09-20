@@ -360,7 +360,9 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             restaurantNameET.setOnFocusChangeListener(new OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
-                    restaurantNameET.showDropDown();
+                    if (hasFocus) {
+                        restaurantNameET.showDropDown();
+                    }
                 }
             });
             orderCostET.addTextChangedListener(new TextWatcher() {
