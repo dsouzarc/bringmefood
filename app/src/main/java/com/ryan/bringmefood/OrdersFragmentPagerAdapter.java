@@ -626,8 +626,8 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                 for(int i = 0; i < wholeArray.length(); i++) {
                     final JSONObject theObj = wholeArray.getJSONObject(i);
                     allItems[i] = new MenuItem(theObj.getString("name"),
-                            theObj.getString("description"),
-                            theObj.getString("price"));
+                            theObj.getString("price"),
+                            theObj.getString("description"));
                 }
                 theReader.close();
                 return allItems;
