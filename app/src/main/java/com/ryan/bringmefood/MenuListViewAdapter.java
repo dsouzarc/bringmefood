@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import java.util.List;
 
+import java.util.LinkedList;
 import android.content.Context;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;

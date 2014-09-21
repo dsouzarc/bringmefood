@@ -13,9 +13,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Item name"
-        android:textSize="24sp"
+        android:textSize="22sp"
         android:textColor="@color/primary900"
-        android:layout_marginBottom="0dp"/>
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="8dp"/>
 
     <TextView
         android:id="@+id/itemCost"
@@ -24,14 +25,20 @@
         android:text="Item cost"
         android:textSize="16sp"
         android:layout_marginTop="0dp"
-        android:layout_gravity="right" android:textColor="@color/primary600"
-        android:textAlignment="viewEnd" android:gravity="right"/>
+        android:layout_gravity="right"
+        android:textColor="@color/primary600"
+        android:textAlignment="viewEnd"
+        android:gravity="right"
+        android:layout_marginRight="16dp"/>
 
     <TextView
         android:id="@+id/itemDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Item description"
-        android:visibility="invisible"
-        android:textSize="16sp"/>
+        android:textSize="16sp"
+        android:textColor="#000000"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="16dp"/>
 </LinearLayout>
