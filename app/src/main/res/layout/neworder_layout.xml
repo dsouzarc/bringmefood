@@ -63,7 +63,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="8dp"
                     android:textSize="20sp"
-                    android:text="Items From Menu"/>
+                    android:text="Items From Menu"
+                    android:id="@+id/addItemMenu"/>
             </LinearLayout>
             <EditText
                 style="@style/New_Order_Edit_Text"
