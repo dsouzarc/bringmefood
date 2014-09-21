@@ -590,7 +590,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                 final JSONArray wholeArray = wholeMenu.getJSONArray("menu");
                 final LinkedList<String> items = new LinkedList<String>();
 
-                
+
             }
             catch (Exception e) {
                 log("Error here: " + restaurantName);
