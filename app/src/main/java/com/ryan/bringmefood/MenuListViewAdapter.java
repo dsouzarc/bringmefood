@@ -46,7 +46,6 @@ public class MenuListViewAdapter extends ArrayAdapter<MenuItem> {
             holder.itemCost.setText("$: " + item.getCost());
             holder.itemName.setText(item.getName());
             holder.itemDescription.setText(item.getDescription());
-            
             holder.itemDescription.setVisibility(View.INVISIBLE);
             view.setOnClickListener(new View.OnClickListener() {
                 @Override

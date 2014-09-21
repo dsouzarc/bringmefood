@@ -3,23 +3,35 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:orientation="vertical"
+                android:layout_marginRight="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
                 android:background="?android:attr/activatedBackgroundIndicator" >
 
     <TextView
         android:id="@+id/itemName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Item name"/>
+        android:text="Item name"
+        android:textSize="24sp"
+        android:textColor="@color/primary900"
+        android:layout_marginBottom="0dp"/>
 
     <TextView
         android:id="@+id/itemCost"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Item cost"/>
+        android:text="Item cost"
+        android:textSize="16sp"
+        android:layout_marginTop="0dp"
+        android:layout_gravity="right" android:textColor="@color/primary600"
+        android:textAlignment="viewEnd" android:gravity="right"/>
 
     <TextView
         android:id="@+id/itemDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Item description" />
+        android:text="Item description"
+        android:visibility="invisible"
+        android:textSize="16sp"/>
 </LinearLayout>
