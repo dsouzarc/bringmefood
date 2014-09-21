@@ -35,6 +35,35 @@ public class MenuListViewAdapter extends ArrayAdapter<MenuItem> {
         final ViewHolder holder;
         if(view == null) {
             holder = new ViewHolder();
-            view = inflater.inflate(R.layout.lis)
+            view = inflater.inflate(com.ryan.bringmefood.R.layout.menu_listview_item, null);
+
+            holder.itemName = (TextView) view.findViewById(R.id.itemName);
+            holder.itemDescription = (TextView) view.findViewById(com.ryan.bringmefood.R.id.itemDescription);
+            holder.itemCost = (TextView) view.findViewById(com.ryan.bringmefood.R.id.itemCost);
+        }
+        else {
+            holder = (ViewHolder) view.getTag();
+        }
+        return view;
+    }
+
+    public void toggleSelection(int position) {
+        selectView(position, !mSelectedItemsIds.get(position));
+    }
+
+    public void selectView(int position, boolean value) {
+        if (value)
+            mSelectedItemsIds.put(position, value);
+        else
+            mSelectedItemsIds.delete(position);
+        notifyDataSetChanged();
+    }
+
+    public int getSelectedCount() {
+        return mSelectedItemsIds.size();
+    }
+
+    public SparseBooleanArray getSelectedIds() {
+        return mSelectedItemsIds;
     }
 }
