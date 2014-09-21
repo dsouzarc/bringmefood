@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.widget.AutoCompleteTextView;
+import java.io.InputStreamReader;
 import android.widget.ArrayAdapter;
 import android.view.View.OnFocusChangeListener;
 import android.graphics.Color;
@@ -14,11 +15,13 @@ import android.os.AsyncTask;
 import java.util.Arrays;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
+import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.telephony.TelephonyManager;
+import android.widget.CheckedTextView;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -48,6 +51,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
@@ -335,7 +343,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
         private View rootInflater;
         private LinearLayout itemsLayout;
-        private TextView addItem;
+        private TextView addItem, addItemFromMenu;
         private EditText myNameET, myPhoneET, myAddressET, orderCostET;
         private AutoCompleteTextView restaurantNameET;
         private Button submit;
@@ -343,6 +351,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
         private void initializeVariables() {
             itemsLayout = (LinearLayout) rootInflater.findViewById(R.id.itemsLinearLayout);
             addItem = (TextView) rootInflater.findViewById(R.id.addItemTV);
+            addItemFromMenu = (TextView) rootInflater.findViewById(R.id.addItemMenu);
             submit = (Button) rootInflater.findViewById(R.id.submitButton);
             myNameET = (EditText) rootInflater.findViewById(R.id.myName);
             myPhoneET = (EditText) rootInflater.findViewById(R.id.myPhoneNumber);
@@ -399,6 +408,15 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             if(data.length() > 2) {
                 myAddressET.setText(data);
             }
+
+            addItemFromMenu.setOnClickListener(new android.view.View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final AlertDialog.Builder theAlert = new AlertDialog.Builder(theC);
+                    CheckedTextView allItems = new CheckedTextView(theC);
+
+                }
+            });
         }
 
         @Override
@@ -555,6 +573,30 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                 confirmSubmit.show();
             }
         };
+
+        private String[] getMenu(final String restaurantName) {
+            try {
+                final BufferedReader theReader = new BufferedReader(
+                        new InputStreamReader(theC.getAssets().open(restaurantName)));
+
+                final StringBuilder menuString = new StringBuilder("");
+
+                while(theReader.ready()) {
+                    menuString.append(theReader.readLine());
+                }
+
+                final JSONObject wholeMenu = new JSONObject(menuString.toString());
+
+                final JSONArray wholeArray = wholeMenu.getJSONArray("menu");
+                final LinkedList<String> items = new LinkedList<String>();
+
+                
+            }
+            catch (Exception e) {
+                log("Error here: " + restaurantName);
+            }
+            return null;
+        }
 
         private class SubmitOrderTask extends AsyncTask<Void, Void, Boolean> {
             private final Order theOrder;
