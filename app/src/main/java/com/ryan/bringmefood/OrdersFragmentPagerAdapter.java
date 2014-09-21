@@ -412,6 +412,23 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             addItemFromMenu.setOnClickListener(new android.view.View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    final String restaurant = restaurantNameET.getText().toString();
+                    boolean isFromList = false;
+
+                    for(int i = 0; i < allRestaurants.length; i++) {
+                        if (allRestaurants[i].equals(restaurant)) {
+                            isFromList = true;
+                            i = Integer.MAX_VALUE;
+                            break;
+                        }
+                    }
+
+                    if(restaurant.length() <= 3 || !isFromList) {
+                        makeToast("Must select a restaurant from list for this feature");
+                        return;
+                    }
+
+
                     final AlertDialog.Builder theAlert = new AlertDialog.Builder(theC);
                     CheckedTextView allItems = new CheckedTextView(theC);
 
