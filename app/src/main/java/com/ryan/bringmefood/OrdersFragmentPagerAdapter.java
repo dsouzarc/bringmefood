@@ -433,7 +433,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                     CheckedTextView allItems = new CheckedTextView(theC);
                     final MenuItem[] theMenu = getMenu(restaurant);
 
-                    final ArrayAdapter<MenuItem> theAdapter = new ArrayAdapter<MenuItem>(theC, android.R.layout.simple_list_item_multiple_choice,
+                    final ArrayAdapter<MenuItem> theAdapter = new ArrayAdapter<MenuItem>(theC, com.ryan.bringmefood.R.layout.restaurant_items_textview,
                             Arrays.asList(theMenu));
 
                     final ListView listView = new ListView(theC);
