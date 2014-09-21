@@ -16,13 +16,16 @@ public class MenuListViewAdapter extends ArrayAdapter<MenuItem> {
     private final Context theC;
     private final LayoutInflater inflater;
     private final MenuItem[] theMenu;
+    private final LinkedList<String> chosenItems;
     private final SparseBooleanArray mSelectedItemsIds;
 
-    public MenuListViewAdapter(Context context, int resource, MenuItem[] objects) {
+    public MenuListViewAdapter(Context context, int resource,
+                               MenuItem[] objects, LinkedList<String> chosenItems) {
         super(context, resource, objects);
         this.theC = context;
         this.inflater = LayoutInflater.from(context);
         this.theMenu = objects;
+        this.chosenItems = chosenItems;
         this.mSelectedItemsIds = new SparseBooleanArray();
     }
 
@@ -57,6 +60,12 @@ public class MenuListViewAdapter extends ArrayAdapter<MenuItem> {
                     else {
                         holder.itemDescription.setVisibility(View.INVISIBLE);
                     }
+                }
+            });
+            view.setOnLongClickListener(new android.view.View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(android.view.View v) {
+                    return false;
                 }
             });
         }
