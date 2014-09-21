@@ -5,37 +5,33 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.content.SharedPreferences;
-import android.widget.AutoCompleteTextView;
-import android.widget.ListView;
-import java.io.InputStreamReader;
-import android.widget.ArrayAdapter;
-import android.view.View.OnFocusChangeListener;
 import android.graphics.Color;
 import android.os.AsyncTask;
-import java.util.Arrays;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
-import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.telephony.TelephonyManager;
-import android.widget.CheckedTextView;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,20 +40,20 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
@@ -666,11 +662,6 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         theDB.addOrder(theOrder);
                         theDB.close();
                         log("Successfully ordered " + response1);
-
-                        /*final ParsePush thePush = new ParsePush();
-                        thePush.setChannel("Drivers");
-                        thePush.setMessage("New Order For " + theOrder.getRestaurantName());
-                        thePush.sendInBackground();*/
                         return true;
                     }
                 }
