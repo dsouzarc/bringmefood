@@ -429,7 +429,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         return;
                     }
 
-                    final AlertDialog.Builder theAlert = new AlertDialog.Builder(theC);
+                    final AlertDialog.Builder theAlert = new AlertDialog.Builder(getActivity());
                     CheckedTextView allItems = new CheckedTextView(theC);
                     final MenuItem[] theMenu = getMenu(restaurant);
 
