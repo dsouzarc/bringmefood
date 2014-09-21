@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.content.SharedPreferences;
 import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
@@ -613,7 +614,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
         private MenuItem[] getMenu(final String restaurantName) {
             try {
                 final BufferedReader theReader = new BufferedReader(
-                        new InputStreamReader(theC.getAssets().open(restaurantName)));
+                        new InputStreamReader(theC.getResources().getAssets().open(restaurantName + ".txt")));
 
                 final StringBuilder menuString = new StringBuilder("");
 
@@ -637,7 +638,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             }
             catch (Exception e) {
                 log("Error here: " + restaurantName);
-                return new MenuItem[]{new MenuItem("Error", "", "")};
+                return new MenuItem[]{new MenuItem("Error", "", e.toString())};
             }
         }
 
