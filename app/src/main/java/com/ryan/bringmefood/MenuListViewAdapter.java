@@ -62,9 +62,10 @@ public class MenuListViewAdapter extends ArrayAdapter<MenuItem> {
                     }
                 }
             });
-            view.setOnLongClickListener(new android.view.View.OnLongClickListener() {
+            view.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
-                public boolean onLongClick(android.view.View v) {
+                public boolean onLongClick(View v) {
+                    chosenItems.add(item.getName() + " " + item.getDescription());
                     return false;
                 }
             });
