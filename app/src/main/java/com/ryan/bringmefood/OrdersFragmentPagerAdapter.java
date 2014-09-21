@@ -7,10 +7,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.widget.AbsListView;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.support.v4.app.Fragment;
+import android.view.ActionMode;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.telephony.PhoneNumberFormattingTextWatcher;
@@ -430,12 +432,44 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                     CheckedTextView allItems = new CheckedTextView(theC);
                     final MenuItem[] theMenu = getMenu(restaurant);
 
-                    final ArrayAdapter<MenuItem> theAdapter = new ArrayAdapter<MenuItem>(theC, com.ryan.bringmefood.R.layout.restaurant_items_textview,
-                            Arrays.asList(theMenu));
+                    //final ArrayAdapter<MenuItem> theAdapter = new ArrayAdapter<MenuItem>(theC, com.ryan.bringmefood.R.layout.restaurant_items_textview, Arrays.asList(theMenu));
+                    final MenuListViewAdapter theAdapter = new
+                            MenuListViewAdapter(theC, com.ryan.bringmefood.R.layout.menu_listview_item, theMenu);
 
                     final ListView listView = new ListView(theC);
                     listView.setAdapter(theAdapter);
                     listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+                    listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+                        @Override
+                        public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
+                            // Capture total checked items
+                            final int checkedCount = listView.getCheckedItemCount();
+                            // Set the CAB title according to total checked items
+                            mode.setTitle(checkedCount + " Selected");
+                            // Calls toggleSelection method from ListViewAdapter Class
+                            theAdapter.toggleSelection(position);
+                        }
+
+                        @Override
+                        public boolean onCreateActionMode(ActionMode mode, android.view.Menu menu) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onPrepareActionMode(ActionMode mode, android.view.Menu menu) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onActionItemClicked(ActionMode mode, android.view.MenuItem item) {
+                            return false;
+                        }
+
+                        @Override
+                        public void onDestroyActionMode(ActionMode mode) {
+
+                        }
+                    });
 
                     theAlert.setView(listView);
 

@@ -31,15 +31,34 @@ public class MenuListViewAdapter extends ArrayAdapter<MenuItem> {
         TextView itemCost;
     }
 
+    @Override
     public View getView(int position, View view, ViewGroup parent) {
         final ViewHolder holder;
         if(view == null) {
             holder = new ViewHolder();
-            view = inflater.inflate(com.ryan.bringmefood.R.layout.menu_listview_item, null);
+            view = inflater.inflate(R.layout.menu_listview_item, null);
 
             holder.itemName = (TextView) view.findViewById(R.id.itemName);
             holder.itemDescription = (TextView) view.findViewById(com.ryan.bringmefood.R.id.itemDescription);
             holder.itemCost = (TextView) view.findViewById(com.ryan.bringmefood.R.id.itemCost);
+
+            final MenuItem item = theMenu[position];
+            holder.itemCost.setText("$: " + item.getCost());
+            holder.itemName.setText(item.getName());
+            holder.itemDescription.setText(item.getDescription());
+            
+            holder.itemDescription.setVisibility(View.INVISIBLE);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(holder.itemDescription.getVisibility() == View.INVISIBLE) {
+                        holder.itemDescription.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        holder.itemDescription.setVisibility(View.INVISIBLE);
+                    }
+                }
+            });
         }
         else {
             holder = (ViewHolder) view.getTag();
