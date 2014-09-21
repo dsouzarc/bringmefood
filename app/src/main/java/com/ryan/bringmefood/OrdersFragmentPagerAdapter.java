@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.widget.AutoCompleteTextView;
+import android.widget.ListView;
 import java.io.InputStreamReader;
 import android.widget.ArrayAdapter;
 import android.view.View.OnFocusChangeListener;
@@ -428,9 +429,27 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         return;
                     }
 
-
                     final AlertDialog.Builder theAlert = new AlertDialog.Builder(theC);
                     CheckedTextView allItems = new CheckedTextView(theC);
+                    final MenuItem[] theMenu = getMenu(restaurant);
+
+                    final ArrayAdapter<MenuItem> theAdapter = new ArrayAdapter<MenuItem>(theC, android.R.layout.simple_list_item_multiple_choice,
+                            Arrays.asList(theMenu));
+
+                    final ListView listView = new ListView(theC);
+                    listView.setAdapter(theAdapter);
+                    listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
+                    theAlert.setView(listView);
+
+                    theAlert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+
+                    theAlert.show();
 
                 }
             });
