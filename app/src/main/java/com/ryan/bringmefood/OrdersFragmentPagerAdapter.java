@@ -435,7 +435,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
                     final ListView listView = new ListView(theC);
                     listView.setAdapter(theAdapter);
-                    listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+                    listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 
                     theAlert.setView(listView);
 
