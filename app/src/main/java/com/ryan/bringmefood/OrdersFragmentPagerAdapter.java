@@ -574,7 +574,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             }
         };
 
-        private String[] getMenu(final String restaurantName) {
+        private MenuItem[] getMenu(final String restaurantName) {
             try {
                 final BufferedReader theReader = new BufferedReader(
                         new InputStreamReader(theC.getAssets().open(restaurantName)));
@@ -588,14 +588,21 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                 final JSONObject wholeMenu = new JSONObject(menuString.toString());
 
                 final JSONArray wholeArray = wholeMenu.getJSONArray("menu");
-                final LinkedList<String> items = new LinkedList<String>();
+                final MenuItem[] allItems = new MenuItem[wholeArray.length()];
 
-
+                for(int i = 0; i < wholeArray.length(); i++) {
+                    final JSONObject theObj = wholeArray.getJSONObject(i);
+                    allItems[i] = new MenuItem(theObj.getString("name"),
+                            theObj.getString("description"),
+                            theObj.getString("price"));
+                }
+                theReader.close();
+                return allItems;
             }
             catch (Exception e) {
                 log("Error here: " + restaurantName);
+                return new MenuItem[]{new MenuItem("Error", "", "")};
             }
-            return null;
         }
 
         private class SubmitOrderTask extends AsyncTask<Void, Void, Boolean> {
