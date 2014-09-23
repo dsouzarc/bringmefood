@@ -66,6 +66,8 @@ public class MenuListViewAdapter extends ArrayAdapter<MenuItem> {
                 @Override
                 public boolean onLongClick(View v) {
                     chosenItems.add(item.getName() + " " + item.getDescription());
+
+
                     return false;
                 }
             });
