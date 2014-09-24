@@ -825,7 +825,8 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         holder.itemCost.setText("$: " + item.getCost());
                     }
                     holder.itemName.setText(item.getName());
-                    holder.itemDescription.setText(item.getDescription());
+                    holder.itemDescription.setText((item.getDescription().length() < 2) ?
+                            "No description available" : item.getDescription());
                     holder.itemDescription.setVisibility(View.INVISIBLE);
                     view.setOnClickListener(new View.OnClickListener() {
                         @Override
