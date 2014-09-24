@@ -812,8 +812,8 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                     view = inflater.inflate(R.layout.menu_listview_item, null);
 
                     holder.itemName = (TextView) view.findViewById(R.id.itemName);
-                    holder.itemDescription = (TextView) view.findViewById(com.ryan.bringmefood.R.id.itemDescription);
-                    holder.itemCost = (TextView) view.findViewById(com.ryan.bringmefood.R.id.itemCost);
+                    holder.itemDescription = (TextView) view.findViewById(R.id.itemDescription);
+                    holder.itemCost = (TextView) view.findViewById(R.id.itemCost);
 
                     final MenuItem item = theMenu[position];
                     holder.itemCost.setText("$: " + item.getCost());
@@ -835,8 +835,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         @Override
                         public boolean onLongClick(View v) {
                             chosenItems.add(item.getName() + " " + item.getDescription());
-
-
+                            itemsLayout.addView(getItemView(item.getName().toString()), 0);
                             return false;
                         }
                     });
