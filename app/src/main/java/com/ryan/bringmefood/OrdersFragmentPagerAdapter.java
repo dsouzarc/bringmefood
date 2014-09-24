@@ -836,6 +836,16 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         public boolean onLongClick(View v) {
                             chosenItems.add(item.getName() + " " + item.getDescription());
                             itemsLayout.addView(getItemView(item.getName().toString()), 0);
+
+                            try {
+                                final double currentPrice =
+                                        Double.parseDouble(orderCostET.getText().toString().replace("$", ""));
+                                orderCostET.setText((String.valueOf(currentPrice +
+                                        Double.parseDouble(item.getCost()))));
+                            }
+                            catch (Exception e) {
+                                e.printStackTrace();
+                            }
                             return false;
                         }
                     });
