@@ -60,6 +60,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.text.DecimalFormat;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -816,7 +817,13 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                     holder.itemCost = (TextView) view.findViewById(R.id.itemCost);
 
                     final MenuItem item = theMenu[position];
-                    holder.itemCost.setText("$: " + item.getCost());
+                    try {
+                        final double cost = Double.parseDouble(item.getCost().replace(" ", "").replace("$", ""));
+                        holder.itemCost.setText("$" + decimalFormat.format(cost));
+                    }
+                    catch (Exception e) {
+                        holder.itemCost.setText("$: " + item.getCost());
+                    }
                     holder.itemName.setText(item.getName());
                     holder.itemDescription.setText(item.getDescription());
                     holder.itemDescription.setVisibility(View.INVISIBLE);
