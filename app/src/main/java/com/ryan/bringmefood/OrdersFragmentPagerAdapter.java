@@ -5,26 +5,12 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-
-import android.util.SparseBooleanArray;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-import java.util.List;
-
-import java.util.LinkedList;
-import android.content.Context;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.widget.AbsListView;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.support.v4.app.Fragment;
-import android.view.ActionMode;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.telephony.PhoneNumberFormattingTextWatcher;
@@ -32,13 +18,17 @@ import android.telephony.TelephonyManager;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.util.TypedValue;
+import android.view.ActionMode;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -59,7 +49,6 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.text.DecimalFormat;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -485,7 +474,8 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
                     theAlert.setView(listView);
 
-                    theAlert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    theAlert.setPositiveButton("Finished choosing from menu",
+                            new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
 
@@ -819,7 +809,8 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                     final MenuItem item = theMenu[position];
                     try {
                         final double cost = Double.parseDouble(item.getCost().replace(" ", "").replace("$", ""));
-                        holder.itemCost.setText("$" + decimalFormat.format(cost));
+                        holder.itemCost.setText("$" + decimalFormat.format(cost).replace(" ", ""));
+                        holder.itemCost.setGravity(Gravity.RIGHT);
                     }
                     catch (Exception e) {
                         holder.itemCost.setText("$: " + item.getCost());

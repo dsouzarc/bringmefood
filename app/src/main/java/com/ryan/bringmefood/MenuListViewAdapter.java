@@ -1,16 +1,14 @@
 package com.ryan.bringmefood;
 
+import android.content.Context;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import java.util.List;
 
 import java.util.LinkedList;
-import android.content.Context;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 
 public class MenuListViewAdapter extends ArrayAdapter<MenuItem> {
     private final Context theC;
