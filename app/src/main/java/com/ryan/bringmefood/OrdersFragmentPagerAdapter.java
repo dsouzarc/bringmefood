@@ -1,5 +1,6 @@
 package com.ryan.bringmefood;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -34,6 +35,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -58,7 +60,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import android.widget.ImageView;
 
 public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
@@ -350,8 +351,10 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
         private EditText myNameET, myPhoneET, myAddressET, orderCostET;
         private AutoCompleteTextView restaurantNameET;
         private Button submit;
+        private Activity theActivity;
 
         private void initializeVariables() {
+            this.theActivity = getActivity();
             itemsLayout = (LinearLayout) rootInflater.findViewById(R.id.itemsLinearLayout);
             addItem = (TextView) rootInflater.findViewById(R.id.addItemTV);
             addItemFromMenu = (TextView) rootInflater.findViewById(R.id.addItemMenu);
@@ -820,11 +823,12 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                     view.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            final AlertDialog.Builder itemDescription =
-                                    new AlertDialog.Builder(getActivity());
                             final EditText toEdit = new EditText(theC);
                             toEdit.setText(item.getDescription());
+                            toEdit.setBackgroundColor(Color.WHITE);
+                            toEdit.setTextColor(Color.BLACK);
 
+                            final AlertDialog.Builder itemDescription = new AlertDialog.Builder(theActivity);
                             itemDescription.setView(toEdit);
                             itemDescription.setTitle("Item description");
                             itemDescription.setMessage(item.getName());
