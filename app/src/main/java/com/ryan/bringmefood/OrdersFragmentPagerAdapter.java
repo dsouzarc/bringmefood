@@ -58,6 +58,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import android.widget.ImageView;
 
 public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
@@ -791,7 +792,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
             private class ViewHolder {
                 TextView itemName;
-                TextView itemDescription;
+                ImageView itemDescription;
                 TextView itemCost;
             }
 
@@ -800,11 +801,11 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                 final ViewHolder holder;
                 if(view == null) {
                     holder = new ViewHolder();
-                    view = inflater.inflate(R.layout.menu_listview_item, null);
+                    view = inflater.inflate(R.layout.menu_items_view, null);
 
-                    holder.itemName = (TextView) view.findViewById(R.id.itemName);
-                    holder.itemDescription = (TextView) view.findViewById(R.id.itemDescription);
-                    holder.itemCost = (TextView) view.findViewById(R.id.itemCost);
+                    holder.itemName = (TextView) view.findViewById(com.ryan.bringmefood.R.id.itemNameTextView);
+                    holder.itemDescription = (ImageView) view.findViewById(com.ryan.bringmefood.R.id.informationButton);
+                    holder.itemCost = (TextView) view.findViewById(com.ryan.bringmefood.R.id.costTextView);
 
                     final MenuItem item = theMenu[position];
                     try {
@@ -816,19 +817,12 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         holder.itemCost.setText("$: " + item.getCost());
                     }
                     holder.itemName.setText(item.getName());
-                    holder.itemDescription.setVisibility(View.INVISIBLE);
                     view.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if(holder.itemDescription.getVisibility() == View.INVISIBLE) {
-                                holder.itemDescription.setText((item.getDescription().length() < 2) ?
-                                        "No description available" : item.getDescription());
-                                holder.itemDescription.setVisibility(View.VISIBLE);
-                            }
-                            else {
-                                holder.itemDescription.setText("");
-                                holder.itemDescription.setVisibility(View.INVISIBLE);
-                            }
+                            final AlertDialog.Builder itemDescription =
+                                    new AlertDialog.Builder(getActivity());
+
                         }
                     });
                     view.setOnLongClickListener(new View.OnLongClickListener() {

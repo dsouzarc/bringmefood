@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/ic_menu_info_details"
+        android:id="@+id/informationButton"
+        android:layout_gravity="left"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/itemNameTextView"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Item name"
+        android:textSize="22sp"
+        android:gravity="left|center_vertical"
+        android:textColor="@color/primary900"
+        android:id="@+id/itemNameTextView"
+        android:layout_toRightOf="@+id/informationButton"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="$cost"
+        android:id="@+id/costTextView"
+        android:layout_alignBottom="@+id/informationButton"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="8dp"
+        android:textSize="20sp"/>
+
+</RelativeLayout>
