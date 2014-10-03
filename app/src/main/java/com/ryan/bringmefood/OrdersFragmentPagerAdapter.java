@@ -822,25 +822,43 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         public void onClick(View v) {
                             final AlertDialog.Builder itemDescription =
                                     new AlertDialog.Builder(getActivity());
+                            final EditText toEdit = new EditText(theC);
+                            toEdit.setText(item.getDescription());
 
-                        }
-                    });
-                    view.setOnLongClickListener(new View.OnLongClickListener() {
-                        @Override
-                        public boolean onLongClick(View v) {
-                            chosenItems.add(item.getName() + " " + item.getDescription());
-                            itemsLayout.addView(getItemView(item.getName().toString()), 0);
+                            itemDescription.setView(toEdit);
+                            itemDescription.setTitle("Item description");
+                            itemDescription.setMessage(item.getName());
 
-                            try {
-                                final double currentPrice =
-                                        Double.parseDouble(orderCostET.getText().toString().replace("$", ""));
-                                orderCostET.setText((String.valueOf(currentPrice +
-                                        Double.parseDouble(item.getCost()))));
-                            }
-                            catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                            return false;
+                            itemDescription.setPositiveButton("Add to order", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    chosenItems.add(item.getName() + " " + toEdit.getText().toString());
+                                    itemsLayout.addView(getItemView(item.getName().toString()), 0);
+
+                                    try {
+                                        try {
+                                            final double currentPrice =
+                                                    Double.parseDouble(orderCostET.getText().toString().replace("$", ""));
+                                            orderCostET.setText((String.valueOf(currentPrice +
+                                                    Double.parseDouble(item.getCost()))));
+                                        }
+                                        catch (Exception e) {
+                                            orderCostET.setText(item.getCost());
+                                        }
+                                    }
+                                    catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
+
+                            itemDescription.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            });
+                            itemDescription.show();
+
                         }
                     });
                 }

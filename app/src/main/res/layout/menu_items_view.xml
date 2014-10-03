@@ -32,10 +32,9 @@
         android:layout_height="wrap_content"
         android:text="$cost"
         android:id="@+id/costTextView"
-        android:layout_alignBottom="@+id/informationButton"
+        android:textSize="20sp"
+        android:layout_below="@+id/informationButton"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="8dp"
-        android:textSize="20sp"/>
+        android:layout_alignParentEnd="true"/>
 
 </RelativeLayout>
