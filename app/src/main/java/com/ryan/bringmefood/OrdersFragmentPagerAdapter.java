@@ -459,7 +459,6 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                     }
 
                     final AlertDialog.Builder theAlert = new AlertDialog.Builder(getActivity());
-                    CheckedTextView allItems = new CheckedTextView(theC);
                     final MenuItem[] theMenu = getMenu(restaurant);
 
                     final MenuListViewAdapter theAdapter = new
@@ -500,7 +499,17 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         }
                     });
 
-                    theAlert.setView(listView);
+                    //theAlert.setView(listView);
+
+                    final EditText something = new EditText(theC);
+                    something.setText("Hi");
+
+                    final LinearLayout items = new LinearLayout(theC);
+                    items.setOrientation(LinearLayout.VERTICAL);
+                    items.addView(something);
+                    items.addView(listView);
+
+                    theAlert.setView(items);
 
                     theAlert.setPositiveButton("Finished choosing from menu",
                             new DialogInterface.OnClickListener() {
