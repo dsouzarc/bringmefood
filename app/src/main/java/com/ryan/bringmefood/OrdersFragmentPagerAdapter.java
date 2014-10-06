@@ -499,14 +499,32 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         }
                     });
 
-                    //theAlert.setView(listView);
+                    final AutoCompleteTextView autoMenuNames = new AutoCompleteTextView(theC);
+                    final ArrayList<String> menuItems = new ArrayList<String>(theMenu.length);
 
-                    final EditText something = new EditText(theC);
-                    something.setText("Hi");
+                    for(MenuItem item : theMenu) {
+                        menuItems.add(item.getName());
+                    }
+
+                    final ArrayAdapter<String> adapter = new ArrayAdapter<String>
+                            (getActivity().getApplicationContext(), R.layout.restaurant_items_textview,
+                                    menuItems);
+
+                    autoMenuNames.setAdapter(adapter);
+                    autoMenuNames.setThreshold(-1);
+                    autoMenuNames.setOnFocusChangeListener(new OnFocusChangeListener() {
+                        @Override
+                        public void onFocusChange(View v, boolean hasFocus) {
+                            if (hasFocus) {
+                                restaurantNameET.showDropDown();
+                            }
+                        }
+                    });
+
 
                     final LinearLayout items = new LinearLayout(theC);
                     items.setOrientation(LinearLayout.VERTICAL);
-                    items.addView(something);
+                    items.addView(autoMenuNames);
                     items.addView(listView);
 
                     theAlert.setView(items);
