@@ -340,8 +340,9 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
     public class NewOrder extends Fragment {
 
         private final String[] allRestaurants = {"Cheeburger Cheeburger",
-                            "Georges", "Slice", "Soup Co", "Taste of Mexico",
-                            "Teresasa"};
+                            "Chucks", "Contes", "Georges", "Hoagie Haven",
+                            "Olives", "Slice Between", "Soup Co.", "Subway",
+                            "Taste of Mexico", "Teresas", "Tortugas"};
 
         private final LinkedList<String> theItems = new LinkedList<String>();
 
