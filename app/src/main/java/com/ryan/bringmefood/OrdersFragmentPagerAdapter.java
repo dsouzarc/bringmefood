@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.text.Editable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
@@ -372,11 +373,33 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                             Arrays.asList(allRestaurants));
 
             restaurantNameET.setAdapter(adapter);
-            restaurantNameET.setThreshold(0);
+            restaurantNameET.setThreshold(-1);
             restaurantNameET.setOnFocusChangeListener(new OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
                     if (hasFocus) {
+                        restaurantNameET.showDropDown();
+                    }
+                }
+            });
+            restaurantNameET.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    if(s.length() == 0) {
+                        restaurantNameET.showDropDown();
+                    }
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    if(s.length() == 0) {
+                        restaurantNameET.showDropDown();
+                    }
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if(s.length() == 0) {
                         restaurantNameET.showDropDown();
                     }
                 }
@@ -807,9 +830,9 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                     holder = new ViewHolder();
                     view = inflater.inflate(R.layout.menu_items_view, null);
 
-                    holder.itemName = (TextView) view.findViewById(com.ryan.bringmefood.R.id.itemNameTextView);
-                    holder.itemDescription = (ImageView) view.findViewById(com.ryan.bringmefood.R.id.informationButton);
-                    holder.itemCost = (TextView) view.findViewById(com.ryan.bringmefood.R.id.costTextView);
+                    holder.itemName = (TextView) view.findViewById(R.id.itemNameTextView);
+                    holder.itemDescription = (ImageView) view.findViewById(R.id.informationButton);
+                    holder.itemCost = (TextView) view.findViewById(R.id.costTextView);
 
                     final MenuItem item = theMenu[position];
                     try {
@@ -825,7 +848,13 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         @Override
                         public void onClick(View v) {
                             final EditText toEdit = new EditText(theC);
-                            toEdit.setText(item.getDescription());
+
+                            if(item.getDescription().length() <= 2) {
+                                toEdit.setHint("No description available");
+                            }
+                            else {
+                                toEdit.setText(item.getDescription());
+                            }
                             toEdit.setBackgroundColor(Color.WHITE);
                             toEdit.setTextColor(Color.BLACK);
 
