@@ -9,6 +9,10 @@ public class MenuItem {
         this.description = description;
     }
 
+    public static MenuItem deepClone(final MenuItem original) {
+        return new MenuItem(original.getName(), original.getCost(), original.getDescription());
+    }
+
     public String getName() {
         return name;
     }
