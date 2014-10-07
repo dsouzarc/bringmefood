@@ -339,6 +339,18 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
         }
     }
 
+
+    /**
+     *
+     *
+     *
+     * NEW ORDER FRAGMENT
+     *
+     *
+     *
+     */
+
+
     public class NewOrder extends Fragment {
 
         private final String[] allRestaurants = {"Cheeburger Cheeburger",
@@ -346,7 +358,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                             "Olives", "Slice Between", "Soup Co.", "Subway",
                             "Taste of Mexico", "Teresas", "Tortugas"};
 
-        private final LinkedList<String> theItems = new LinkedList<String>();
+        private final LinkedList<MenuItem> theItems = new LinkedList<MenuItem>();
 
         private View rootInflater;
         private LinearLayout itemsLayout;
@@ -369,10 +381,10 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             restaurantNameET = (AutoCompleteTextView) rootInflater.findViewById(R.id.restaurantName);
             orderCostET = (EditText) rootInflater.findViewById(R.id.cost);
 
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>
+            //Set up restaurant autocomplete
+            final ArrayAdapter<String> adapter = new ArrayAdapter<String>
                     (getActivity().getApplicationContext(), R.layout.restaurant_items_textview,
                             Arrays.asList(allRestaurants));
-
             restaurantNameET.setAdapter(adapter);
             restaurantNameET.setThreshold(-1);
             restaurantNameET.setOnFocusChangeListener(new OnFocusChangeListener() {
@@ -427,6 +439,8 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                 }
             });
 
+
+            //Personal variables
             String data = getPreferences("myName");
             if(data.length() > 2) {
                 myNameET.setText(data);
@@ -440,7 +454,8 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                 myAddressET.setText(data);
             }
 
-            addItemFromMenu.setOnClickListener(new android.view.View.OnClickListener() {
+            //Add item from menu
+            addItemFromMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     final String restaurant = restaurantNameET.getText().toString();
@@ -467,59 +482,36 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
                     final ListView listView = new ListView(theC);
                     listView.setAdapter(theAdapter);
-                    listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-                    listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
-                        @Override
-                        public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked) {
-                            // Capture total checked items
-                            final int checkedCount = listView.getCheckedItemCount();
-                            // Set the CAB title according to total checked items
-                            mode.setTitle(checkedCount + " Selected");
-                            // Calls toggleSelection method from ListViewAdapter Class
-                            theAdapter.toggleSelection(position);
-                        }
 
-                        @Override
-                        public boolean onCreateActionMode(ActionMode mode, android.view.Menu menu) {
-                            return false;
-                        }
-
-                        @Override
-                        public boolean onPrepareActionMode(ActionMode mode, android.view.Menu menu) {
-                            return false;
-                        }
-
-                        @Override
-                        public boolean onActionItemClicked(ActionMode mode, android.view.MenuItem item) {
-                            return false;
-                        }
-
-                        @Override
-                        public void onDestroyActionMode(ActionMode mode) {
-
-                        }
-                    });
-
+                    //AutoComplete for adding items from menu
                     final AutoCompleteTextView autoMenuNames = (AutoCompleteTextView)
                             (((LayoutInflater) getActivity()
                                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE))
                                     .inflate(R.layout.autocomplete, null))
                                     .findViewById(R.id.itemNameACTV);
-                    ((ViewGroup)autoMenuNames.getParent()).removeView(autoMenuNames);
-                    final String[] menuItems = new String[theMenu.length];
+                    ((ViewGroup) autoMenuNames.getParent()).removeView(autoMenuNames);
 
+                    final String[] menuItems = new String[theMenu.length];
                     for(int i = 0; i < theMenu.length; i++) {
                         menuItems[i] = theMenu[i].getName();
                     }
 
                     final ArrayAdapter<String> adapter = new ArrayAdapter<String>
-                            (getActivity().getApplicationContext(), R.layout.restaurant_items_textview,
-                                    menuItems);
+                            (getActivity().getApplicationContext(),
+                                    R.layout.restaurant_items_textview, menuItems);
 
                     autoMenuNames.setAdapter(adapter);
                     autoMenuNames.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            final String text = ((TextView) view).getText().toString();
+
+                            for(int i = 0; i < theMenu.length; i++) {
+                                if (theMenu[i].getName().contains(text)) {
+                                    position = i;
+                                }
+                            }
+
                             final MenuItem item = theMenu[position];
                             final EditText toEdit = new EditText(theC);
                             final AlertDialog.Builder itemDescription = new AlertDialog.Builder(theActivity);
@@ -540,8 +532,10 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                             itemDescription.setPositiveButton("Add to order", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    theItems.add(item.getName() + " " + toEdit.getText().toString());
-                                    itemsLayout.addView(getItemView(item.getName().toString()), 0);
+                                    final MenuItem newItem = MenuItem.deepClone(item);
+                                    newItem.setDescription(toEdit.getText().toString());
+                                    theItems.add(newItem);
+                                    itemsLayout.addView(getItemView(newItem), 0);
 
                                     try {
                                         try {
@@ -610,9 +604,9 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             return rootInflater;
         }
 
-        public TextView getItemView(final String text) {
+        public TextView getItemView(final MenuItem anItem) {
             final TextView theView = new TextView(theC);
-            theView.setText(text);
+            theView.setText(anItem.getName() + " - " + anItem.getDescription());
             theView.setTextColor(getResources().getColor(R.color.primary700));
             theView.setTextSize(20);
             theView.setPadding(20, 20, 0, 0);
@@ -627,7 +621,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                     final EditText theItem = new EditText(theC);
                     theItem.setBackgroundColor(Color.WHITE);
                     theItem.setTextColor(Color.BLACK);
-                    theItem.setText(text);
+                    theItem.setText(anItem.getDescription());
 
                     editAD.setView(theItem);
 
@@ -635,22 +629,10 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             final TextView theV = (TextView) v;
-                            final String newItem = theItem.getText().toString();
-                            final String oldItem = theV.getText().toString();
-                            for(int i = 0; i < theItems.size(); i++) {
-                                try {
-                                    if (theItems.get(i).equals(oldItem)) {
-                                        theItems.set(i, newItem);
-                                        i = Integer.MAX_VALUE;
-                                        break;
-                                    }
-                                }
-                                catch (Exception e) {
-                                }
-                            }
+                            anItem.setDescription(theItem.getText().toString());
 
-                            theV.setText(newItem);
-                            theView.setText(newItem);
+                            theV.setText(anItem.getName() + " - " + anItem.getDescription());
+                            theView.setText(anItem.getName() + " - " + anItem.getDescription());
                         }
                     });
                     editAD.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -676,18 +658,8 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                     deleteAD.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-
-                            for(String item : theItems) {
-                                if (toBeDeleted.equals(item)) {
-                                    theItems.remove(item);
-                                    break;
-                                }
-                            }
-
-                            itemsLayout.removeAllViews();
-                            for(String item : theItems) {
-                                itemsLayout.addView(getItemView(item));
-                            }
+                            theItems.remove(anItem);
+                            updateChosenItems();
                         }
                     });
                     deleteAD.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -785,6 +757,13 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             }
         }
 
+        private void updateChosenItems() {
+            itemsLayout.removeAllViews();
+            for(MenuItem item : theItems) {
+                itemsLayout.addView(getItemView(item));
+            }
+        }
+
         private class SubmitOrderTask extends AsyncTask<Void, Void, Boolean> {
             private final Order theOrder;
             private final ProgressDialog theDialog;
@@ -863,8 +842,10 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                             makeToast("Please enter a valid item");
                         }
                         else {
-                            theItems.add(item.getText().toString());
-                            itemsLayout.addView(getItemView(item.getText().toString()), 0);
+                            final MenuItem newItem = new MenuItem("Not on Menu",
+                                    "0.00", item.getText().toString());
+                            theItems.add(newItem);
+                            updateChosenItems();
                         }
                     }
                 });
@@ -888,11 +869,11 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
         private class MenuListViewAdapter extends ArrayAdapter<MenuItem> {
             private final LayoutInflater inflater;
             private final MenuItem[] theMenu;
-            private final LinkedList<String> chosenItems;
+            private final LinkedList<MenuItem> chosenItems;
             private final SparseBooleanArray mSelectedItemsIds;
 
             public MenuListViewAdapter(Context context, int resource,
-                                       MenuItem[] objects, LinkedList<String> chosenItems) {
+                                       MenuItem[] objects, LinkedList<MenuItem> chosenItems) {
                 super(context, resource, objects);
                 this.inflater = LayoutInflater.from(context);
                 this.theMenu = objects;
@@ -949,8 +930,10 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                             itemDescription.setPositiveButton("Add to order", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    chosenItems.add(item.getName() + " " + toEdit.getText().toString());
-                                    itemsLayout.addView(getItemView(item.getName().toString()), 0);
+                                    final MenuItem newItem = MenuItem.deepClone(item);
+                                    newItem.setDescription(toEdit.getText().toString());
+                                    chosenItems.add(newItem);
+                                    updateChosenItems();
 
                                     try {
                                         try {
