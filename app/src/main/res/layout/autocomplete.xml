@@ -11,6 +11,6 @@
         android:layout_marginTop="24dp"
         android:ems="10"
         android:hint="Item name"
-        android:id="@+id/itemName"/>
+        android:id="@+id/itemNameACTV"/>
 
 </LinearLayout>

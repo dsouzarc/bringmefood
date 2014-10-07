@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.widget.AdapterView;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -499,11 +500,16 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         }
                     });
 
-                    final AutoCompleteTextView autoMenuNames = new AutoCompleteTextView(theC);
-                    final ArrayList<String> menuItems = new ArrayList<String>(theMenu.length);
+                    final AutoCompleteTextView autoMenuNames = (AutoCompleteTextView)
+                            (((LayoutInflater) getActivity()
+                                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+                                    .inflate(R.layout.autocomplete, null))
+                                    .findViewById(R.id.itemNameACTV);
+                    ((ViewGroup)autoMenuNames.getParent()).removeView(autoMenuNames);
+                    final String[] menuItems = new String[theMenu.length];
 
-                    for(MenuItem item : theMenu) {
-                        menuItems.add(item.getName());
+                    for(int i = 0; i < theMenu.length; i++) {
+                        menuItems[i] = theMenu[i].getName();
                     }
 
                     final ArrayAdapter<String> adapter = new ArrayAdapter<String>
@@ -511,6 +517,58 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                                     menuItems);
 
                     autoMenuNames.setAdapter(adapter);
+                    autoMenuNames.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            final MenuItem item = theMenu[position];
+                            final EditText toEdit = new EditText(theC);
+                            final AlertDialog.Builder itemDescription = new AlertDialog.Builder(theActivity);
+
+                            if(item.getDescription().length() <= 2) {
+                                toEdit.setHint("No description available");
+                            }
+                            else {
+                                toEdit.setText(item.getDescription());
+                            }
+                            toEdit.setBackgroundColor(Color.WHITE);
+                            toEdit.setTextColor(Color.BLACK);
+
+                            itemDescription.setView(toEdit);
+                            itemDescription.setTitle("Item description");
+                            itemDescription.setMessage(item.getName());
+
+                            itemDescription.setPositiveButton("Add to order", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    theItems.add(item.getName() + " " + toEdit.getText().toString());
+                                    itemsLayout.addView(getItemView(item.getName().toString()), 0);
+
+                                    try {
+                                        try {
+                                            final double currentPrice =
+                                                    Double.parseDouble(orderCostET.getText().toString().replace("$", ""));
+                                            orderCostET.setText((String.valueOf(currentPrice +
+                                                    Double.parseDouble(item.getCost()))));
+                                        }
+                                        catch (Exception e) {
+                                            orderCostET.setText(item.getCost());
+                                        }
+                                    }
+                                    catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
+
+                            itemDescription.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            });
+                            itemDescription.show();
+                        }
+                    });
+
                     autoMenuNames.setThreshold(-1);
                     autoMenuNames.setOnFocusChangeListener(new OnFocusChangeListener() {
                         @Override
@@ -520,7 +578,6 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                             }
                         }
                     });
-
 
                     final LinearLayout items = new LinearLayout(theC);
                     items.setOrientation(LinearLayout.VERTICAL);
@@ -538,7 +595,6 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                     });
 
                     theAlert.show();
-
                 }
             });
         }
