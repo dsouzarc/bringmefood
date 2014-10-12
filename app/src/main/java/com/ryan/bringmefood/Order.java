@@ -33,13 +33,13 @@ public class Order {
     public Order(String myName, String myNumber, String myAddress, String restaurantName,
                  String uniqueDeviceIdentifier, String[] myOrder, String idNumber, String orderCost,
                  final String calendarTimeMillis, final String status) {
-        this.myName = myName;
-        this.myNumber = myNumber;
-        this.myAddress = myAddress;
-        this.restaurantName = restaurantName;
-        this.uniqueDeviceIdentifier = uniqueDeviceIdentifier;
+        this.myName = filter(myName);
+        this.myNumber = filter(myNumber);
+        this.myAddress = filter(myAddress);
+        this.restaurantName = filter(restaurantName);
+        this.uniqueDeviceIdentifier = filter(uniqueDeviceIdentifier);
         this.myOrder = myOrder;
-        this.idNumber = idNumber;
+        this.idNumber = filter(idNumber);
         this.orderCost = orderCost;
         this.calendarTimeMillis = calendarTimeMillis;
         this.theDate = new GregorianCalendar();
@@ -60,6 +60,13 @@ public class Order {
         catch (Exception e) {
             this.status = status;
         }
+    }
+
+    public static String filter(String original) {
+        original = original.replace("'", "");
+        original = original.replace(";", "");
+        original = original.replace("~", "");
+        return original;
     }
 
     public JSONObject toJSONObject() {
