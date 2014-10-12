@@ -411,11 +411,13 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                                 public void run() {
                                     final HttpClient theClient = new DefaultHttpClient();
                                     final HttpPost aPost =
-                                            new HttpPost("https://maps.googleapis.com/maps/api/distancematrix/json?origins=" +
-                                            String.valueOf(addresses.get(0).getLatitude())+ "," +
-                                            String.valueOf(addresses.get(0).getLongitude()) +
-                                            "&destinations=" +  String.valueOf(addresses.get(1).getLatitude())+ "," +
-                                                    String.valueOf(addresses.get(1).getLongitude()));
+                                            new HttpPost(("https://maps.googleapis.com/maps/api/distancematrix/json?origins=" +
+                                                    "151 Moore Street, Princeton, NJ" +
+                                            //String.valueOf(addresses.get(0).getLatitude())+ "," +
+                                            //String.valueOf(addresses.get(0).getLongitude()) +
+                                            "&destinations=" +  "23 Silvers Lane, Cranbury, NJ, 08512").replace(" ", "+"));
+                                                    //String.valueOf(addresses.get(1).getLatitude())+ "," +
+                                                    //String.valueOf(addresses.get(1).getLongitude()));
                                     try {
                                         final HttpResponse resp = theClient.execute(aPost);
                                         log("RESULT: " + EntityUtils.toString(resp.getEntity()));
