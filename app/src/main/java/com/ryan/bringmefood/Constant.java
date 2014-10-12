@@ -57,25 +57,25 @@ public class Constant {
             return Address.Olives;
         }
         if(restaurant.contains("Slice Between")) {
-            return com.ryan.bringmefood.Constant.Address.SliceBetween;
+            return Address.SliceBetween;
         }
         if(restaurant.contains("Soup")) {
-            return com.ryan.bringmefood.Constant.Address.SoupCo;
+            return Address.SoupCo;
         }
         if(restaurant.contains("Subway")) {
-            return com.ryan.bringmefood.Constant.Address.Subway;
+            return Address.Subway;
         }
         if(restaurant.contains("Taste of Mexico")) {
-            return com.ryan.bringmefood.Constant.Address.Taste_Of_Mexico;
+            return Address.Taste_Of_Mexico;
         }
         if(restaurant.contains("Teresa")) {
-            return com.ryan.bringmefood.Constant.Address.Teresas;
+            return Address.Teresas;
         }
         if(restaurant.contains("Tortugas")) {
-            return com.ryan.bringmefood.Constant.Address.Tortugas;
+            return Address.Tortugas;
         }
         if(restaurant.contains("Wawa")) {
-            return com.ryan.bringmefood.Constant.Address.Wawa;
+            return Address.Wawa;
         }
         return "151 Moore Street, Princeton, NJ, 08540";
     }
