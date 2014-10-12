@@ -825,7 +825,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             public Boolean doInBackground(Void... params) {
                 try {
                     final HttpClient httpclient = new DefaultHttpClient();
-                    final HttpPost httppost = new HttpPost(theOrder.getOrderHttpPost());
+                    final HttpPost httppost = new HttpPost(theOrder.getOrderHttpPost(7.5));
                     final HttpResponse response = httpclient.execute(httppost);
                     final String response1 = EntityUtils.toString(response.getEntity());
 
@@ -836,6 +836,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         log("Successfully ordered " + response1);
                         return true;
                     }
+                    log("ERROR RESPONSE: " + response1);
                 }
                 catch(Exception e) {
                     e.printStackTrace();
