@@ -391,46 +391,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             this.restaurantNameSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    Geocoder geocoder = new Geocoder(theC);
-                    final List<Address> addresses;
-                    try {
-                        addresses = geocoder.getFromLocationName("151 Moore Street, Princeton, NJ", 1);
-                        addresses.addAll(geocoder.getFromLocationName("23 Silvers Lane, Cranbury, NJ", 1));
-
-                        if (addresses.size() >= 1) {
-                            Location locationA = new Location("point A");
-                            locationA.setLatitude(addresses.get(0).getLatitude());
-                            locationA.setLongitude(addresses.get(0).getLongitude());
-                            Location locationB = new Location("point B");
-                            locationB.setLatitude(addresses.get(1).getLatitude());
-                            locationB.setLongitude(addresses.get(1).getLongitude());
-                            log("DISTANCE: " + locationA.distanceTo(locationB));
-
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    final HttpClient theClient = new DefaultHttpClient();
-                                    final HttpPost aPost =
-                                            new HttpPost(("https://maps.googleapis.com/maps/api/distancematrix/json?origins=" +
-                                                    "151 Moore Street, Princeton, NJ" +
-                                            //String.valueOf(addresses.get(0).getLatitude())+ "," +
-                                            //String.valueOf(addresses.get(0).getLongitude()) +
-                                            "&destinations=" +  "23 Silvers Lane, Cranbury, NJ, 08512").replace(" ", "+"));
-                                                    //String.valueOf(addresses.get(1).getLatitude())+ "," +
-                                                    //String.valueOf(addresses.get(1).getLongitude()));
-                                    try {
-                                        final HttpResponse resp = theClient.execute(aPost);
-                                        log("RESULT: " + EntityUtils.toString(resp.getEntity()));
-                                    }
-                                    catch (Exception e) {
-                                        log(e.toString());
-                                    }
-                                }
-                            }).start();
-                        }
-                    } catch (Exception e) {
-                        log(e.toString());
-                    }
+                    //Calculate distance
                 }
 
                 @Override
@@ -610,6 +571,53 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                     theAlert.show();
                 }
             });
+        }
+
+        private class CalculateAndShowDistance extends AsyncTask<String, Void, Double[]> {
+            @Override
+            public Double[] doInBackground(final String... params) {
+
+                final HttpClient theClient = new DefaultHttpClient();
+                final HttpPost aPost =
+                        new HttpPost(("https://maps.googleapis.com/maps/api/distancematrix/json?origins=" +
+                                params[0] + "&destinations=" + params[1] +
+                                "&mode=driving&language=en-EN&units=imperial").replace(" ", "+"));
+                try {
+                    final HttpResponse resp = theClient.execute(aPost);
+                    log("RESULT: " + EntityUtils.toString(resp.getEntity()));
+
+                    final JSONObject response = new JSONObject(EntityUtils.toString(resp.getEntity()));
+                    final JSONObject rows = response.getJSONObject("rows");
+                    final JSONArray elements = rows.getJSONArray("elements");
+
+                    final JSONObject firstRoute = elements.getJSONObject(0);
+
+                    final double distanceInMiles =
+                            Double.parseDouble(firstRoute.getJSONObject("distance")
+                                    .getString("text").replace("miles", "").replace(" ", ""));
+                    final double timeInMinutes =
+                            Double.parseDouble(firstRoute.getJSONObject("duration")
+                                    .getString("value").replace(" ", "")) / (60 * 60 * 24);
+                    return new Double[]{distanceInMiles, timeInMinutes};
+                }
+                catch (Exception e) {
+                    log(e.toString());
+                }
+
+                return null;
+            }
+
+            @Override
+            public void onPostExecute(Double[] params) {
+                if(params == null) {
+                    makeToast("Sorry, it looks like your address isn't valid");
+                }
+
+                final double distanceInMiles = params[0];
+                final double timeInMinutes = params[1];
+
+                makeToast("Approximately " + timeInMinutes + " from you");
+            }
         }
 
         @Override
