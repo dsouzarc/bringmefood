@@ -762,11 +762,12 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             }
         };
 
-        public String[] getArray(final MenuItem[] items) {
-            final String[] result = new String[items.length];
-
-            for(int i = 0; i < items.length; i++) {
-                result[i] = items[i].getName() + " - " + items[i].getDescription();
+        public String[] getArray(final LinkedList<MenuItem> items) {
+            final String[] result = new String[items.size()];
+            int counter = 0;
+            for(MenuItem item : items) {
+                result[counter] = item.getName() + " - " + item.getDescription();
+                counter++;
             }
             return result;
         }
