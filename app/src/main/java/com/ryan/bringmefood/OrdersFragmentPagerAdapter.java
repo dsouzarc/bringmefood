@@ -354,7 +354,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
         private final String[] allRestaurants = {"Cheeburger Cheeburger",
                             "Chucks", "Contes", "Georges", "Hoagie Haven",
                             "Olives", "Slice Between", "Soup Co.", "Subway",
-                            "Taste of Mexico", "Teresas", "Tortugas", "WaWa"};
+                            "Taste of Mexico", "Teresas", "Tortugas", "Wawa"};
 
         private final LinkedList<MenuItem> theItems = new LinkedList<MenuItem>();
 
@@ -367,25 +367,26 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
         private Activity theActivity;
 
         private void initializeVariables() {
+            Arrays.sort(this.allRestaurants);
             this.theActivity = getActivity();
-            itemsLayout = (LinearLayout) rootInflater.findViewById(R.id.itemsLinearLayout);
-            addItem = (TextView) rootInflater.findViewById(R.id.addItemTV);
-            addItemFromMenu = (TextView) rootInflater.findViewById(R.id.addItemMenu);
-            submit = (Button) rootInflater.findViewById(R.id.submitButton);
-            myNameET = (EditText) rootInflater.findViewById(R.id.myName);
-            myPhoneET = (EditText) rootInflater.findViewById(R.id.myPhoneNumber);
-            myPhoneET.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
-            myAddressET = (EditText) rootInflater.findViewById(R.id.myAddress);
-            restaurantNameSpinner = (Spinner) rootInflater.findViewById(R.id.restaurantName);
-            orderCostET = (EditText) rootInflater.findViewById(R.id.cost);
+            this.itemsLayout = (LinearLayout) rootInflater.findViewById(R.id.itemsLinearLayout);
+            this.addItem = (TextView) rootInflater.findViewById(R.id.addItemTV);
+            this.addItemFromMenu = (TextView) rootInflater.findViewById(R.id.addItemMenu);
+            this.submit = (Button) rootInflater.findViewById(R.id.submitButton);
+            this.myNameET = (EditText) rootInflater.findViewById(R.id.myName);
+            this.myPhoneET = (EditText) rootInflater.findViewById(R.id.myPhoneNumber);
+            this.myPhoneET.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
+            this.myAddressET = (EditText) rootInflater.findViewById(R.id.myAddress);
+            this.restaurantNameSpinner = (Spinner) rootInflater.findViewById(R.id.restaurantName);
+            this.orderCostET = (EditText) rootInflater.findViewById(R.id.cost);
 
             //Set up restaurant autocomplete
             final ArrayAdapter<String> adapter = new ArrayAdapter<String>
                     (getActivity().getApplicationContext(), R.layout.restaurant_items_textview,
                             Arrays.asList(allRestaurants));
-            restaurantNameSpinner.setAdapter(adapter);
+            this.restaurantNameSpinner.setAdapter(adapter);
 
-            orderCostET.addTextChangedListener(new TextWatcher() {
+            this.orderCostET.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 }
@@ -411,15 +412,15 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             //Personal variables
             String data = getPreferences("myName");
             if(data.length() > 2) {
-                myNameET.setText(data);
+                this.myNameET.setText(data);
             }
 
             data = getPreferences("myPhone");
-            myPhoneET.setText((data.length() > 2) ? data : getPhoneNumber(theC));
+            this.myPhoneET.setText((data.length() > 2) ? data : getPhoneNumber(theC));
 
             data = getPreferences("myAddress");
             if(data.length() > 2) {
-                myAddressET.setText(data);
+                this.myAddressET.setText(data);
             }
 
             //Add item from menu
