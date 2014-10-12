@@ -36,4 +36,47 @@ public class Constant {
         final String Tortugas = "41 Leigh Avenue, Princeton, NJ 08542";
         final String Wawa = "140 University Pl, Princeton, NJ 08540";
     }
+
+    public static String getAddress(final String restaurant) {
+        if(restaurant.contains("Cheeburger")) {
+            return Address.Cheeburger;
+        }
+        if(restaurant.contains("Chucks")) {
+            return Address.Chucks;
+        }
+        if(restaurant.contains("Contes")) {
+            return Address.Contes;
+        }
+        if(restaurant.contains("Georges")) {
+            return Address.Georges;
+        }
+        if(restaurant.contains("Hoagie Haven")) {
+            return Address.Hoagie_Haven;
+        }
+        if(restaurant.contains("Olives")) {
+            return Address.Olives;
+        }
+        if(restaurant.contains("Slice Between")) {
+            return com.ryan.bringmefood.Constant.Address.SliceBetween;
+        }
+        if(restaurant.contains("Soup")) {
+            return com.ryan.bringmefood.Constant.Address.SoupCo;
+        }
+        if(restaurant.contains("Subway")) {
+            return com.ryan.bringmefood.Constant.Address.Subway;
+        }
+        if(restaurant.contains("Taste of Mexico")) {
+            return com.ryan.bringmefood.Constant.Address.Taste_Of_Mexico;
+        }
+        if(restaurant.contains("Teresa")) {
+            return com.ryan.bringmefood.Constant.Address.Teresas;
+        }
+        if(restaurant.contains("Tortugas")) {
+            return com.ryan.bringmefood.Constant.Address.Tortugas;
+        }
+        if(restaurant.contains("Wawa")) {
+            return com.ryan.bringmefood.Constant.Address.Wawa;
+        }
+        return "151 Moore Street, Princeton, NJ, 08540";
+    }
 }

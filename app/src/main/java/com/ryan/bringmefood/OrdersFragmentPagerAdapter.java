@@ -389,6 +389,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     //Calculate distance
+
                 }
 
                 @Override
