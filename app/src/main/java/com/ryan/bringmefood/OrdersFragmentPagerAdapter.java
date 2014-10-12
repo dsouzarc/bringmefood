@@ -362,7 +362,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
         private LinearLayout itemsLayout;
         private TextView addItem, addItemFromMenu;
         private EditText myNameET, myPhoneET, myAddressET, orderCostET;
-        private AutoCompleteTextView restaurantNameET;
+        private Spinner restaurantNameSpinner;
         private Button submit;
         private Activity theActivity;
 
@@ -376,45 +376,15 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             myPhoneET = (EditText) rootInflater.findViewById(R.id.myPhoneNumber);
             myPhoneET.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
             myAddressET = (EditText) rootInflater.findViewById(R.id.myAddress);
-            restaurantNameET = (AutoCompleteTextView) rootInflater.findViewById(R.id.restaurantName);
+            restaurantNameSpinner = (Spinner) rootInflater.findViewById(R.id.restaurantName);
             orderCostET = (EditText) rootInflater.findViewById(R.id.cost);
 
             //Set up restaurant autocomplete
             final ArrayAdapter<String> adapter = new ArrayAdapter<String>
                     (getActivity().getApplicationContext(), R.layout.restaurant_items_textview,
                             Arrays.asList(allRestaurants));
-            restaurantNameET.setAdapter(adapter);
-            restaurantNameET.setThreshold(-1);
-            restaurantNameET.setOnFocusChangeListener(new OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-                    if (hasFocus) {
-                        restaurantNameET.showDropDown();
-                    }
-                }
-            });
-            restaurantNameET.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    if(s.length() == 0) {
-                        restaurantNameET.showDropDown();
-                    }
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if(s.length() == 0) {
-                        restaurantNameET.showDropDown();
-                    }
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    if(s.length() == 0) {
-                        restaurantNameET.showDropDown();
-                    }
-                }
-            });
+            restaurantNameSpinner.setAdapter(adapter);
+            
             orderCostET.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
