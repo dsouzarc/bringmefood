@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.location.Geocoder;
+import android.location.Address;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.widget.Spinner;
@@ -385,6 +387,29 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                     (getActivity().getApplicationContext(), R.layout.restaurant_items_textview,
                             Arrays.asList(allRestaurants));
             this.restaurantNameSpinner.setAdapter(adapter);
+            this.restaurantNameSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    Geocoder geocoder = new Geocoder(theC);
+                    List<Address> addresses;
+                    try {
+                        addresses = geocoder.getFromLocationName("151 Moore Street, Princeton, NJ", 1);
+                        if (addresses.size() > 0) {
+                            double latitude = addresses.get(0).getLatitude();
+                            double longitude = addresses.get(0).getLongitude();
+                            log("LAT: " + latitude + " LONG: " + longitude);
+                        }
+                    }
+                    catch(Exception e) {
+                        log(e.toString());
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
 
             this.orderCostET.addTextChangedListener(new TextWatcher() {
                 @Override
