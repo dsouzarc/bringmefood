@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.location.Geocoder;
+import android.location.Location;
 import android.location.Address;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -391,16 +392,41 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     Geocoder geocoder = new Geocoder(theC);
-                    List<Address> addresses;
+                    final List<Address> addresses;
                     try {
                         addresses = geocoder.getFromLocationName("151 Moore Street, Princeton, NJ", 1);
-                        if (addresses.size() > 0) {
-                            double latitude = addresses.get(0).getLatitude();
-                            double longitude = addresses.get(0).getLongitude();
-                            log("LAT: " + latitude + " LONG: " + longitude);
+                        addresses.addAll(geocoder.getFromLocationName("23 Silvers Lane, Cranbury, NJ", 1));
+
+                        if (addresses.size() >= 1) {
+                            Location locationA = new Location("point A");
+                            locationA.setLatitude(addresses.get(0).getLatitude());
+                            locationA.setLongitude(addresses.get(0).getLongitude());
+                            Location locationB = new Location("point B");
+                            locationB.setLatitude(addresses.get(1).getLatitude());
+                            locationB.setLongitude(addresses.get(1).getLongitude());
+                            log("DISTANCE: " + locationA.distanceTo(locationB));
+
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    final HttpClient theClient = new DefaultHttpClient();
+                                    final HttpPost aPost =
+                                            new HttpPost("https://maps.googleapis.com/maps/api/distancematrix/json?origins=" +
+                                            String.valueOf(addresses.get(0).getLatitude())+ "," +
+                                            String.valueOf(addresses.get(0).getLongitude()) +
+                                            "&destinations=" +  String.valueOf(addresses.get(1).getLatitude())+ "," +
+                                                    String.valueOf(addresses.get(1).getLongitude()));
+                                    try {
+                                        final HttpResponse resp = theClient.execute(aPost);
+                                        log("RESULT: " + EntityUtils.toString(resp.getEntity()));
+                                    }
+                                    catch (Exception e) {
+                                        log(e.toString());
+                                    }
+                                }
+                            }).start();
                         }
-                    }
-                    catch(Exception e) {
+                    } catch (Exception e) {
                         log(e.toString());
                     }
                 }
