@@ -386,8 +386,13 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                             Arrays.asList(allRestaurants));
             this.restaurantNameSpinner.setAdapter(adapter);
             this.restaurantNameSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                boolean isFirstTime = true;
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if(isFirstTime) {
+                        isFirstTime = false;
+                        return;
+                    }
                     //Calculate distance
                     final String myAddress = myAddressET.getText().toString();
                     if(myAddress != null) {
