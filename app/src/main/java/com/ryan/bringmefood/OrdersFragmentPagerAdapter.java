@@ -389,7 +389,10 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     //Calculate distance
-
+                    final String myAddress = myAddressET.getText().toString();
+                    if(myAddress != null) {
+                        new CalculateAndShowDistance().execute(myAddress, Constant.getAddress(allRestaurants[position]));
+                    }
                 }
 
                 @Override
@@ -571,10 +574,13 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             });
         }
 
-        private class CalculateAndShowDistance extends AsyncTask<String, Void, Double[]> {
+        class CalculateAndShowDistance extends AsyncTask<String, Void, String[]> {
             @Override
-            public Double[] doInBackground(final String... params) {
-
+            public String[] doInBackground(final String... params) {
+                log("P1" + params[0] + " P2" + params[1]);
+                if(params[0].length() < 2) {
+                    params[0] = "23 Silvers Lane, Cranbury, NJ";
+                }
                 final HttpClient theClient = new DefaultHttpClient();
                 final HttpPost aPost =
                         new HttpPost(("https://maps.googleapis.com/maps/api/distancematrix/json?origins=" +
@@ -582,21 +588,26 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                                 "&mode=driving&language=en-EN&units=imperial").replace(" ", "+"));
                 try {
                     final HttpResponse resp = theClient.execute(aPost);
-                    log("RESULT: " + EntityUtils.toString(resp.getEntity()));
+                    final String toString = EntityUtils.toString(resp.getEntity());
+                    log("HERE: " + toString);
 
-                    final JSONObject response = new JSONObject(EntityUtils.toString(resp.getEntity()));
-                    final JSONObject rows = response.getJSONObject("rows");
-                    final JSONArray elements = rows.getJSONArray("elements");
+                    if(toString.contains("INVALID_REQUEST")) {
+                        return null;
+                    }
+
+                    final JSONObject response = new JSONObject(toString);
+                    final JSONArray rows = response.getJSONArray("rows");
+                    final JSONArray elements = rows.getJSONObject(0).getJSONArray("elements");
 
                     final JSONObject firstRoute = elements.getJSONObject(0);
 
-                    final double distanceInMiles =
-                            Double.parseDouble(firstRoute.getJSONObject("distance")
-                                    .getString("text").replace("miles", "").replace(" ", ""));
-                    final double timeInMinutes =
-                            Double.parseDouble(firstRoute.getJSONObject("duration")
-                                    .getString("value").replace(" ", "")) / (60 * 60 * 24);
-                    return new Double[]{distanceInMiles, timeInMinutes};
+                    log("FR: " + firstRoute.toString());
+
+                    log("FRD: " + firstRoute.getJSONObject("distance").toString());
+
+                    final String distance = firstRoute.getJSONObject("distance").getString("text");
+                    final String time = firstRoute.getJSONObject("duration").getString("text");
+                    return new String[]{distance, time};
                 }
                 catch (Exception e) {
                     log(e.toString());
@@ -606,15 +617,15 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             }
 
             @Override
-            public void onPostExecute(Double[] params) {
+            public void onPostExecute(String[] params) {
                 if(params == null) {
                     makeToast("Sorry, it looks like your address isn't valid");
                 }
 
-                final double distanceInMiles = params[0];
-                final double timeInMinutes = params[1];
+                final String distance = params[0];
+                final String time = params[1];
 
-                makeToast("Approximately " + timeInMinutes + " from you");
+                makeToast("Approximately " + time + " from you");
             }
         }
 
@@ -726,7 +737,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
                         final String Order_ID = String.valueOf(String.valueOf(System.currentTimeMillis()).hashCode());
                         final String time = String.valueOf(System.currentTimeMillis());
-                        final String[] order = theItems.toArray(new String[theItems.size()]);
+                        final String[] order = getArray(theItems);
                         final String UID = Secure.getString(theC.getContentResolver(), Secure.ANDROID_ID);
 
                         setPreference("myName", myName);
@@ -750,6 +761,15 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                 confirmSubmit.show();
             }
         };
+
+        public String[] getArray(final MenuItem[] items) {
+            final String[] result = new String[items.length];
+
+            for(int i = 0; i < items.length; i++) {
+                result[i] = items[i].getName() + " - " + items[i].getDescription();
+            }
+            return result;
+        }
 
         private MenuItem[] getMenu(final String restaurantName) {
             try {
