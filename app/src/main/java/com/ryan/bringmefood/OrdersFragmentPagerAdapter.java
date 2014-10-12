@@ -384,7 +384,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                     (getActivity().getApplicationContext(), R.layout.restaurant_items_textview,
                             Arrays.asList(allRestaurants));
             restaurantNameSpinner.setAdapter(adapter);
-            
+
             orderCostET.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -426,7 +426,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             addItemFromMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final String restaurant = restaurantNameET.getText().toString();
+                    final String restaurant = restaurantNameSpinner.getSelectedItem().toString();
                     boolean isFromList = false;
 
                     for(int i = 0; i < allRestaurants.length; i++) {
@@ -532,14 +532,6 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                     });
 
                     autoMenuNames.setThreshold(-1);
-                    autoMenuNames.setOnFocusChangeListener(new OnFocusChangeListener() {
-                        @Override
-                        public void onFocusChange(View v, boolean hasFocus) {
-                            if (hasFocus) {
-                                restaurantNameET.showDropDown();
-                            }
-                        }
-                    });
 
                     final LinearLayout items = new LinearLayout(theC);
                     items.setOrientation(LinearLayout.VERTICAL);
@@ -665,7 +657,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         final String myName = myNameET.getText().toString();
                         final String myAddress = myAddressET.getText().toString();
                         final String myPhone = myPhoneET.getText().toString();
-                        final String restaurantName = restaurantNameET.getText().toString();
+                        final String restaurantName = restaurantNameSpinner.getSelectedItem().toString();
 
                         final String Order_ID = String.valueOf(String.valueOf(System.currentTimeMillis()).hashCode());
                         final String time = String.valueOf(System.currentTimeMillis());
