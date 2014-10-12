@@ -354,7 +354,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
         private final String[] allRestaurants = {"Cheeburger Cheeburger",
                             "Chucks", "Contes", "Georges", "Hoagie Haven",
                             "Olives", "Slice Between", "Soup Co.", "Subway",
-                            "Taste of Mexico", "Teresas", "Tortugas"};
+                            "Taste of Mexico", "Teresas", "Tortugas", "WaWa"};
 
         private final LinkedList<MenuItem> theItems = new LinkedList<MenuItem>();
 
@@ -444,6 +444,11 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
                     final AlertDialog.Builder theAlert = new AlertDialog.Builder(getActivity());
                     final MenuItem[] theMenu = getMenu(restaurant);
+
+                    if(theMenu == null) {
+                        makeToast("Sorry, there is no available menu for " + restaurant);
+                        return;
+                    }
 
                     final MenuListViewAdapter theAdapter = new
                             MenuListViewAdapter(theC, R.layout.menu_listview_item, theMenu, theItems);
@@ -713,7 +718,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             }
             catch (Exception e) {
                 log("Error here: " + restaurantName);
-                return new MenuItem[]{new MenuItem("Error", "", e.toString())};
+                return null; //new MenuItem[]{new MenuItem("Error", "", e.toString())};
             }
         }
 
