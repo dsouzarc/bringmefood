@@ -167,7 +167,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         final String status = theResponse.substring(0, theResponse.indexOf("|"));
                         final String deliveryTime = theResponse.substring(theResponse.indexOf("||") + 2);
                         theOrder.setEstimatedDeliveryTime(deliveryTime);
-                        theOrder.setOrderStatus(status);
+                        theOrder.setOrderStatus(Order.getStatus(status));
 
                     } catch (Exception e) {
                         log(e.toString());
@@ -234,6 +234,14 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             if (isBeingUpdated) {
                 statusTV.setText("Updating...");
             } else {
+
+                
+
+                if(theOrder.getStatus() == com.ryan.bringmefood.Order.STATUS.CLAIMED) {
+                    statusTV.setText(theOrder.getStatusNiceString() + theOrder.getStatusIC());
+                }
+
+
                 final String rawStatus = theOrder.getRawStatus();
                 if(rawStatus.contains("0")) {
                     statusTV.setText("Unclaimed");

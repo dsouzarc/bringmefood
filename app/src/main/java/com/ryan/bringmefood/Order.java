@@ -87,6 +87,23 @@ public class Order {
         }
     }
 
+    public String getStatusNiceString() {
+        switch (status) {
+            case UNCLAIMED:
+                return "Unclaimed";
+            case CLAIMED:
+                return "Claimed";
+            case FOOD_ORDERED:
+                return "Food Ordered";
+            case EN_ROUTE:
+                return "En Route";
+            case DELIVERED:
+                return "Delivered";
+            default:
+                return "Unclaimed";
+        }
+    }
+
     public STATUS getStatus() {
         return this.status;
     }
@@ -106,6 +123,10 @@ public class Order {
             default:
                 return "\uD83D\uDD0E";
         }
+    }
+
+    public String getStatusIC() {
+        return getStatusIC(status);
     }
 
     public static String filter(String original) {
