@@ -3,12 +3,15 @@ package com.ryan.bringmefood;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.content.Context;
+import android.provider.Settings;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings.Secure;
+import android.app.AlertDialog;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
@@ -20,6 +23,9 @@ import android.view.MenuItem;
 import com.parse.Parse;
 import com.parse.ParseInstallation;
 import com.parse.PushService;
+import android.content.DialogInterface;
+import android.net.NetworkInfo;
+import android.net.ConnectivityManager;
 
 public class MainOrdersActivity extends FragmentActivity {
 
@@ -34,6 +40,20 @@ public class MainOrdersActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_orders);
+
+        if(!haveNetworkConnection()) {
+            AlertDialog.Builder theBuilder = new AlertDialog.Builder(MainOrdersActivity.this);
+            theBuilder.setTitle("No Internet Connection Detected");
+            theBuilder.setMessage("Sorry, you must have a working Internet Connection to use " +
+                        "this app");
+            theBuilder.setPositiveButton("Take me to Wifi Settings", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
+                    finish();
+                }
+            });
+        }
 
         try {
             Parse.initialize(this, "AdzOc2Rwa3OHorbxpc8mv698qtl8e7dg2XSjscqO",
@@ -163,6 +183,22 @@ public class MainOrdersActivity extends FragmentActivity {
         }
     };
 
+    private boolean haveNetworkConnection() {
+        boolean haveConnectedWifi = false;
+        boolean haveConnectedMobile = false;
+
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo[] netInfo = cm.getAllNetworkInfo();
+        for (NetworkInfo ni : netInfo) {
+            if (ni.getTypeName().equalsIgnoreCase("WIFI"))
+                if (ni.isConnected())
+                    haveConnectedWifi = true;
+            if (ni.getTypeName().equalsIgnoreCase("MOBILE"))
+                if (ni.isConnected())
+                    haveConnectedMobile = true;
+        }
+        return haveConnectedWifi || haveConnectedMobile;
+    }
 
     public void log(final String message) {
         Log.e("com.ryan.bringmefood", message);
