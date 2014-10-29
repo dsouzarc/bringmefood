@@ -391,6 +391,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                                 Constant.getAddress(allRestaurants[position]));
                     }
                     itemsLayout.removeAllViews();
+                    theItems.clear();
                 }
 
                 @Override
