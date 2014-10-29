@@ -60,8 +60,9 @@ public class VieworderActivity extends Activity {
     }
 
     private void addEtaDetails() {
-        final String rawStatus = theOrder.getRawStatus();
-        if(rawStatus.contains("1") || rawStatus.contains("2")) {
+        if(theOrder.getStatus() == Order.STATUS.CLAIMED ||
+                theOrder.getStatus() == Order.STATUS.EN_ROUTE ||
+                theOrder.getStatus() == Order.STATUS.FOOD_ORDERED) {
             if(eta != null && driverDetails != null) {
                 orderStatusLinearLayout.removeView(eta);
                 orderStatusLinearLayout.removeView(driverDetails);
@@ -130,7 +131,7 @@ public class VieworderActivity extends Activity {
                 final String status = theResponse.substring(0, theResponse.indexOf("|"));
                 final String deliveryTime = theResponse.substring(theResponse.indexOf("||") + 2);
                 theOrder.setEstimatedDeliveryTime(deliveryTime);
-                theOrder.setOrderStatus(status);
+                theOrder.setOrderStatus(Order.getStatus(status));
             }
             catch (Exception e) {
                 e.printStackTrace();
