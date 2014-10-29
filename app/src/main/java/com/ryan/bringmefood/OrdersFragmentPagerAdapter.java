@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.text.Editable;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -162,8 +163,6 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         httpPost = new HttpPost(theOrder.getUpdateOrderHttpPost());
                         httpResponse = httpclient.execute(httpPost);
                         final String theResponse = EntityUtils.toString(httpResponse.getEntity());
-                        log("ORDER RESPONSE: " + theResponse);
-
                         final String status = theResponse.substring(0, theResponse.indexOf("|"));
                         final String deliveryTime =
                                 theResponse.substring(theResponse.indexOf("||") + 2);
@@ -412,15 +411,15 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                             orderCostET.setText("$" + theString.replace("$", ""));
                         }
                         orderCostET.setSelection(orderCostET.getText().length());
-                    } catch (Exception e) {
+                    }
+                    catch (Exception e) {
                     }
                 }
 
                 @Override
-                public void afterTextChanged(android.text.Editable s) {
+                public void afterTextChanged(Editable s) {
                 }
             });
-
 
             //Personal variables
             String data = getPreferences("myName");
@@ -532,10 +531,16 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                                             final double currentPrice =
                                                     Double.parseDouble(orderCostET.getText().
                                                             toString().replace("$", ""));
-                                            orderCostET.setText((String.valueOf(currentPrice +
-                                                    Double.parseDouble(item.getCost()))));
+                                            log("Current: " + currentPrice);
+                                            final double newPrice =
+                                                    currentPrice + Double.parseDouble(
+                                                            item.getCost().replace("$", ""));
+                                            log("New: " + currentPrice);
+
+                                            orderCostET.setText(decimalFormat.format(newPrice));
                                         }
                                         catch (Exception e) {
+                                            log("Error updating: " + e.toString());
                                             orderCostET.setText(item.getCost());
                                         }
                                     }
@@ -717,8 +722,10 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
                 final AlertDialog.Builder confirmSubmit = new AlertDialog.Builder(getActivity());
 
-                final String myCost = "$" + decimalFormat.format(
-                        Double.parseDouble(orderCostET.getText().toString().replace("$", "")));
+                final double cost =
+                        Double.parseDouble(orderCostET.getText().toString().replace("$", ""));
+                log("C: " + cost);
+                final String myCost = "$" + decimalFormat.format(cost);
 
                 confirmSubmit.setTitle("Confirm Order");
                 confirmSubmit.setMessage("Are you sure you want to submit this order for " +
@@ -997,10 +1004,13 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                                             final double currentPrice =
                                                     Double.parseDouble(orderCostET.getText()
                                                             .toString().replace("$", ""));
-                                            orderCostET.setText(decimalFormat.format(currentPrice) +
-                                                    Double.parseDouble(item.getCost()));
+                                            final double newPrice =
+                                                    currentPrice + Double.parseDouble(
+                                                            item.getCost().replace("$", ""));
+                                            orderCostET.setText(decimalFormat.format(newPrice));
                                         }
                                         catch (Exception e) {
+                                            log("Errrrrrr: " + e.toString());
                                             orderCostET.setText(item.getCost());
                                         }
                                     }
