@@ -221,8 +221,6 @@ public class Order {
         return null;
     }
 
-    public String getRawStatus() { return this.status; }
-
     public String getCalendarTimeMillis() {
         return this.calendarTimeMillis;
     }
@@ -290,7 +288,7 @@ public class Order {
         this.orderCost = orderCost;
     }
 
-    public void setOrderStatus(final String newStatus) { this.status = newStatus; }
+    public void setOrderStatus(final STATUS newStatus) { this.status = newStatus; }
 
     public String getIdNumber() {
         return idNumber;
@@ -304,40 +302,6 @@ public class Order {
             return false;
         return ((Order)other).getIdNumber().equals(this.getIdNumber());
     }
-
-    /*@Override
-    public boolean equals(Object o) {
-        if (this == o)
-            return true;
-        if (!(o instanceof com.ryan.bringmefood.Order))
-            return false;
-
-        Order order = (Order) o;
-
-        if (!calendarTimeMillis.equals(order.calendarTimeMillis))
-            return false;
-        if (!idNumber.equals(order.idNumber))
-            return false;
-        if (!myAddress.equals(order.myAddress))
-            return false;
-        if (!myName.equals(order.myName))
-            return false;
-        if (!myNumber.equals(order.myNumber))
-            return false;
-        if (!Arrays.equals(myOrder, order.myOrder))
-            return false;
-        if (!orderCost.equals(order.orderCost))
-            return false;
-        if (!restaurantName.equals(order.restaurantName))
-            return false;
-        if (!status.equals(order.status))
-            return false;
-        if (!theDate.equals(order.theDate))
-            return false;
-        if (!uniqueDeviceIdentifier.equals(order.uniqueDeviceIdentifier))
-            return false;
-        return true;
-    }*/
 
     @Override
     public int hashCode() {
