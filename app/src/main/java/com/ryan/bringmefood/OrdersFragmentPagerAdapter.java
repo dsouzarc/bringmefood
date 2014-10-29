@@ -165,7 +165,8 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         log("ORDER RESPONSE: " + theResponse);
 
                         final String status = theResponse.substring(0, theResponse.indexOf("|"));
-                        final String deliveryTime = theResponse.substring(theResponse.indexOf("||") + 2);
+                        final String deliveryTime =
+                                theResponse.substring(theResponse.indexOf("||") + 2);
                         theOrder.setEstimatedDeliveryTime(deliveryTime);
                         theOrder.setOrderStatus(Order.getStatus(status));
 
@@ -319,7 +320,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                 });
 
                 final AlertDialog theDialog = deleteItem.create();
-                theDialog.getWindow().getAttributes().windowAnimations = com.ryan.bringmefood.R.style.DialogSlideAnim;
+                theDialog.getWindow().getAttributes().windowAnimations = R.style.DialogSlideAnim;
                 theDialog.show();
                 return false;
             }
@@ -375,10 +376,11 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                     (getActivity().getApplicationContext(), R.layout.restaurant_items_textview,
                             Arrays.asList(allRestaurants));
             this.restaurantNameSpinner.setAdapter(adapter);
-            this.restaurantNameSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            this.restaurantNameSpinner.setOnItemSelectedListener(
+                    new AdapterView.OnItemSelectedListener() {
                 boolean isFirstTime = true;
                 @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                public void onItemSelected(AdapterView<?> p, View view, int position, long id) {
                     if(isFirstTime) {
                         isFirstTime = false;
                         return;
@@ -386,7 +388,8 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                     //Calculate distance
                     final String myAddress = myAddressET.getText().toString();
                     if(myAddress != null) {
-                        new CalculateAndShowDistance().execute(myAddress, Constant.getAddress(allRestaurants[position]));
+                        new CalculateAndShowDistance().execute(myAddress,
+                                Constant.getAddress(allRestaurants[position]));
                     }
                 }
 
@@ -462,7 +465,8 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                     }
 
                     final MenuListViewAdapter theAdapter = new
-                            MenuListViewAdapter(theC, R.layout.menu_listview_item, theMenu, theItems);
+                            MenuListViewAdapter(theC, R.layout.menu_listview_item, theMenu,
+                                                                                    theItems);
 
                     final ListView listView = new ListView(theC);
                     listView.setAdapter(theAdapter);
@@ -487,18 +491,19 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                     autoMenuNames.setAdapter(adapter);
                     autoMenuNames.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
-                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        public void onItemClick(AdapterView<?> p, View view, int pos, long id) {
                             final String text = ((TextView) view).getText().toString();
 
                             for(int i = 0; i < theMenu.length; i++) {
                                 if (theMenu[i].getName().contains(text)) {
-                                    position = i;
+                                    pos = i;
                                 }
                             }
 
-                            final MenuItem item = theMenu[position];
+                            final MenuItem item = theMenu[pos];
                             final EditText toEdit = new EditText(theC);
-                            final AlertDialog.Builder itemDescription = new AlertDialog.Builder(theActivity);
+                            final AlertDialog.Builder itemDescription =
+                                    new AlertDialog.Builder(theActivity);
 
                             if(item.getDescription().length() <= 2) {
                                 toEdit.setHint("No description available");
@@ -513,7 +518,8 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                             itemDescription.setTitle("Item description");
                             itemDescription.setMessage(item.getName());
 
-                            itemDescription.setPositiveButton("Add to order", new DialogInterface.OnClickListener() {
+                            itemDescription.setPositiveButton("Add to order",
+                                    new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     final MenuItem newItem = MenuItem.deepClone(item);
@@ -524,7 +530,8 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                                     try {
                                         try {
                                             final double currentPrice =
-                                                    Double.parseDouble(orderCostET.getText().toString().replace("$", ""));
+                                                    Double.parseDouble(orderCostET.getText().
+                                                            toString().replace("$", ""));
                                             orderCostET.setText((String.valueOf(currentPrice +
                                                     Double.parseDouble(item.getCost()))));
                                         }
@@ -538,7 +545,8 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                                 }
                             });
 
-                            itemDescription.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            itemDescription.setNegativeButton("Cancel",
+                                    new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                 }
@@ -575,10 +583,11 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                 if(params[0].length() < 2) {
                     params[0] = "23 Silvers Lane, Cranbury, NJ";
                 }
+                final String URL =
+                        "https://maps.googleapis.com/maps/api/distancematrix/json?origins=";
                 final HttpClient theClient = new DefaultHttpClient();
                 final HttpPost aPost =
-                        new HttpPost(("https://maps.googleapis.com/maps/api/distancematrix/json?origins=" +
-                                params[0] + "&destinations=" + params[1] +
+                        new HttpPost((URL + params[0] + "&destinations=" + params[1] +
                                 "&mode=driving&language=en-EN&units=imperial").replace(" ", "+"));
                 try {
                     final HttpResponse resp = theClient.execute(aPost);
@@ -720,17 +729,20 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         final String myName = myNameET.getText().toString();
                         final String myAddress = myAddressET.getText().toString();
                         final String myPhone = myPhoneET.getText().toString();
-                        final String restaurantName = restaurantNameSpinner.getSelectedItem().toString();
+                        final String restaurantName =
+                                restaurantNameSpinner.getSelectedItem().toString();
 
                         final String Order_ID = String.valueOf(System.currentTimeMillis());
                         final String time = String.valueOf(System.currentTimeMillis());
                         final String[] order = getArray(theItems);
-                        final String UID = Secure.getString(theC.getContentResolver(), Secure.ANDROID_ID);
+                        final String UID = Secure.getString(theC.getContentResolver(),
+                                Secure.ANDROID_ID);
 
                         setPreference("myName", myName);
                         setPreference("myPhone", myPhone);
                         setPreference("myAddress", myAddress);
-                        //Name, phone number, my address, restaurant address, UID, myOrder[], order ID, orderCost, time in millis, status
+                        //Name, phone number, my address, restaurant address, UID, myOrder[],
+                        // order ID, orderCost, time in millis, status
 
                         final Order theOrder = new Order(myName, myPhone, myAddress, restaurantName,
                                 UID, order, Order_ID, myCost, time, "0");
@@ -762,7 +774,8 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
         private MenuItem[] getMenu(final String restaurantName) {
             try {
                 final BufferedReader theReader = new BufferedReader(
-                        new InputStreamReader(theC.getResources().getAssets().open(restaurantName + ".txt")));
+                        new InputStreamReader(theC.getResources().
+                                getAssets().open(restaurantName + ".txt")));
 
                 final StringBuilder menuString = new StringBuilder("");
 
@@ -803,8 +816,8 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
             public SubmitOrderTask(final Order theOrder) {
                 this.theOrder = theOrder;
-                theDialog = ProgressDialog.show(getActivity(), "Please wait", "Submitting order to " +
-                theOrder.getRestaurantName(), true);
+                theDialog = ProgressDialog.show(getActivity(), "Please wait",
+                        "Submitting order to " + theOrder.getRestaurantName(), true);
                 theDialog.setCancelable(false);
             }
 
@@ -897,7 +910,8 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                 });
 
                 final AlertDialog theDialog = addItem.create();
-                theDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+                theDialog.getWindow().
+                        setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
                 theDialog.show();
             }
         };
@@ -940,7 +954,8 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
                     final MenuItem item = theMenu[position];
                     try {
-                        final double cost = Double.parseDouble(item.getCost().replace(" ", "").replace("$", ""));
+                        final double cost = Double.parseDouble(item.getCost().
+                                replace(" ", "").replace("$", ""));
                         holder.itemCost.setText("$" + decimalFormat.format(cost).replace(" ", ""));
                         holder.itemCost.setGravity(Gravity.RIGHT);
                     }
@@ -962,12 +977,14 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                             toEdit.setBackgroundColor(Color.WHITE);
                             toEdit.setTextColor(Color.BLACK);
 
-                            final AlertDialog.Builder itemDescription = new AlertDialog.Builder(theActivity);
+                            final AlertDialog.Builder itemDescription =
+                                    new AlertDialog.Builder(theActivity);
                             itemDescription.setView(toEdit);
                             itemDescription.setTitle("Item description");
                             itemDescription.setMessage(item.getName());
 
-                            itemDescription.setPositiveButton("Add to order", new DialogInterface.OnClickListener() {
+                            itemDescription.setPositiveButton("Add to order",
+                                    new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     final MenuItem newItem = MenuItem.deepClone(item);
@@ -978,7 +995,8 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                                     try {
                                         try {
                                             final double currentPrice =
-                                                    Double.parseDouble(orderCostET.getText().toString().replace("$", ""));
+                                                    Double.parseDouble(orderCostET.getText()
+                                                            .toString().replace("$", ""));
                                             orderCostET.setText(decimalFormat.format(currentPrice) +
                                                     Double.parseDouble(item.getCost()));
                                         }
@@ -992,7 +1010,8 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                                 }
                             });
 
-                            itemDescription.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            itemDescription.setNegativeButton("Cancel",
+                                    new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                 }
