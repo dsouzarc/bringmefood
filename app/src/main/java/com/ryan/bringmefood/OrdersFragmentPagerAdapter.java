@@ -235,29 +235,16 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                 statusTV.setText("Updating...");
             } else {
 
-                
+                final StringBuilder text = new StringBuilder(
+                        theOrder.getStatusNiceString() + " " + theOrder.getStatusIC());
 
-                if(theOrder.getStatus() == com.ryan.bringmefood.Order.STATUS.CLAIMED) {
-                    statusTV.setText(theOrder.getStatusNiceString() + theOrder.getStatusIC());
+                if(theOrder.getStatus() == Order.STATUS.CLAIMED ||
+                        theOrder.getStatus() == Order.STATUS.EN_ROUTE ||
+                        theOrder.getStatus() == Order.STATUS.FOOD_ORDERED) {
+                    text.append(" " + theOrder.getDeliveryTime() + " minutes");
                 }
 
-
-                final String rawStatus = theOrder.getRawStatus();
-                if(rawStatus.contains("0")) {
-                    statusTV.setText("Unclaimed");
-                }
-                else if(rawStatus.contains("1")) {
-                    statusTV.setText("Claimed: " + theOrder.getDeliveryTime() + " minutes");
-                }
-                else if(rawStatus.contains("2")) {
-                    statusTV.setText("En route to address: " + theOrder.getDeliveryTime() + " minutes");
-                }
-                else if(rawStatus.contains("3")) {
-                    statusTV.setText("Delivered");
-                }
-                else {
-                    statusTV.setText("Unclaimed: " + theOrder.getDeliveryTime() + " minutes");
-                }
+                statusTV.setText(text.toString());
             }
 
             restaurantTV.setTextColor(Color.BLACK);
@@ -309,8 +296,8 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
-                        if(theOrder.getStatus().contains("Unclaimed") || theOrder.getStatus().contains("Delivered") ||
-                                theOrder.getRawStatus().equals("0")) {
+                        if(theOrder.getStatus() == Order.STATUS.UNCLAIMED ||
+                                theOrder.getStatus() == Order.STATUS.DELIVERED) {
                             new Thread(new SendToServer(theOrder.getOrderDeleteHttpPost())).start();
                             theDB.deleteOrder(theOrder.getIdNumber());
                             allOrders.clear();
