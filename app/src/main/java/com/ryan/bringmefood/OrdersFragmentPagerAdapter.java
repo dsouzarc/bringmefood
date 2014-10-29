@@ -390,6 +390,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         new CalculateAndShowDistance().execute(myAddress,
                                 Constant.getAddress(allRestaurants[position]));
                     }
+                    itemsLayout.removeAllViews();
                 }
 
                 @Override
@@ -974,21 +975,21 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         @Override
                         public void onClick(View v) {
                             final EditText toEdit = new EditText(theC);
-
-                            if(item.getDescription().length() <= 2) {
-                                toEdit.setHint("No description available");
-                            }
-                            else {
-                                toEdit.setText(item.getDescription());
-                            }
+                            toEdit.setHint("Item Notes");
                             toEdit.setBackgroundColor(Color.WHITE);
                             toEdit.setTextColor(Color.BLACK);
 
                             final AlertDialog.Builder itemDescription =
                                     new AlertDialog.Builder(theActivity);
                             itemDescription.setView(toEdit);
-                            itemDescription.setTitle("Item description");
-                            itemDescription.setMessage(item.getName());
+                            itemDescription.setTitle(item.getName() + " Description");
+
+                            if(item.getDescription().length() <= 2) {
+                                itemDescription.setMessage("No details available");
+                            }
+                            else {
+                                itemDescription.setMessage(item.getDescription());
+                            }
 
                             itemDescription.setPositiveButton("Add to order",
                                     new DialogInterface.OnClickListener() {
