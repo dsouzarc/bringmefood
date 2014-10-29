@@ -24,7 +24,7 @@ public class Order {
     private final String calendarTimeMillis;
     private final Calendar theDate;
 
-    private String status;
+    private STATUS status;
     private String orderCost;
     private String estimatedDeliveryTime = "";
 
@@ -59,6 +59,47 @@ public class Order {
         }
         catch (Exception e) {
             this.status = status;
+        }
+    }
+
+    public static enum STATUS {
+        UNCLAIMED, CLAIMED, FOOD_ORDERED, EN_ROUTE, DELIVERED;
+    }
+
+    public static STATUS getStatus(final String text) {
+        if(text.contains("0")) {
+            return STATUS.UNCLAIMED;
+        }
+        else if(text.contains("1")) {
+            return STATUS.CLAIMED;
+        }
+        else if(text.contains("2")) {
+            return STATUS.FOOD_ORDERED;
+        }
+        else if(text.contains("3")) {
+            return STATUS.EN_ROUTE;
+        }
+        else if(text.contains("4")) {
+            return STATUS.DELIVERED;
+        }
+        return STATUS.UNCLAIMED;
+    }
+
+    public static STATUS getStatus(final int val) {
+        switch (val) {
+
+            case 0:
+                return STATUS.UNCLAIMED;
+            case 1:
+                return STATUS.CLAIMED;
+            case 2:
+                return STATUS.FOOD_ORDERED;
+            case 3:
+                return STATUS.EN_ROUTE;
+            case 4:
+                return STATUS.DELIVERED;
+            default:
+                return STATUS.UNCLAIMED;
         }
     }
 
