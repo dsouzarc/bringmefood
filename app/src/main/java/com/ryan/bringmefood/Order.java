@@ -149,7 +149,7 @@ public class Order {
             theObject.put("id", idNumber);
             theObject.put("orderCost", orderCost);
             theObject.put("time", calendarTimeMillis);
-            theObject.put("status", status);
+            theObject.put("status", String.valueOf(this.status));
             theObject.put("deliveryTime", estimatedDeliveryTime);
         }
         catch (Exception e) {

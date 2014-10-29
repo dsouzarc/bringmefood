@@ -32,7 +32,7 @@ public class SQLiteOrdersDatabase extends SQLiteOpenHelper {
     public void onCreate(final SQLiteDatabase theDB) {
         final String CREATE_ORDER_TABLE = "CREATE TABLE " + TABLE_NAME + " ( " +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                KEY_ID + " INTEGER, "+
+                KEY_ID + " LONG, "+
                 KEY_ORDER + " STRING )";
         theDB.execSQL(CREATE_ORDER_TABLE);
     }
@@ -47,7 +47,7 @@ public class SQLiteOrdersDatabase extends SQLiteOpenHelper {
         final SQLiteDatabase theDB = this.getWritableDatabase();
 
         final ContentValues values = new ContentValues();
-        values.put(KEY_ID, Integer.parseInt(theOrder.getIdNumber()));
+        values.put(KEY_ID, Long.parseLong(theOrder.getIdNumber()));
         values.put(KEY_ORDER, theOrder.toJSONObject().toString());
 
         theDB.insert(TABLE_NAME, null, values);

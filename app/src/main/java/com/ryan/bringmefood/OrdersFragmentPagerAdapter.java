@@ -838,6 +838,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             @Override
             public void onPostExecute(final Boolean status) {
                 log("STATUS: " + status);
+                theDialog.dismiss();
                 if(status) {
                     theDialog.setMessage("Order submitted");
                     theDialog.setTitle("Order submitted");
@@ -853,7 +854,6 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                 else {
                     makeToast("Sorry, something went wrong. Please submit again");
                 }
-                theDialog.dismiss();
             }
         }
 
