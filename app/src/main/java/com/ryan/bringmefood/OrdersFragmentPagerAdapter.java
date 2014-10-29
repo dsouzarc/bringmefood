@@ -981,8 +981,8 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                                         try {
                                             final double currentPrice =
                                                     Double.parseDouble(orderCostET.getText().toString().replace("$", ""));
-                                            orderCostET.setText((String.valueOf(currentPrice +
-                                                    Double.parseDouble(item.getCost()))));
+                                            orderCostET.setText(decimalFormat.format(currentPrice) +
+                                                    Double.parseDouble(item.getCost()));
                                         }
                                         catch (Exception e) {
                                             orderCostET.setText(item.getCost());
