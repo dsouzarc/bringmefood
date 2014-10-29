@@ -572,7 +572,6 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
         class CalculateAndShowDistance extends AsyncTask<String, Void, String[]> {
             @Override
             public String[] doInBackground(final String... params) {
-                log("P1" + params[0] + " P2" + params[1]);
                 if(params[0].length() < 2) {
                     params[0] = "23 Silvers Lane, Cranbury, NJ";
                 }
@@ -584,7 +583,6 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                 try {
                     final HttpResponse resp = theClient.execute(aPost);
                     final String toString = EntityUtils.toString(resp.getEntity());
-                    log("HERE: " + toString);
 
                     if(toString.contains("INVALID_REQUEST")) {
                         return null;
@@ -593,13 +591,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                     final JSONObject response = new JSONObject(toString);
                     final JSONArray rows = response.getJSONArray("rows");
                     final JSONArray elements = rows.getJSONObject(0).getJSONArray("elements");
-
                     final JSONObject firstRoute = elements.getJSONObject(0);
-
-                    log("FR: " + firstRoute.toString());
-
-                    log("FRD: " + firstRoute.getJSONObject("distance").toString());
-
                     final String distance = firstRoute.getJSONObject("distance").getString("text");
                     final String time = firstRoute.getJSONObject("duration").getString("text");
                     return new String[]{distance, time};
@@ -823,11 +815,15 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                     final HttpPost httppost = new HttpPost(theOrder.getOrderHttpPost(7.5));
                     final HttpResponse response = httpclient.execute(httppost);
                     final String response1 = EntityUtils.toString(response.getEntity());
-
                     if (response1.contains("ACK")) {
-                        final SQLiteOrdersDatabase theDB = new SQLiteOrdersDatabase(theC);
-                        theDB.addOrder(theOrder);
-                        theDB.close();
+                        try {
+                            final SQLiteOrdersDatabase theDB = new SQLiteOrdersDatabase(theC);
+                            theDB.addOrder(theOrder);
+                            theDB.close();
+                        }
+                        catch (Exception e) {
+                            log("Error saving to DB: " + e.toString());
+                        }
                         log("Successfully ordered " + response1);
                         return true;
                     }
@@ -841,6 +837,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
             @Override
             public void onPostExecute(final Boolean status) {
+                log("STATUS: " + status);
                 if(status) {
                     theDialog.setMessage("Order submitted");
                     theDialog.setTitle("Order submitted");
@@ -851,6 +848,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                     viewOrder.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(viewOrder);
                     getActivity().finish();
+                    return;
                 }
                 else {
                     makeToast("Sorry, something went wrong. Please submit again");
