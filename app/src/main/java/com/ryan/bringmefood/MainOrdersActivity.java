@@ -2,16 +2,19 @@ package com.ryan.bringmefood;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
+import android.app.AlertDialog;
 import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.content.Context;
-import android.provider.Settings;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.provider.Settings.Secure;
-import android.app.AlertDialog;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
@@ -23,9 +26,6 @@ import android.view.MenuItem;
 import com.parse.Parse;
 import com.parse.ParseInstallation;
 import com.parse.PushService;
-import android.content.DialogInterface;
-import android.net.NetworkInfo;
-import android.net.ConnectivityManager;
 
 public class MainOrdersActivity extends FragmentActivity {
 
