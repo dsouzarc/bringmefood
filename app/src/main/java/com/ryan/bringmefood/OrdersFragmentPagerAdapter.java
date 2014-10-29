@@ -735,7 +735,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         final String myPhone = myPhoneET.getText().toString();
                         final String restaurantName = restaurantNameSpinner.getSelectedItem().toString();
 
-                        final String Order_ID = String.valueOf(String.valueOf(System.currentTimeMillis()).hashCode());
+                        final String Order_ID = String.valueOf(System.currentTimeMillis());
                         final String time = String.valueOf(System.currentTimeMillis());
                         final String[] order = getArray(theItems);
                         final String UID = Secure.getString(theC.getContentResolver(), Secure.ANDROID_ID);
