@@ -44,22 +44,7 @@ public class Order {
         this.calendarTimeMillis = calendarTimeMillis;
         this.theDate = new GregorianCalendar();
         this.theDate.setTimeInMillis(Long.parseLong(calendarTimeMillis));
-
-        try {
-            final int statusNum = Integer.parseInt(status);
-            if (statusNum > 3) {
-                this.status = "3";
-            }
-            else if(statusNum < 0) {
-                this.status = "0";
-            }
-            else {
-                this.status = status;
-            }
-        }
-        catch (Exception e) {
-            this.status = status;
-        }
+        this.status = getStatus(status);
     }
 
     public static enum STATUS {
@@ -87,7 +72,6 @@ public class Order {
 
     public static STATUS getStatus(final int val) {
         switch (val) {
-
             case 0:
                 return STATUS.UNCLAIMED;
             case 1:
@@ -100,6 +84,27 @@ public class Order {
                 return STATUS.DELIVERED;
             default:
                 return STATUS.UNCLAIMED;
+        }
+    }
+
+    public STATUS getStatus() {
+        return this.status;
+    }
+
+    public static String getStatusIC(final STATUS status) {
+        switch (status) {
+            case UNCLAIMED:
+                return "\uD83D\uDD0E";
+            case CLAIMED:
+                return "\uD83D\uDC4D";
+            case FOOD_ORDERED:
+                return "\uD83C\uDF73";
+            case EN_ROUTE:
+                return "\uD83D\uDE98";
+            case DELIVERED:
+                return "\u2714";
+            default:
+                return "\uD83D\uDD0E";
         }
     }
 
@@ -188,22 +193,6 @@ public class Order {
         catch (Exception e) {
             return null;
         }
-    }
-
-    public String getStatus() {
-        if(status.contains("0")) {
-            return "Unclaimed";
-        }
-        if(status.contains("1")) {
-            return "Claimed";
-        }
-        if(status.contains("2")) {
-            return "En route";
-        }
-        if(status.contains("3")) {
-            return "Delivered";
-        }
-        return status;
     }
 
     public static Order getOrder(final JSONObject theJSON) {
