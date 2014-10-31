@@ -53,6 +53,7 @@ public class MainOrdersActivity extends FragmentActivity {
                     finish();
                 }
             });
+            theBuilder.show();
         }
 
         try {
