@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import java.util.concurrent.TimeUnit;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -744,20 +745,19 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         final String myName = myNameET.getText().toString();
                         final String myAddress = myAddressET.getText().toString();
                         final String myPhone = myPhoneET.getText().toString();
-                        final String restaurantName =
-                                restaurantNameSpinner.getSelectedItem().toString();
-
-                        final String Order_ID = String.valueOf(System.currentTimeMillis());
-                        final String time = String.valueOf(System.currentTimeMillis());
+                        final String Order_ID = String.valueOf(
+                                TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()));
                         final String[] order = getArray(theItems);
+
                         final String UID = Secure.getString(theC.getContentResolver(),
                                 Secure.ANDROID_ID);
+                        final String restaurantName =
+                                restaurantNameSpinner.getSelectedItem().toString();
+                        final String time = Order_ID;
 
                         setPreference("myName", myName);
                         setPreference("myPhone", myPhone);
                         setPreference("myAddress", myAddress);
-                        //Name, phone number, my address, restaurant address, UID, myOrder[],
-                        // order ID, orderCost, time in millis, status
 
                         final Order theOrder = new Order(myName, myPhone, myAddress, restaurantName,
                                 UID, order, Order_ID, myCost, time, "0");
