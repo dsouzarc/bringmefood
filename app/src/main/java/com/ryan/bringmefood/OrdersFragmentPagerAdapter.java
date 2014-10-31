@@ -735,7 +735,8 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
                 confirmSubmit.setTitle("Confirm Order");
                 confirmSubmit.setMessage("Are you sure you want to submit this order for " +
-                                            myCost + "?");
+                                            myCost + "? A delivery fee of $" + deliveryCost +
+                                            " will be added upon delivery");
                 confirmSubmit.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
