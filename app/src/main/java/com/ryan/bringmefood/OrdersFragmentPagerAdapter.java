@@ -357,6 +357,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
         private Button submit;
         private Activity theActivity;
         private double deliveryTime = 1;
+        private double deliveryCost = 7;
 
         private void initializeVariables() {
             Arrays.sort(this.allRestaurants);
@@ -731,7 +732,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         Double.parseDouble(orderCostET.getText().toString().replace("$", ""));
                 log("C: " + cost);
                 final String myCost = "$" + decimalFormat.format(cost);
-                final double deliveryCost = 7 * Math.pow(Math.E, 0.03565 * deliveryTime);
+                deliveryCost = 7 * Math.pow(Math.E, 0.03565 * deliveryTime);
 
                 confirmSubmit.setTitle("Confirm Order");
                 confirmSubmit.setMessage("Are you sure you want to submit this order for " +
@@ -839,7 +840,8 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             public Boolean doInBackground(Void... params) {
                 try {
                     final HttpClient httpclient = new DefaultHttpClient();
-                    final HttpPost httppost = new HttpPost(theOrder.getOrderHttpPost(7.5));
+                    final HttpPost httppost = new HttpPost(theOrder
+                            .getOrderHttpPost("$" + decimalFormat.format(deliveryCost)));
                     final HttpResponse response = httpclient.execute(httppost);
                     final String response1 = EntityUtils.toString(response.getEntity());
                     if (response1.contains("ACK")) {

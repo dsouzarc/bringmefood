@@ -168,7 +168,7 @@ public class Order {
                 Uri.encode(idNumber), Uri.encode(uniqueDeviceIdentifier), Uri.encode("1"));
     }
 
-    public String getOrderHttpPost(final double deliveryCost) {
+    public String getOrderHttpPost(final String deliveryCost) {
         final StringBuilder newOrder = new StringBuilder("");
         for(String order : myOrder) {
             newOrder.append(order + "||");
@@ -179,7 +179,7 @@ public class Order {
                         "Name=%s&Restaurant=%s&OrderDetails=%s&Address=%s&user=%s&newOrder=%s&EstimatedCost=%s&DeliveryCost=%s",
                 Uri.encode(idNumber), Uri.encode(uniqueDeviceIdentifier), Uri.encode(myNumber), Uri.encode(myName),
                 Uri.encode(restaurantName), Uri.encode(orderString), Uri.encode(myAddress),
-                Uri.encode("1"), Uri.encode("1"), Uri.encode(orderCost), Uri.encode(String.valueOf(deliveryCost)));
+                Uri.encode("1"), Uri.encode("1"), Uri.encode(orderCost), Uri.encode(deliveryCost));
     }
 
     public String getOrderHttpPost() {
