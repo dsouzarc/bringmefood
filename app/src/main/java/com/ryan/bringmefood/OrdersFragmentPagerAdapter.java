@@ -174,6 +174,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                     }
                     new UpdateViewAndDatabaseTask(counter, theOrder).execute();
                     counter++;
+
                 }
             }
         }
@@ -355,6 +356,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
         private Spinner restaurantNameSpinner;
         private Button submit;
         private Activity theActivity;
+        private double deliveryTime = 1;
 
         private void initializeVariables() {
             Arrays.sort(this.allRestaurants);
@@ -627,6 +629,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
                 final String distance = params[0];
                 final String time = params[1];
+                deliveryTime = Double.parseDouble(time);
 
                 makeToast("Approximately " + time + " from you");
             }
@@ -728,6 +731,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         Double.parseDouble(orderCostET.getText().toString().replace("$", ""));
                 log("C: " + cost);
                 final String myCost = "$" + decimalFormat.format(cost);
+                final double deliveryCost = 7 * Math.pow(Math.E, 0.03565 * deliveryTime);
 
                 confirmSubmit.setTitle("Confirm Order");
                 confirmSubmit.setMessage("Are you sure you want to submit this order for " +
