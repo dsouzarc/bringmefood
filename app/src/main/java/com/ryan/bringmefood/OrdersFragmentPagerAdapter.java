@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Handler;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -14,6 +15,7 @@ import android.provider.Settings.Secure;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
@@ -118,12 +120,14 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
         private LinearLayout theLL;
         private SQLiteOrdersDatabase theDB;
         private UpdateOrderDB updateOrderDBRunnable;
+        private SwipeRefreshLayout swipeView;
 
         @Override
         public View onCreateView(LayoutInflater theLI, ViewGroup container, Bundle savedinstance) {
             final View rootInflater = theLI.inflate(R.layout.myorders_layout, container, false);
 
             theLL = (LinearLayout) rootInflater.findViewById(R.id.theLinearLayout);
+            swipeView = (SwipeRefreshLayout) rootInflater.findViewById(R.id.swipeMyOrders);
 
             log("WHAT");
 
@@ -145,6 +149,22 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                     }
                 }
             }).start();
+
+            swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    swipeView.setRefreshing(true);
+                    log("Refreshing...");
+                    (new Handler()).postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            swipeView.setRefreshing(false);
+                            double f = Math.random();
+                            log("Fine " + f);
+                        }
+                    }, 3000);
+                }
+            });
 
             //theDB = new SQLiteOrdersDatabase(theC);
             //allOrders.addAll(theDB.getAllOrders());

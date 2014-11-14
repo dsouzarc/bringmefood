@@ -1,21 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.SwipeRefreshLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/swipeMyOrders">
 
-    <ScrollView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:layout_height="match_parent"
-        android:id="@+id/scrollViewAllOrders">
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
+            android:orientation="horizontal"
             android:layout_height="match_parent"
-            android:id="@+id/theLinearLayout"
-            android:orientation="vertical" >
-        </LinearLayout>
-    </ScrollView>
-</RelativeLayout>
+            android:id="@+id/scrollViewAllOrders">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/theLinearLayout"
+                android:orientation="vertical" >
+                </LinearLayout>
+            </ScrollView>
+        </RelativeLayout>
+</android.support.v4.widget.SwipeRefreshLayout>
