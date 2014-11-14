@@ -60,7 +60,7 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
-
+import android.net.Uri;
 public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
     private static final int NUM_PAGES = 2;
@@ -76,6 +76,8 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
     private final int DP_72, DP_16, DP_8;
     private final int SP_16, SP_14;
 
+    private final String UDID;
+
     public final MyOrders myOrdersFragment;
     public final NewOrder newOrderFragment;
 
@@ -84,6 +86,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
         this.theC = theC;
         this.thePrefs = theC.getSharedPreferences("com.ryan.bringmefood", Context.MODE_PRIVATE);
         this.theEd = thePrefs.edit();
+        this.UDID = this.thePrefs.getString("UDID", getUDID());
 
         this.theMetrics = theC.getResources().getDisplayMetrics();
         this.DP_72 = getDP(72);
@@ -121,6 +124,28 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             final View rootInflater = theLI.inflate(R.layout.myorders_layout, container, false);
 
             theLL = (LinearLayout) rootInflater.findViewById(R.id.theLinearLayout);
+
+            log("WHAT");
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    HttpPost httpPost;
+                    HttpResponse httpResponse;
+
+                    try {
+                        log("Trying");
+                        httpPost = new HttpPost(getAllOrdersHttpPost()); //theOrder.getUpdateOrderHttpPost());
+                        httpResponse = httpclient.execute(httpPost);
+                        final String theResponse = EntityUtils.toString(httpResponse.getEntity());
+                        log("RESPONSE: " + theResponse);
+
+                    } catch (Exception e) {
+                        log(e.toString());
+                    }
+                }
+            }).start();
+
             //theDB = new SQLiteOrdersDatabase(theC);
             //allOrders.addAll(theDB.getAllOrders());
             //addOrdersToLayout();
@@ -160,7 +185,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                 while (theIterator.hasNext() && toContinue) {
                     final Order theOrder = theIterator.next();
                     try {
-                        httpPost = new HttpPost(theOrder.getUpdateOrderHttpPost());
+                        httpPost = new HttpPost(getAllOrdersHttpPost()); //theOrder.getUpdateOrderHttpPost());
                         httpResponse = httpclient.execute(httpPost);
                         final String theResponse = EntityUtils.toString(httpResponse.getEntity());
                         log("RESPONSE: " + theResponse);
@@ -1071,6 +1096,11 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
         }
     }
 
+    public String getAllOrdersHttpPost() {
+        return String.format("http://barsoftapps.com/scripts/PrincetonFoodDelivery.py?udid=%s&getAllOrders=%s",
+                Uri.encode(this.UDID), Uri.encode("1"));
+    }
+
     public Order fromJSON(final String JSON) {
         try {
             final JSONObject theOrder = new JSONObject(JSON);
@@ -1131,6 +1161,11 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
 
     private void log(final String message) {
         Log.e("com.ryan.bringmefood", message);
+    }
+
+    private String getUDID() {
+        return Secure.getString(theC.getApplicationContext().getContentResolver(),
+                Secure.ANDROID_ID);
     }
 
     @Override

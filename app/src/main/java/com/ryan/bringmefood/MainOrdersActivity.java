@@ -75,6 +75,9 @@ public class MainOrdersActivity extends FragmentActivity {
             installation.saveInBackground();
         }
 
+        theEd.putString("UDID", getUDID());
+        theEd.commit();
+
         theActionBar = getActionBar();
         getActionBar().setIcon(
                 new ColorDrawable(getResources().getColor(android.R.color.transparent)));
