@@ -121,10 +121,9 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             final View rootInflater = theLI.inflate(R.layout.myorders_layout, container, false);
 
             theLL = (LinearLayout) rootInflater.findViewById(R.id.theLinearLayout);
-            theDB = new SQLiteOrdersDatabase(theC);
-            allOrders.addAll(theDB.getAllOrders());
-
-            addOrdersToLayout();
+            //theDB = new SQLiteOrdersDatabase(theC);
+            //allOrders.addAll(theDB.getAllOrders());
+            //addOrdersToLayout();
             return rootInflater;
         }
 
@@ -164,6 +163,7 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                         httpPost = new HttpPost(theOrder.getUpdateOrderHttpPost());
                         httpResponse = httpclient.execute(httpPost);
                         final String theResponse = EntityUtils.toString(httpResponse.getEntity());
+                        log("RESPONSE: " + theResponse);
                         final String status = theResponse.substring(0, theResponse.indexOf("|"));
                         final String deliveryTime =
                                 theResponse.substring(theResponse.indexOf("||") + 2);
@@ -630,7 +630,10 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                 }
 
                 final String distance = params[0];
-                final String time = params[1];
+                final String time = params[1]
+                        .replace(" ", "").replace("mins", "")
+                        .replace("hours", "").replace("days", "");
+
                 deliveryTime = Double.parseDouble(time);
 
                 makeToast("Approximately " + time + " from you");
@@ -845,14 +848,14 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                     final HttpResponse response = httpclient.execute(httppost);
                     final String response1 = EntityUtils.toString(response.getEntity());
                     if (response1.contains("ACK")) {
-                        try {
+                        /*try {
                             final SQLiteOrdersDatabase theDB = new SQLiteOrdersDatabase(theC);
                             theDB.addOrder(theOrder);
                             theDB.close();
                         }
                         catch (Exception e) {
                             log("Error saving to DB: " + e.toString());
-                        }
+                        }*/
                         log("Successfully ordered " + response1);
                         return true;
                     }
@@ -1066,6 +1069,19 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                 return mSelectedItemsIds;
             }
         }
+    }
+
+    public Order fromJSON(final String JSON) {
+        try {
+            final JSONObject theOrder = new JSONObject(JSON);
+
+
+
+        }
+        catch (Exception e) {
+            log("Error: " + e.toString());
+        }
+        return null;
     }
 
     private class SendToServer implements Runnable {
