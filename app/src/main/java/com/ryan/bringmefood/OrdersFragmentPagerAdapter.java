@@ -129,8 +129,6 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
             theLL = (LinearLayout) rootInflater.findViewById(R.id.theLinearLayout);
             swipeView = (SwipeRefreshLayout) rootInflater.findViewById(R.id.swipeMyOrders);
 
-            log("WHAT");
-
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -138,7 +136,6 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
                     HttpResponse httpResponse;
 
                     try {
-                        log("Trying");
                         httpPost = new HttpPost(getAllOrdersHttpPost()); //theOrder.getUpdateOrderHttpPost());
                         httpResponse = httpclient.execute(httpPost);
                         final String theResponse = EntityUtils.toString(httpResponse.getEntity());
@@ -1117,16 +1114,55 @@ public class OrdersFragmentPagerAdapter extends FragmentPagerAdapter {
     }
 
     public String getAllOrdersHttpPost() {
-        return String.format("http://barsoftapps.com/scripts/PrincetonFoodDelivery.py?udid=%s&getAllOrders=%s",
-                Uri.encode(this.UDID), Uri.encode("1"));
+        return String.format("http://barsoftapps.com/scripts/PrincetonFoodDelivery.py?" +
+                "udid=%s&getAllOrders=%s&driver=%s",
+                Uri.encode(this.UDID), Uri.encode("1"),Uri.encode("1"));
     }
 
-    public Order fromJSON(final String JSON) {
+    public Order[] ordersfromJSON(final String JSON) {
         try {
+            final LinkedList<Order> orders = new LinkedList<Order>();
             final JSONObject theOrder = new JSONObject(JSON);
 
+            for(int i = 0; i < Integer.MAX_VALUE; i++) {
+                try {
+                    final JSONObject anOrder = theOrder.getJSONObject(String.valueOf(i));
 
+                    final String status = anOrder.getString("Status");
+                    final String driverName = anOrder.getString("Driver Name");
+                    final boolean isClaimed = driverName.contains("Unclaimed");
+                    final String deliveryCost = anOrder.getString("Delivery Cost");
+                    final String eta = anOrder.getString("ETA Time");
+                    final String name = anOrder.getString("Name");
+                    final String restaurant = anOrder.getString("Restaurant");
+                    final String UDID = anOrder.getString("UDID");
+                    final String phoneNumber = anOrder.getString("Phone Number");
+                    final String deliveryTimeStamp = anOrder.getString("Timestamp of Delivery");
+                    final String DUDID = anOrder.getString("DUDID");
+                    final String[] items = anOrder.getString("Details").split("||");
+                    final String address = anOrder.getString("Address");
+                    final String ID = anOrder.getString("ID");
+                    final String estimatedCost = anOrder.getString("Estimated Cost");
 
+                    double orderCost = 0;
+
+                    try {
+                        orderCost += Double.parseDouble(deliveryCost.replace("$", ""));
+                        orderCost += Double.parseDouble(estimatedCost.replace("$", ""));
+                    }
+                    catch (Exception e) {
+                    }
+
+                    final String totalCost = orderCost == 0 ? estimatedCost :
+                            "$" + String.valueOf(orderCost);
+
+                    orders.add(new Order(name, phoneNumber, address, restaurant, UDID,
+                            items, ID, totalCost, ID, status));
+                }
+                catch (Exception e) {
+                    return orders.toArray(new Order[orders.size()]);
+                }
+            }
         }
         catch (Exception e) {
             log("Error: " + e.toString());
